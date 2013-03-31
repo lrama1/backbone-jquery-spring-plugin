@@ -1,6 +1,6 @@
 package bsbuilder.wizards.site;
 
-import java.io.IOException;
+
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
@@ -52,6 +52,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 	 * framework.
 	 */
 	private WizardNewProjectCreationPage wizardPage;
+	private BackboneProjectWizardPageOne pageOne;
 
 	private IConfigurationElement config;
 
@@ -61,7 +62,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 
 	private IProject project;
 
-	
+	@Override
 	public void addPages() {
 		/*
 		 * Unlike the custom new wizard, we just add the pre-defined one and
@@ -72,6 +73,9 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		wizardPage.setDescription("Create a new Example.com Site Project.");
 		wizardPage.setTitle("New Example.com Site Project");
 		addPage(wizardPage);
+		
+		pageOne = new BackboneProjectWizardPageOne("test");
+		addPage(pageOne);
 		
 	}
 
