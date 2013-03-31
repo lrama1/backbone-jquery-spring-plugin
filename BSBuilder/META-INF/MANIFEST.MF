@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: BSBuilder
+Bundle-SymbolicName: BSBuilder; singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: bsbuilder.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.ui.ide,
+ org.eclipse.jdt;bundle-version="3.8.1",
+ org.eclipse.jdt.core;bundle-version="3.8.3",
+ org.eclipse.wst.common.core;bundle-version="1.2.0",
+ org.eclipse.wst.common.project.facet.core;bundle-version="1.4.300",
+ org.eclipse.wst.common.project.facet.ui;bundle-version="1.4.300"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: libs/velocity-1.7-dep.jar,
+ .

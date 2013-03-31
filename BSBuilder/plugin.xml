@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            name="AxlEli"
+            id="BSBuilder">
+      </category>
+      <wizard
+            name="Backbone Enabled Page"
+            icon="icons/sample.gif"
+            category="BSBuilder"
+            class="bsbuilder.wizards.backbone.BackbonePageNewWizard"
+            id="bsbuilder.wizards.backbone.BackbonePageNewWizard">
+      </wizard>
+      <wizard
+            category="BSBuilder"
+            class="bsbuilder.wizards.site.NewBackboneSpringProjectWizard"
+            icon="icons/sample.gif"
+            id="bsbuilder.wizards.site.NewBackboneSpringProjectWizard"
+            name="Spring Backbone Project Wizard"
+            project="true">
+      </wizard>
+   </extension>
+
+</plugin>
