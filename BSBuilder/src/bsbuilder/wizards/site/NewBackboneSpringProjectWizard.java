@@ -29,6 +29,7 @@ import org.eclipse.jdt.core.IClasspathAttribute;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -52,7 +53,8 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 	 * framework.
 	 */
 	private WizardNewProjectCreationPage wizardPage;
-	private BackboneProjectWizardPageOne pageOne;
+	private BackboneProjectWizardPageTwo pageTwo;
+	private BackboneProjectWizardPageThree pageThree;
 
 	private IConfigurationElement config;
 
@@ -74,8 +76,11 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		wizardPage.setTitle("New Example.com Site Project");
 		addPage(wizardPage);
 		
-		pageOne = new BackboneProjectWizardPageOne("test");
-		addPage(pageOne);
+		pageTwo = new BackboneProjectWizardPageTwo("test");
+		addPage(pageTwo);
+		
+		pageThree = new BackboneProjectWizardPageThree("");
+		addPage(pageThree);
 		
 	}
 
@@ -98,6 +103,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 
 		desc.setLocationURI(projectURI);
 		
+		//The following all go in the .project file
 		desc.setNatureIds(new String[] {"org.eclipse.jem.workbench.JavaEMFNature",
 				"org.eclipse.wst.common.modulecore.ModuleCoreNature",
 				"org.eclipse.jdt.core.javanature",
@@ -114,6 +120,8 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		commands[4].setBuilderName("org.eclipse.wst.validation.validationbuilder");
 		desc.setBuildSpec(commands);
 
+		final String basePackageName = pageTwo.getBasePackageName(); 
+		final String controllerPackageName = pageTwo.getControllerPackage();
 		/*
 		 * Just like the NewFileWizard, but this time with an operation object
 		 * that modifies workspaces.
@@ -121,7 +129,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		WorkspaceModifyOperation op = new WorkspaceModifyOperation() {
 			protected void execute(IProgressMonitor monitor)
 					throws CoreException {
-				createProject(desc, projectHandle, monitor);
+				createProject(desc, projectHandle, basePackageName, controllerPackageName , monitor);
 			}
 		};
 
@@ -162,7 +170,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 	 * @throws CoreException
 	 * @throws OperationCanceledException
 	 */
-	void createProject(IProjectDescription description, IProject proj,
+	void createProject(IProjectDescription description, IProject proj, String basePackageName, String controllerPackageName,
 			IProgressMonitor monitor) throws CoreException,
 			OperationCanceledException {
 		try {
@@ -182,39 +190,17 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			 * Okay, now we have the project and we can do more things with it
 			 * before updating the perspective.
 			 */
-			IContainer container = (IContainer) proj;
-
-			
+			IContainer container = (IContainer) proj;			
 
 			/* Add an pom file */
-			//InputStream pomStream = this.getClass().getResourceAsStream(
-			//		"/bsbuilder/resources/maven/pom.xml.template");
 			addFileToProject(container, new Path("pom.xml"),
-					TemplateMerger.merge("/bsbuilder/resources/maven/pom.xml.template", proj.getName()), monitor);
-			
-			/* Add the style folder and the site.css file to it */
-			final IFolder styleFolder = container.getFolder(new Path("styles"));
-			styleFolder.create(true, true, monitor);
-			
-			InputStream resourceStream = this.getClass().getResourceAsStream(
-			"/bsbuilder/resources/css/site-css.template");
-
-			addFileToProject(container, new Path(styleFolder.getName()
-					+ Path.SEPARATOR + "style.css"),
-					resourceStream, monitor);
-			resourceStream.close();
-			
-			/*
-			 * Add the images folder, which is an official Exmample.com standard
-			 * for static web projects.
-			 */
-			IFolder imageFolder = container.getFolder(new Path("images"));
-			imageFolder.create(true, true, monitor);
+					TemplateMerger.merge("/bsbuilder/resources/maven/pom.xml-template", proj.getName(),
+							basePackageName,controllerPackageName), monitor);
 			
 
 			IFolder outputFolder = container.getFolder(new Path("target"));
 			outputFolder.create(true, true, monitor);
-//
+
 			IFolder outputFolder2 = outputFolder.getFolder(new Path("classes"));
 			outputFolder2.create(true, true, monitor);
 			
@@ -246,44 +232,64 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			IFolder settingsFolder = container.getFolder(new Path(".settings"));
 			settingsFolder.create(false, true, new NullProgressMonitor());
 			
-			addVariousSettings(settingsFolder, proj ,monitor);
+			//resources
+			IFolder resourcesFolder = srcFolder51.getFolder(new Path("resources"));
+			resourcesFolder.create(false, true, new NullProgressMonitor());
+			
+			//resources/js
+			IFolder jsFolder = resourcesFolder.getFolder(new Path("js"));
+			jsFolder.create(false, true, new NullProgressMonitor());
+			
+			//add 3rd party JS libs
+			addFileToProject(jsFolder, new Path("backbone.js"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/backbone.js"), monitor);
+			addFileToProject(jsFolder, new Path("ejs_fulljslint.js"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/ejs_fulljslint.js"), monitor);
+			addFileToProject(jsFolder, new Path("jquery-1.8.3.js"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/jquery-1.8.3.js"), monitor);
+			addFileToProject(jsFolder, new Path("jquery.dataTables.js"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/jquery.dataTables.js"), monitor);
+			addFileToProject(jsFolder, new Path("json2.js"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/json2.js"), monitor);
+			addFileToProject(jsFolder, new Path("underscore-min.js"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/underscore-min.js"), monitor);
+
+			
+			//resources/js/yourjs
+			IFolder yourJsFolder = jsFolder.getFolder(new Path("yourjs"));
+			yourJsFolder.create(false, true, new NullProgressMonitor());
+			
+			addFileToProject(yourJsFolder, new Path("components.js"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/components.js"), monitor);
+			
+			//resources/templates
+			IFolder templatesFolder = resourcesFolder.getFolder(new Path("templates"));
+			templatesFolder.create(false, true, new NullProgressMonitor());
+			
+			addVariousSettings(settingsFolder, proj, basePackageName,controllerPackageName ,monitor);
 			
 			/* Add web-xml file */
-			//InputStream webXMLStream = this.getClass().getResourceAsStream(
-			//		"/bsbuilder/resources/maven/web.xml.template");
 			addFileToProject(srcFolder51, new Path("web.xml"),
-					TemplateMerger.merge("/bsbuilder/resources/maven/web.xml.template", proj.getName()), monitor);
+					TemplateMerger.merge("/bsbuilder/resources/maven/web.xml-template", proj.getName(),basePackageName,controllerPackageName), monitor);
+			/* Add Spring servlet dispathcer mapping file */
+			addFileToProject(srcFolder51, new Path("yourdispatcher-servlet.xml"),
+					TemplateMerger.merge("/bsbuilder/resources/maven/yourdispatcher-servlet.xml-template", proj.getName(),basePackageName,controllerPackageName), monitor);
+			
 			
 			/* Add a default html file */
 			addFileToProject(srcFolder41, new Path("index.html"),
 					BackbonePageNewWizard.openContentStream("Welcome to "
 							+ proj.getName()), monitor);
 			
+			/* Add a default jsp file */
+			addFileToProject(srcFolder51, new Path("index.jsp"),
+					TemplateMerger.merge("/bsbuilder/resources/web/jsps/index.jsp-template", proj.getName(),basePackageName,controllerPackageName), monitor);
+			
 			IJavaProject javaProject = JavaCore.create(proj);
-			IClasspathEntry javasrc = JavaCore.newSourceEntry(srcFolder31.getFullPath(), null, null, outputFolder2.getFullPath(), 
-					new IClasspathAttribute[] { 
-						JavaCore.newClasspathAttribute("optional", "true"),
-						JavaCore.newClasspathAttribute("maven.pomderived", "true")
-						});
-			IClasspathEntry testsrc = JavaCore.newSourceEntry(srcFolder32.getFullPath(), null, null, outputFolder3.getFullPath(), 
-					new IClasspathAttribute[] { 
-						JavaCore.newClasspathAttribute("optional", "true"),
-						JavaCore.newClasspathAttribute("maven.pomderived", "true")
-						});
-			IClasspathEntry jre = JavaCore.newContainerEntry(new Path("org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"),
-					new IAccessRule[0], 
-					new IClasspathAttribute[] { JavaCore.newClasspathAttribute("maven.pomderived", "true")}, false);
 			
-			IClasspathEntry mavenContainer = JavaCore.newContainerEntry(new Path("org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER"),
-					new IAccessRule[0], 
-					new IClasspathAttribute[] { 
-							JavaCore.newClasspathAttribute("maven.pomderived", "true"),
-				 			JavaCore.newClasspathAttribute("org.eclipse.jst.component.dependency", "/WEB-INF/lib")
-						}, false);
-			
-
-			IClasspathEntry[] entries = new IClasspathEntry[] { javasrc,testsrc, jre, mavenContainer };			
-			javaProject.setRawClasspath(entries, outputFolder2.getFullPath(), new NullProgressMonitor());
+			//Create classpath entries which really creates the ".classpath" file of the Eclipse project
+			createClassPathEntries(outputFolder2, outputFolder3, srcFolder31,
+					srcFolder32, javaProject);
 			
 		} catch (Throwable ioe) {
 			IStatus status = new Status(IStatus.ERROR, "NewFileWizard", IStatus.OK,
@@ -294,8 +300,36 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		}
 	}
 
+	private void createClassPathEntries(IFolder outputFolder2,
+			IFolder outputFolder3, IFolder srcFolder31, IFolder srcFolder32,
+			IJavaProject javaProject) throws JavaModelException {
+		IClasspathEntry javasrc = JavaCore.newSourceEntry(srcFolder31.getFullPath(), null, null, outputFolder2.getFullPath(), 
+				new IClasspathAttribute[] { 
+					JavaCore.newClasspathAttribute("optional", "true"),
+					JavaCore.newClasspathAttribute("maven.pomderived", "true")
+					});
+		IClasspathEntry testsrc = JavaCore.newSourceEntry(srcFolder32.getFullPath(), null, null, outputFolder3.getFullPath(), 
+				new IClasspathAttribute[] { 
+					JavaCore.newClasspathAttribute("optional", "true"),
+					JavaCore.newClasspathAttribute("maven.pomderived", "true")
+					});
+		IClasspathEntry jre = JavaCore.newContainerEntry(new Path("org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"),
+				new IAccessRule[0], 
+				new IClasspathAttribute[] { JavaCore.newClasspathAttribute("maven.pomderived", "true")}, false);
+		
+		IClasspathEntry mavenContainer = JavaCore.newContainerEntry(new Path("org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER"),
+				new IAccessRule[0], 
+				new IClasspathAttribute[] { 
+						JavaCore.newClasspathAttribute("maven.pomderived", "true"),
+			 			JavaCore.newClasspathAttribute("org.eclipse.jst.component.dependency", "/WEB-INF/lib")
+					}, false);			
+
+		IClasspathEntry[] entries = new IClasspathEntry[] { javasrc,testsrc, jre, mavenContainer };			
+		javaProject.setRawClasspath(entries, outputFolder2.getFullPath(), new NullProgressMonitor());
+	}
+
 	
-	private void addVariousSettings(IFolder settingsFolder, IProject project, IProgressMonitor monitor)
+	private void addVariousSettings(IFolder settingsFolder, IProject project, String basePackageName, String controllerPackageName, IProgressMonitor monitor)
 		throws Exception{
 		//TODO Add value substitution capability for setting values within settings files
 		InputStream jdtCorePref = this.getClass().getResourceAsStream(
@@ -311,7 +345,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		//InputStream wstCommonComponent = this.getClass().getResourceAsStream(
 		//		"/bsbuilder/resources/settings/org.eclipse.wst.common.component.template");
 		addFileToProject(settingsFolder, new Path("org.eclipse.wst.common.component"),
-				TemplateMerger.merge("/bsbuilder/resources/settings/org.eclipse.wst.common.component.template", project.getName()), monitor);
+				TemplateMerger.merge("/bsbuilder/resources/settings/org.eclipse.wst.common.component.template", project.getName(),basePackageName,controllerPackageName), monitor);
 		
 		InputStream wstCommonProject = this.getClass().getResourceAsStream(
 				"/bsbuilder/resources/settings/org.eclipse.wst.common.project.facet.core.xml.template");

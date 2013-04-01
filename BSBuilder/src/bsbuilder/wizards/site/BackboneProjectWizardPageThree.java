@@ -10,13 +10,14 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.ModifyEvent;
 
-public class BackboneProjectWizardPageOne extends WizardPage {
-	private Text textBasePackage;
+public class BackboneProjectWizardPageThree extends WizardPage {
+	private Text textSampleDomainClass;
 
-	protected BackboneProjectWizardPageOne(String pageName) {
+	protected BackboneProjectWizardPageThree(String pageName) {
 		super(pageName);
-		setTitle("Select Base Package");
-		setDescription("Select a base package name to use for your Java Classes.");
+		setTitle("Sample Domain Class");
+		setDescription("Create a sample domain class which will be wired to" +
+				" a sample Restful Controller");
 	}
 
 	@Override
@@ -33,28 +34,28 @@ public class BackboneProjectWizardPageOne extends WizardPage {
 		
 		Label lblNewLabel = new Label(container, SWT.NONE);
 		lblNewLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblNewLabel.setText("Base Package Name:");
+		lblNewLabel.setText("Sample Domain Class:");
 		
-		textBasePackage = new Text(container, SWT.BORDER);
-		textBasePackage.addModifyListener(new ModifyListener() {
+		textSampleDomainClass = new Text(container, SWT.BORDER);
+		textSampleDomainClass.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent modifyEvent) {
-				validatePackage(textBasePackage.getText());
+				validatePackage(textSampleDomainClass.getText());
 			}
 		});
-		textBasePackage.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		textSampleDomainClass.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		//Validate on display
-		validatePackage(textBasePackage.getText());
+		validatePackage(textSampleDomainClass.getText());
 	}
 	
-	private void validatePackage(String packageName){
-		if(packageName.trim().length() == 0){
-			updateStatus("Please specify a package name");
+	private void validatePackage(String className){	
+		
+		if(className.trim().length() == 0){
+			updateStatus("Please specify a Class name");
 			return;			
-		}
-		if(packageName.trim().endsWith(".")){
-			updateStatus("Please specify a valid format for your package name");
-			return;			
+		}		
+		if(!className.trim().substring(0, 1).matches("[A-Z]")){
+			updateStatus("Please capitalize the first letter.");
+			return;	
 		}
 		
 		updateStatus(null);

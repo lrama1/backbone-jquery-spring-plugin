@@ -11,7 +11,7 @@ import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
 public class TemplateMerger {
-	public static InputStream merge(String templateName, String projectName){
+	public static InputStream merge(String templateName, String projectName, String basePackageName, String controllerPackageName){
 		Velocity.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath"); 
 		Velocity.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
 		Velocity.init();
@@ -19,6 +19,8 @@ public class TemplateMerger {
 		VelocityContext context = new VelocityContext();		
 
 		context.put( "projectName", projectName );
+		context.put( "basePackageName", basePackageName );
+		context.put( "controllerPackageName", controllerPackageName );
 
 		Template template = null;
 
