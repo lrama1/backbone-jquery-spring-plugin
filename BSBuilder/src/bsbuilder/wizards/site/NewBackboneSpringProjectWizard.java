@@ -1,6 +1,7 @@
 package bsbuilder.wizards.site;
 
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
@@ -122,6 +123,16 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 
 		final String basePackageName = pageTwo.getBasePackageName(); 
 		final String controllerPackageName = pageTwo.getControllerPackage();
+		final String domainPackageName = pageTwo.getDomainPackage();
+		final String controllerClassName = "MainController";
+		final String domainClassName = pageThree.getDomainClassName();
+		final String classSourceCode = pageThree.getClassSource(domainPackageName);
+		final String controllerSourceCode = pageThree.getControllerSource(basePackageName, controllerPackageName, domainClassName);
+		
+		
+		//generate POJO
+		
+		
 		/*
 		 * Just like the NewFileWizard, but this time with an operation object
 		 * that modifies workspaces.
@@ -129,7 +140,9 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		WorkspaceModifyOperation op = new WorkspaceModifyOperation() {
 			protected void execute(IProgressMonitor monitor)
 					throws CoreException {
-				createProject(desc, projectHandle, basePackageName, controllerPackageName , monitor);
+				createProject(desc, projectHandle, basePackageName, controllerPackageName, 
+						controllerClassName, controllerSourceCode,
+						domainPackageName, domainClassName ,classSourceCode , monitor);
 			}
 		};
 
@@ -170,7 +183,10 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 	 * @throws CoreException
 	 * @throws OperationCanceledException
 	 */
-	void createProject(IProjectDescription description, IProject proj, String basePackageName, String controllerPackageName,
+	void createProject(IProjectDescription description, IProject proj, 
+			String basePackageName, 
+			String controllerPackageName, String controllerClassName, String controllerSourceCode,
+			String domainPackageName, String domainClassName, String classSourceCode,
 			IProgressMonitor monitor) throws CoreException,
 			OperationCanceledException {
 		try {
@@ -247,8 +263,8 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/ejs_fulljslint.js"), monitor);
 			addFileToProject(jsFolder, new Path("jquery-1.8.3.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/jquery-1.8.3.js"), monitor);
-			addFileToProject(jsFolder, new Path("jquery.dataTables.js"), 
-					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/jquery.dataTables.js"), monitor);
+			//addFileToProject(jsFolder, new Path("jquery.dataTables.js"), 
+			//		this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/jquery.dataTables.js"), monitor);
 			addFileToProject(jsFolder, new Path("json2.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/json2.js"), monitor);
 			addFileToProject(jsFolder, new Path("underscore-min.js"), 
@@ -274,6 +290,10 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			/* Add Spring servlet dispathcer mapping file */
 			addFileToProject(srcFolder51, new Path("yourdispatcher-servlet.xml"),
 					TemplateMerger.merge("/bsbuilder/resources/maven/yourdispatcher-servlet.xml-template", proj.getName(),basePackageName,controllerPackageName), monitor);
+			/* Add Spring applicationContext file */
+			addFileToProject(srcFolder51, new Path("applicationContext.xml"),
+					TemplateMerger.merge("/bsbuilder/resources/maven/applicationContext.xml-template", proj.getName(),basePackageName,controllerPackageName), monitor);
+		
 			
 			
 			/* Add a default html file */
@@ -285,11 +305,19 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			addFileToProject(srcFolder51, new Path("index.jsp"),
 					TemplateMerger.merge("/bsbuilder/resources/web/jsps/index.jsp-template", proj.getName(),basePackageName,controllerPackageName), monitor);
 			
+			/* Add a java file */
+			createPackageAndClass(srcFolder31, domainPackageName, domainClassName, classSourceCode , monitor);
+			/* Add a Controller*/
+			createPackageAndClass(srcFolder31, controllerPackageName, controllerClassName, controllerSourceCode , monitor);
+			
 			IJavaProject javaProject = JavaCore.create(proj);
 			
 			//Create classpath entries which really creates the ".classpath" file of the Eclipse project
 			createClassPathEntries(outputFolder2, outputFolder3, srcFolder31,
 					srcFolder32, javaProject);
+			
+			
+			
 			
 		} catch (Throwable ioe) {
 			IStatus status = new Status(IStatus.ERROR, "NewFileWizard", IStatus.OK,
@@ -299,6 +327,21 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			monitor.done();
 		}
 	}
+	
+	private void createPackageAndClass(IFolder parentFolder, String packageName, 
+			String className, String sourceCode, IProgressMonitor monitor ) throws Exception{
+		String[] path = packageName.split("\\.");
+		for(int i = 0; i < path.length; i++){
+			IFolder javaSrc = parentFolder.getFolder(new Path(path[i]));
+			if(!javaSrc.exists())
+				javaSrc.create(false, true, new NullProgressMonitor());
+			parentFolder = javaSrc;
+		}		
+		addFileToProject(parentFolder, new Path(className + ".java"),
+				new ByteArrayInputStream(sourceCode.getBytes()), monitor);		
+	}
+	
+
 
 	private void createClassPathEntries(IFolder outputFolder2,
 			IFolder outputFolder3, IFolder srcFolder31, IFolder srcFolder32,

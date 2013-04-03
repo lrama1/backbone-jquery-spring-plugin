@@ -3,6 +3,7 @@ package bsbuilder.wizards.site.utils;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.util.Map;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -21,6 +22,62 @@ public class TemplateMerger {
 		context.put( "projectName", projectName );
 		context.put( "basePackageName", basePackageName );
 		context.put( "controllerPackageName", controllerPackageName );
+
+		Template template = null;
+
+		try
+		{
+		   template = Velocity.getTemplate(templateName);	
+		}catch( Exception e )
+		{
+			e.printStackTrace();
+		}
+
+		StringWriter sw = new StringWriter();
+		template.merge( context, sw );
+		return new ByteArrayInputStream(sw.toString().getBytes());
+	}
+	
+	public static InputStream merge(String templateName,String domainPackageName ,String className, Map<String, String> attrs){
+		Velocity.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath"); 
+		Velocity.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
+		Velocity.init();
+				
+		VelocityContext context = new VelocityContext();		
+
+		context.put( "domainPackageName", domainPackageName );
+		context.put( "className", className );
+		context.put( "attrs", attrs );
+
+
+		Template template = null;
+
+		try
+		{
+		   template = Velocity.getTemplate(templateName);	
+		}catch( Exception e )
+		{
+			e.printStackTrace();
+		}
+
+		StringWriter sw = new StringWriter();
+		template.merge( context, sw );
+		return new ByteArrayInputStream(sw.toString().getBytes());
+	}
+	
+	public static InputStream merge(String templateName, Map<String, Object> valuesToPlug){
+		Velocity.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath"); 
+		Velocity.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
+		Velocity.init();
+				
+		VelocityContext context = new VelocityContext();		
+
+//		context.put( "basePackageName", basePackageName );
+//		context.put("controllerPackageName", controllerPackageName);
+//		context.put( "domainClassName", domainClassName );
+		for(String key : valuesToPlug.keySet()){
+			context.put(key, valuesToPlug.get(key));
+		}
 
 		Template template = null;
 

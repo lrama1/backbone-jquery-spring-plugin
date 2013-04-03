@@ -1,0 +1,33 @@
+package $controllerPackageName;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+//import the domain
+import ${basePackageName}.web.domain.$domainClassName;
+
+
+@Controller
+public class MainController {
+
+	@RequestMapping("/controller/home")
+	public String showHomePage(){
+		return "/WEB-INF/index.jsp";
+	}
+	
+	@RequestMapping(value = "/controller/$domainClassName.toLowerCase()/{id}", method = RequestMethod.GET)
+	public @ResponseBody $domainClassName get$domainClassName(@PathVariable("id") String id){
+		 $domainClassName  $domainClassName.toLowerCase() = new  $domainClassName();
+		  ${domainClassName.toLowerCase()}.populateWithSample();
+		 return $domainClassName.toLowerCase();
+	}
+	
+	
+}

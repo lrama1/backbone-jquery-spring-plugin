@@ -17,7 +17,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script type="text/javascript" src="<c:url value="resources/js/backbone.js"/>"></script>
 	<script type="text/javascript" src="<c:url value="resources/js/json2.js"/>"></script>
 	<script type="text/javascript" src="<c:url value="resources/js/yourjs/components.js"/>"></script>
-	<script type="text/javascript" src="<c:url value="resources/js/jquery.dataTables.js"/>"></script>
+	<!-- script type="text/javascript" src="<c:url value="resources/js/jquery.dataTables.js"/>"></script-->
 
 	<script type="text/javascript">
 		$(document).ready(function(){		

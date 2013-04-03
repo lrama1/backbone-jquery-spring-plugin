@@ -13,6 +13,7 @@ import org.eclipse.swt.events.ModifyEvent;
 public class BackboneProjectWizardPageTwo extends WizardPage {
 	private Text textBasePackage;
 	private Text textControllerPackage;
+	private Text textDomainPackage;
 
 	protected BackboneProjectWizardPageTwo(String pageName) {
 		super(pageName);
@@ -41,6 +42,7 @@ public class BackboneProjectWizardPageTwo extends WizardPage {
 			public void modifyText(ModifyEvent modifyEvent) {
 				validatePackage(textBasePackage.getText());
 				textControllerPackage.setText(textBasePackage.getText() + ".controller" );
+				textDomainPackage.setText(textBasePackage.getText() + ".web.domain" );
 			}
 		});
 		textBasePackage.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -53,6 +55,15 @@ public class BackboneProjectWizardPageTwo extends WizardPage {
 		textControllerPackage.setEnabled(false);
 		textControllerPackage.setEditable(false);
 		textControllerPackage.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblNewLabel_1 = new Label(container, SWT.NONE);
+		lblNewLabel_1.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblNewLabel_1.setText("Domain Package:");
+		
+		textDomainPackage = new Text(container, SWT.BORDER);
+		textDomainPackage.setEditable(false);
+		textDomainPackage.setEnabled(false);
+		textDomainPackage.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		//Validate on display
 		validatePackage(textBasePackage.getText());
@@ -82,6 +93,10 @@ public class BackboneProjectWizardPageTwo extends WizardPage {
 	
 	public String getControllerPackage(){
 		return textControllerPackage.getText();
+	}
+	
+	public String getDomainPackage(){
+		return textDomainPackage.getText();
 	}
 
 }

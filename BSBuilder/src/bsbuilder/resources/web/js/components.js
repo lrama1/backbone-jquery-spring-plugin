@@ -35,10 +35,6 @@ PersonEditView = Backbone.View.extend({
      	"click #saveNewPerson": "saveNewPerson"  //binding the saveNewButton of template using id attr as selector
     },
     savePerson : function(){
-    	//alert("saving person..");
-    	//window.location.hash = "#/person/create/";  //by changing the hash, the page does not have
-    										//to fully reload and 'createPerson' is invoked on the Router
-    	//alert("savex");
     	alert(JSON.stringify(this.model));
     	this.model.save();
     },
