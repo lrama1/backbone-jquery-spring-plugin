@@ -11,6 +11,12 @@ public class $className {
 		}
 	#end
 	
+	#foreach($key in $attrs.keySet() )
+		public void set${key.substring(0,1).toUpperCase()}$key.substring(1)($attrs.get($key) $key ){
+			this.$key = $key;
+		}
+	#end
+	
 	public void populateWithSample(){
 		#foreach($key in $attrs.keySet() )
 			$key = "Sample Value $foreach.count";

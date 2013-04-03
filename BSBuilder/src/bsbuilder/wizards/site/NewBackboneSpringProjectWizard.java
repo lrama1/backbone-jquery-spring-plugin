@@ -126,9 +126,10 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		final String basePackageName = pageTwo.getBasePackageName(); 
 		final String controllerPackageName = pageTwo.getControllerPackage();
 		final String domainPackageName = pageTwo.getDomainPackage();
-		final String controllerClassName = "MainController";
+		
 		final String domainClassName = pageThree.getDomainClassName();
 		final String classSourceCode = pageThree.getClassSource(domainPackageName);
+		final String controllerClassName = domainClassName + "Controller";
 		final String controllerSourceCode = pageThree.getControllerSource(basePackageName, controllerPackageName, domainClassName);
 		
 		
@@ -322,7 +323,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			/*Add a backbone template file.  This is dependent on the Java Model generation*/
 			
 			addFileToProject(templatesFolder, new Path("EditTemplate.htm"), 
-					TemplateMerger.mergeMap("/bsbuilder/resources/web/js/template/EditTemplate.htm-template", modelAttributes ), monitor);
+					TemplateMerger.mergeMap("/bsbuilder/resources/web/js/template/EditTemplate.htm-template", domainClassName ,modelAttributes ), monitor);
 
 			
 			/* Add a Controller*/

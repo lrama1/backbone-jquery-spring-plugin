@@ -15,7 +15,7 @@ import ${basePackageName}.web.domain.$domainClassName;
 
 
 @Controller
-public class MainController {
+public class ${domainClassName}Controller {
 
 	@RequestMapping("/controller/home")
 	public String showHomePage(){
@@ -27,6 +27,33 @@ public class MainController {
 		 $domainClassName  $domainClassName.toLowerCase() = new  $domainClassName();
 		  ${domainClassName.toLowerCase()}.populateWithSample();
 		 return $domainClassName.toLowerCase();
+	}
+	
+	
+	@RequestMapping(value = "/controller/${domainClassName.toLowerCase()}", headers = {"accept=application/json"}, method = RequestMethod.POST)
+	public @ResponseBody String saveNew${domainClassName}(@RequestBody ${domainClassName} ${domainClassName.toLowerCase()}){
+		System.out.println();
+		return "";
+	}
+	
+	@RequestMapping(value = "/controller/${domainClassName.toLowerCase()}/{id}", headers = {"accept=application/json"}, method = RequestMethod.PUT)
+	public  @ResponseBody String  update${domainClassName}(@RequestBody ${domainClassName} ${domainClassName.toLowerCase()}){
+		System.out.println();
+		return "";
+	}
+	
+	@RequestMapping("/controller/${domainClassName.toLowerCase()}s")
+	public @ResponseBody List<${domainClassName}> getAll${domainClassName}s(){
+		List<${domainClassName}> all${domainClassName} = new ArrayList<${domainClassName}>();
+		${domainClassName} ${domainClassName.toLowerCase()}1 = new ${domainClassName}();		
+		${domainClassName.toLowerCase()}1.populateWithSample();
+		all${domainClassName}.add(${domainClassName.toLowerCase()}1);
+		
+		${domainClassName} ${domainClassName.toLowerCase()}2 = new ${domainClassName}();		
+		${domainClassName.toLowerCase()}2.populateWithSample();
+		all${domainClassName}.add(${domainClassName.toLowerCase()}2);
+		
+		return all${domainClassName};
 	}
 	
 	

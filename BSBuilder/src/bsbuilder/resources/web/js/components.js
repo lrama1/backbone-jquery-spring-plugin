@@ -1,7 +1,7 @@
 
 
 ${className} = Backbone.Model.extend({	
-	defaults : {firstName : "", lastName : ""},
+	//defaults : {firstName : "", lastName : ""},
     initialize: function(){        
         this.bind("error", function(model, error){
             // We have received an error, log it, alert it or forget it :)
