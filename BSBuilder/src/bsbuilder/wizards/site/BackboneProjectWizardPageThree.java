@@ -39,6 +39,7 @@ import bsbuilder.wizards.site.utils.TemplateMerger;
 public class BackboneProjectWizardPageThree extends WizardPage {
 	private Text textSampleDomainClass;
 	private Table table;
+	private Map<String, Object> attrs = new LinkedHashMap<String, Object>();
 
 	protected BackboneProjectWizardPageThree(String pageName) {
 		super(pageName);
@@ -220,7 +221,7 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 	
 	public String getClassSource(String domainPackageName){
 		TableItem[] tableItems = table.getItems();
-		Map<String, String> attrs = new LinkedHashMap<String, String>();
+				
 		for(TableItem tableItem : tableItems){
 			attrs.put(tableItem.getText(0), tableItem.getText(1));
 		}
@@ -262,6 +263,10 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 			e.printStackTrace();
 		}
 		return stringWriter.toString();
+	}
+	
+	public Map<String, Object> getModelAttributes(){
+		return attrs;
 	}
 
 }

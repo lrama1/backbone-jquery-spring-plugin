@@ -1,6 +1,6 @@
 
 
-Person = Backbone.Model.extend({	
+${className} = Backbone.Model.extend({	
 	defaults : {firstName : "", lastName : ""},
     initialize: function(){        
         this.bind("error", function(model, error){
@@ -10,7 +10,7 @@ Person = Backbone.Model.extend({
         });
     }
 	,	
-	urlRoot : '/XBackbone/controller/person'
+	urlRoot : '/${projectName}/controller/${className.toLowerCase()}'
 	,
 	validate : function(attributes){
 		
@@ -18,33 +18,32 @@ Person = Backbone.Model.extend({
 });
 
 
-PersonEditView = Backbone.View.extend({
+${className}EditView = Backbone.View.extend({
 	defaults : {model : {}},
     initialize: function(){    	
         this.render(this.$el, this.model);
     },
     render: function(myEl, modelToRender){    	
-//		$.get("resources/templates/EditTemplate.htm", function(templateText){			
-//			 myEl.html( _.template(templateText, modelToRender.toJSON()) );
-//		});
-    	myEl.html( _.template($("#personTemplatex").html(), modelToRender.toJSON()) );
+		$.get("resources/templates/EditTemplate.htm", function(templateText){			
+			 myEl.html( _.template(templateText, modelToRender.toJSON()) );
+		});
+
     },
     events: {
         "change input": "change",   //binding change of any input field to the change function below
-        "click #savePerson": "savePerson",  //binding the saveButton of template using id attr as selector  
-     	"click #saveNewPerson": "saveNewPerson"  //binding the saveNewButton of template using id attr as selector
+        "click #save${className}": "save${className}",  //binding the saveButton of template using id attr as selector  
+     	"click #saveNew${className}": "saveNew${className}"  //binding the saveNewButton of template using id attr as selector
     },
-    savePerson : function(){
+    save${className} : function(){
     	alert(JSON.stringify(this.model));
     	this.model.save();
     },
-    saveNewPerson : function(){
+    saveNew${className} : function(){
     	this.model.set("id", null);
     	this.model.save();
     },
     change : function(){
-    	var target = event.target;
-        //alert('changing ' + target.id +  ' with name:' + target.name +' from: ' + target.defaultValue + ' to: ' + target.value);
+    	var target = event.target;        
         this.model.set(target.id, target.value);
     }
     

@@ -1,0 +1,10 @@
+
+<div>
+		
+	#foreach($key in $valuesToPlug.keySet() )
+		<input type='text' id="$key" name='$key' value="{{=$key}}"/>
+	#end
+	
+	<input type="button" class="save" id="savePerson" value="Save" />
+	<input type="button" class="save" id="saveNewPerson" value="Save NEw" />
+</div>

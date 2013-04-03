@@ -5,6 +5,8 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IContainer;
@@ -256,6 +258,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			IFolder jsFolder = resourcesFolder.getFolder(new Path("js"));
 			jsFolder.create(false, true, new NullProgressMonitor());
 			
+			
 			//add 3rd party JS libs
 			addFileToProject(jsFolder, new Path("backbone.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/backbone.js"), monitor);
@@ -275,8 +278,11 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			IFolder yourJsFolder = jsFolder.getFolder(new Path("yourjs"));
 			yourJsFolder.create(false, true, new NullProgressMonitor());
 			
+			Map<String, Object> mapOfValues = new HashMap<String, Object>();
+			mapOfValues.put("className", domainClassName);
+			mapOfValues.put("projectName", proj.getName());
 			addFileToProject(yourJsFolder, new Path("components.js"), 
-					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/components.js"), monitor);
+					TemplateMerger.merge("/bsbuilder/resources/web/js/components.js", mapOfValues), monitor);
 			
 			//resources/templates
 			IFolder templatesFolder = resourcesFolder.getFolder(new Path("templates"));
@@ -301,12 +307,24 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 					BackbonePageNewWizard.openContentStream("Welcome to "
 							+ proj.getName()), monitor);
 			
-			/* Add a default jsp file */
-			addFileToProject(srcFolder51, new Path("index.jsp"),
-					TemplateMerger.merge("/bsbuilder/resources/web/jsps/index.jsp-template", proj.getName(),basePackageName,controllerPackageName), monitor);
-			
+						
+					
 			/* Add a java file */
 			createPackageAndClass(srcFolder31, domainPackageName, domainClassName, classSourceCode , monitor);
+			
+			Map<String, Object> modelAttributes = pageThree.getModelAttributes();
+			/* Add a default jsp file.  This is dependent on the Java Model generation */
+			addFileToProject(srcFolder51, new Path("index.jsp"),
+					TemplateMerger.merge("/bsbuilder/resources/web/jsps/index.jsp-template", domainPackageName, 
+							domainClassName, modelAttributes), monitor);
+	
+			
+			/*Add a backbone template file.  This is dependent on the Java Model generation*/
+			
+			addFileToProject(templatesFolder, new Path("EditTemplate.htm"), 
+					TemplateMerger.mergeMap("/bsbuilder/resources/web/js/template/EditTemplate.htm-template", modelAttributes ), monitor);
+
+			
 			/* Add a Controller*/
 			createPackageAndClass(srcFolder31, controllerPackageName, controllerClassName, controllerSourceCode , monitor);
 			

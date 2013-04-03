@@ -38,7 +38,7 @@ public class TemplateMerger {
 		return new ByteArrayInputStream(sw.toString().getBytes());
 	}
 	
-	public static InputStream merge(String templateName,String domainPackageName ,String className, Map<String, String> attrs){
+	public static InputStream merge(String templateName,String domainPackageName ,String className, Map<String, Object> attrs){
 		Velocity.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath"); 
 		Velocity.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
 		Velocity.init();
@@ -71,14 +71,33 @@ public class TemplateMerger {
 		Velocity.init();
 				
 		VelocityContext context = new VelocityContext();		
-
-//		context.put( "basePackageName", basePackageName );
-//		context.put("controllerPackageName", controllerPackageName);
-//		context.put( "domainClassName", domainClassName );
 		for(String key : valuesToPlug.keySet()){
 			context.put(key, valuesToPlug.get(key));
 		}
 
+		Template template = null;
+
+		try
+		{
+		   template = Velocity.getTemplate(templateName);	
+		}catch( Exception e )
+		{
+			e.printStackTrace();
+		}
+
+		StringWriter sw = new StringWriter();
+		template.merge( context, sw );
+		return new ByteArrayInputStream(sw.toString().getBytes());
+	}
+	
+	public static InputStream mergeMap(String templateName, Map<String, Object> valuesToPlug){
+		Velocity.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath"); 
+		Velocity.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
+		Velocity.init();
+						
+		VelocityContext context = new VelocityContext();		
+		context.put("valuesToPlug", valuesToPlug);
+		
 		Template template = null;
 
 		try
