@@ -39,7 +39,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		    //handler for getting a ${className} record
 		    app_router.on('route:get$className', function (idToFetch) {
 		        // Note the variable in the route definition being passed in here  
-		        var $className.toLowerCase()  = new ${className}({id : idToFetch});			
+		        var $className.toLowerCase()  = new ${className}({${domainClassIdAttributeName} : idToFetch});			
 				var result = ${className.toLowerCase()}.fetch({
 					success : function(){
 						//render the view when ${className} is fetched successfully	

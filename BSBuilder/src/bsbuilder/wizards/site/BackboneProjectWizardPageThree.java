@@ -14,22 +14,27 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.TouchListener;
 import org.eclipse.swt.events.TouchEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.widgets.Combo;
@@ -84,38 +89,52 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 		tblclmnNewColumn_1.setText("Attribute");
 		
 		TableColumn tblclmnNewColumn = new TableColumn(table, SWT.NONE);
-		tblclmnNewColumn.setWidth(100);
+		tblclmnNewColumn.setWidth(208);
 		tblclmnNewColumn.setText("Data Type");
 		new Label(container, SWT.NONE);
 		new Label(container, SWT.NONE);
-		new Label(container, SWT.NONE);
+				
+		TableColumn tblclmnIdFlag = new TableColumn(table, SWT.NONE);
+		tblclmnIdFlag.setWidth(100);
+		tblclmnIdFlag.setText("Is Id?");
 		
 		
-		
-		final TableEditor editor = new TableEditor(table);
+		/*
+		final TableEditor editor1 = new TableEditor(table);
 		//The editor must have the same size as the cell and must
 		//not be any smaller than 50 pixels.
-		editor.horizontalAlignment = SWT.LEFT;
-		editor.grabHorizontal = true;
-		editor.minimumWidth = 50;
+		editor1.horizontalAlignment = SWT.LEFT;
+		editor1.grabHorizontal = true;
+		editor1.minimumWidth = 50;
 				
-		final TableEditor editor2 = new TableEditor(table);
+		final TableEditor editor2 = new TableEditor(table);				
 		//The editor must have the same size as the cell and must
 		//not be any smaller than 50 pixels.
 		editor2.horizontalAlignment = SWT.LEFT;
 		editor2.grabHorizontal = true;
 		editor2.minimumWidth = 50;
-
 		
-		table.addSelectionListener(new SelectionAdapter() {
+		final TableEditor editor3 = new TableEditor(table);				
+		//The editor must have the same size as the cell and must
+		//not be any smaller than 50 pixels.
+		editor3.horizontalAlignment = SWT.LEFT;
+		editor3.grabHorizontal = true;
+		editor3.minimumWidth = 50;
+		*/
+		
+		/*table.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				// Clean up any previous editor control
-				Control oldEditor = editor.getEditor();
+				Control oldEditor = editor1.getEditor();
 				if (oldEditor != null) oldEditor.dispose();
 				
 				// Clean up any previous editor control
 				Control oldEditor2 = editor2.getEditor();
 				if (oldEditor2 != null) oldEditor2.dispose();
+				
+				// Clean up any previous editor control
+				Control oldEditor3 = editor3.getEditor();
+				if (oldEditor3 != null) oldEditor3.dispose();
 		
 				// Identify the selected row
 				TableItem item = (TableItem)e.item;
@@ -126,13 +145,13 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 				newEditor.setText(item.getText(0));
 				newEditor.addModifyListener(new ModifyListener() {
 					public void modifyText(ModifyEvent me) {
-						Text text = (Text)editor.getEditor();
-						editor.getItem().setText(0, text.getText());
+						Text text = (Text)editor1.getEditor();
+						editor1.getItem().setText(0, text.getText());
 					}
 				});
 				newEditor.selectAll();
 				newEditor.setFocus();
-				editor.setEditor(newEditor, item, 0);
+				editor1.setEditor(newEditor, item, 0);
 				
 				// The control that will be the editor must be a child of the Table
 				//Text newEditor2 = new Text(table, SWT.NONE);
@@ -150,21 +169,100 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 						editor2.getItem().setText(1, combo.getText());
 					}
 				});	
-
 				editor2.setEditor(comboEditor, item, 1);
+				
+				Button radioButtonEditor = new Button(table, SWT.RADIO);
+				radioButtonEditor.addSelectionListener(new SelectionListener() {
+					
+					@Override
+					public void widgetSelected(SelectionEvent arg0) {
+						// TODO Auto-generated method stub
+						System.out.println();
+					}
+					
+					@Override
+					public void widgetDefaultSelected(SelectionEvent arg0) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
+				editor3.setEditor(radioButtonEditor, item, 2);
 			}
+		});*/
+		
+		table.addListener(SWT.MeasureItem, new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+			      // height cannot be per row so simply set
+			      event.height = 20;
+			   }
 		});
-		
-		
 		
 		
 		Button btnNewButton = new Button(container, SWT.NONE);
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
-				TableItem tableItem = new TableItem(table, SWT.NONE);
+				final TableItem tableItem = new TableItem(table, SWT.NONE);
+				
 				tableItem.setText(0, "changeMe");
+				TableEditor column1Editor = new TableEditor(table);
+				column1Editor.horizontalAlignment = SWT.LEFT;
+				column1Editor.grabHorizontal = true;
+				column1Editor.minimumWidth = 50;
+				Text newEditor = new Text(table, SWT.NONE);
+				newEditor.setText("changeMe");					
+				newEditor.addModifyListener(new ModifyListener() {					
+					@Override
+					public void modifyText(ModifyEvent arg0) {
+					  tableItem.setText(0, ((Text)arg0.getSource()).getText());													
+					}
+				});							
+				column1Editor.setEditor(newEditor, tableItem, 0);
+				
 				tableItem.setText(1, "String");
+				TableEditor column2Editor = new TableEditor(table);
+				column2Editor.horizontalAlignment = SWT.LEFT;
+				column2Editor.grabHorizontal = true;
+				column2Editor.minimumWidth = 50;
+				CCombo combo = new CCombo(table, SWT.NONE);
+			    combo.setText("String");
+			    combo.add("String");
+			    combo.add("Date");			    
+			    combo.addModifyListener(new ModifyListener() {
+					@Override
+					public void modifyText(ModifyEvent arg0) {
+						tableItem.setText(1, ((CCombo)arg0.getSource()).getText());
+					}
+				});
+			    column2Editor.setEditor(combo, tableItem, 1);
+			    
+			    TableEditor column3Editor = new TableEditor(table);
+			    column3Editor.horizontalAlignment = SWT.LEFT;
+			    column3Editor.grabHorizontal = true;
+			    column3Editor.minimumWidth = 50;
+			    column3Editor.minimumHeight = 30;
+			    Button radioButtonEditor = new Button(table, SWT.RADIO);
+			    radioButtonEditor.setText("X");
+			    if(table.getItems().length == 1){
+			    	radioButtonEditor.setSelection(true);
+			    	tableItem.setText(2, "X");
+			    }
+			    radioButtonEditor.addSelectionListener(new SelectionListener() {					
+					@Override
+					public void widgetSelected(SelectionEvent arg0) {
+						for(TableItem tableItemReset : table.getItems())
+							tableItemReset.setText(2, "");
+						tableItem.setText(2, "X");
+					}
+					
+					@Override
+					public void widgetDefaultSelected(SelectionEvent arg0) {
+						
+					}
+				});
+			    column3Editor.setEditor(radioButtonEditor, tableItem, 2);
+			    
 			}
 		});
 		btnNewButton.setText("Add Row");
@@ -173,11 +271,9 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 		btnNewButton_1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
-				TableItem[] tableItems = table.getItems();
+				TableItem[] tableItems = table.getItems();			
 				for(int i = 0; i < tableItems.length; i++){
-					System.out.println(tableItems[i].getText(0));
-					System.out.println(tableItems[i].getText(1));
-					System.out.println();
+					System.out.println(tableItems[i].getText(0) + "=====" + tableItems[i].getText(1) + tableItems[i].getText(2));
 				}
 			}
 		});
@@ -227,7 +323,7 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 		}
 		
 		InputStream is = 
-				TemplateMerger.merge("/bsbuilder/resources/java/class.java-template", domainPackageName,textSampleDomainClass.getText(), attrs);
+				TemplateMerger.merge("/bsbuilder/resources/java/class.java-template", domainPackageName,textSampleDomainClass.getText(), "" ,attrs);
 		BufferedReader br 	= new BufferedReader(new InputStreamReader(is));
 		String line = "";
 		StringWriter stringWriter = new StringWriter();
@@ -267,6 +363,17 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 	
 	public Map<String, Object> getModelAttributes(){
 		return attrs;
+	}
+	
+	public String getDomainClassAttributeName(){
+		String idAttrName = "";
+		TableItem[] tableItems = table.getItems();			
+		for(int i = 0; i < tableItems.length; i++){
+			if("X".equals(tableItems[i].getText(2))){
+				idAttrName = tableItems[i].getText(0);
+			}
+		}
+		return idAttrName;
 	}
 
 }

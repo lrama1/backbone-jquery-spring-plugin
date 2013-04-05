@@ -38,7 +38,8 @@ public class TemplateMerger {
 		return new ByteArrayInputStream(sw.toString().getBytes());
 	}
 	
-	public static InputStream merge(String templateName,String domainPackageName ,String className, Map<String, Object> attrs){
+	public static InputStream merge(String templateName,String domainPackageName ,String className,
+			String domainClassIdAttributeName ,Map<String, Object> attrs){
 		Velocity.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath"); 
 		Velocity.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
 		Velocity.init();
@@ -47,6 +48,7 @@ public class TemplateMerger {
 
 		context.put( "domainPackageName", domainPackageName );
 		context.put( "className", className );
+		context.put("domainClassIdAttributeName", domainClassIdAttributeName);
 		context.put( "attrs", attrs );
 
 

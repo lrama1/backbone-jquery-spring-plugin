@@ -2,6 +2,7 @@
 
 ${className} = Backbone.Model.extend({	
 	//defaults : {firstName : "", lastName : ""},
+	idAttribute : '${domainClassIdAttributeName}',
     initialize: function(){        
         this.bind("error", function(model, error){
             // We have received an error, log it, alert it or forget it :)
@@ -39,7 +40,7 @@ ${className}EditView = Backbone.View.extend({
     	this.model.save();
     },
     saveNew${className} : function(){
-    	this.model.set("id", null);
+    	this.model.set("${domainClassIdAttributeName}", null);
     	this.model.save();
     },
     change : function(){

@@ -129,6 +129,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		
 		final String domainClassName = pageThree.getDomainClassName();
 		final String classSourceCode = pageThree.getClassSource(domainPackageName);
+		final String domainClassIdAttrName = pageThree.getDomainClassAttributeName();
 		final String controllerClassName = domainClassName + "Controller";
 		final String controllerSourceCode = pageThree.getControllerSource(basePackageName, controllerPackageName, domainClassName);
 		
@@ -145,7 +146,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 					throws CoreException {
 				createProject(desc, projectHandle, basePackageName, controllerPackageName, 
 						controllerClassName, controllerSourceCode,
-						domainPackageName, domainClassName ,classSourceCode , monitor);
+						domainPackageName, domainClassName ,classSourceCode, domainClassIdAttrName , monitor);
 			}
 		};
 
@@ -189,7 +190,9 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 	void createProject(IProjectDescription description, IProject proj, 
 			String basePackageName, 
 			String controllerPackageName, String controllerClassName, String controllerSourceCode,
-			String domainPackageName, String domainClassName, String classSourceCode,
+			String domainPackageName, 
+			String domainClassName, String domainClassSourceCode,
+			String domainClassIdAttributeName,
 			IProgressMonitor monitor) throws CoreException,
 			OperationCanceledException {
 		try {
@@ -282,6 +285,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			Map<String, Object> mapOfValues = new HashMap<String, Object>();
 			mapOfValues.put("className", domainClassName);
 			mapOfValues.put("projectName", proj.getName());
+			mapOfValues.put("domainClassIdAttributeName", domainClassIdAttributeName);
 			addFileToProject(yourJsFolder, new Path("components.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/components.js", mapOfValues), monitor);
 			
@@ -311,13 +315,13 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 						
 					
 			/* Add a java file */
-			createPackageAndClass(srcFolder31, domainPackageName, domainClassName, classSourceCode , monitor);
+			createPackageAndClass(srcFolder31, domainPackageName, domainClassName, domainClassSourceCode , monitor);
 			
 			Map<String, Object> modelAttributes = pageThree.getModelAttributes();
 			/* Add a default jsp file.  This is dependent on the Java Model generation */
 			addFileToProject(srcFolder51, new Path("index.jsp"),
 					TemplateMerger.merge("/bsbuilder/resources/web/jsps/index.jsp-template", domainPackageName, 
-							domainClassName, modelAttributes), monitor);
+							domainClassName, domainClassIdAttributeName, modelAttributes), monitor);
 	
 			
 			/*Add a backbone template file.  This is dependent on the Java Model generation*/
