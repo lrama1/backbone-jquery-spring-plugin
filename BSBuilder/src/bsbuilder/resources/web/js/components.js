@@ -2,14 +2,7 @@
 
 ${className} = Backbone.Model.extend({	
 	//defaults : {firstName : "", lastName : ""},
-	idAttribute : '${domainClassIdAttributeName}',
-    initialize: function(){        
-        this.bind("error", function(model, error){
-            // We have received an error, log it, alert it or forget it :)
-            alert("Error:" + JSON.stringify(error));
-            return false;
-        });
-    }
+	idAttribute : '${domainClassIdAttributeName}'
 	,	
 	urlRoot : '/${projectName}/controller/${className.toLowerCase()}'
 	,

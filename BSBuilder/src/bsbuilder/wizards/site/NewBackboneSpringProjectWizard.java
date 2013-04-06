@@ -268,8 +268,11 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/backbone.js"), monitor);
 			addFileToProject(jsFolder, new Path("ejs_fulljslint.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/ejs_fulljslint.js"), monitor);
-			addFileToProject(jsFolder, new Path("jquery-1.8.3.js"), 
-					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/jquery-1.8.3.js"), monitor);
+			addFileToProject(jsFolder, new Path("jquery-1.9.1.min.js"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/jquery-1.9.1.min.js"), monitor);
+			addFileToProject(jsFolder, new Path("require.js"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/require.js"), monitor);
+			
 			//addFileToProject(jsFolder, new Path("jquery.dataTables.js"), 
 			//		this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/jquery.dataTables.js"), monitor);
 			addFileToProject(jsFolder, new Path("json2.js"), 

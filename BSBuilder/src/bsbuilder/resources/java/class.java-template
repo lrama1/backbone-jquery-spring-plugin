@@ -22,4 +22,16 @@ public class $className {
 			$key = "Sample Value $foreach.count";
 		#end
 	}
+	
+	public String toString(){
+		return
+			#foreach($key in $attrs.keySet() )
+				#if($foreach.count == 1)
+					"${key} = " + ${key}
+				#else
+					+ ", ${key} = " + ${key}
+				#end	
+			#end
+			;
+	}
 }

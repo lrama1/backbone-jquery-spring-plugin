@@ -31,14 +31,14 @@ public class ${domainClassName}Controller {
 	
 	
 	@RequestMapping(value = "/controller/${domainClassName.toLowerCase()}", headers = {"accept=application/json"}, method = RequestMethod.POST)
-	public @ResponseBody String saveNew${domainClassName}(@RequestBody ${domainClassName} ${domainClassName.toLowerCase()}){
-		System.out.println();
+	public @ResponseBody String saveNew${domainClassName}(@RequestBody ${domainClassName} ${domainClassName.substring(0,1).toLowerCase()}${domainClassName.substring(1)}){
+		System.out.println(${domainClassName.substring(0,1).toLowerCase()}${domainClassName.substring(1)}.toString());
 		return "";
 	}
 	
 	@RequestMapping(value = "/controller/${domainClassName.toLowerCase()}/{id}", headers = {"accept=application/json"}, method = RequestMethod.PUT)
-	public  @ResponseBody String  update${domainClassName}(@RequestBody ${domainClassName} ${domainClassName.toLowerCase()}){
-		System.out.println();
+	public  @ResponseBody String  update${domainClassName}(@RequestBody ${domainClassName} ${domainClassName.substring(0,1).toLowerCase()}${domainClassName.substring(1)}){
+		System.out.println(${domainClassName.substring(0,1).toLowerCase()}${domainClassName.substring(1)}.toString());
 		return "";
 	}
 	
