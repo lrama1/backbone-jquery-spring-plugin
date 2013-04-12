@@ -1,68 +1,15 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%
-String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+<!DOCTYPE html>
 <html>
-  <head>
-    <base href="<%=basePath%>">
-    
-    <title>Sample JSP</title>
-	
-	<script type="text/javascript" src="<c:url value="resources/js/jquery-1.9.1.min.js"/>"></script>
-	<script type="text/javascript" src="<c:url value="resources/js/underscore-min.js"/>"></script>
-	<script type="text/javascript" src="<c:url value="resources/js/backbone.js"/>"></script>
-	<script type="text/javascript" src="<c:url value="resources/js/json2.js"/>"></script>
-	<script type="text/javascript" src="<c:url value="resources/js/require.js"/>"></script>	
-	<script type="text/javascript" src="<c:url value="resources/js/yourjs/components.js"/>"></script>	
-	<!-- script type="text/javascript" src="<c:url value="resources/js/jquery.dataTables.js"/>"></script-->
+<head>
 
-	<script type="text/javascript">
-		$(document).ready(function(){		
-			//change underscore delims to using {{}}
-			_.templateSettings = {
-				evaluate :  /{{([\s\S]+?)}}/g,
-				interpolate : /{{=([\s\S]+?)}}/g
-			};
-			
-			var AppRouter = Backbone.Router.extend({
-		        routes: {
-		            "$className.toLowerCase()/:id": "get$className " // matches http://example.com/#/$className.toLowerCase()/{id}
-		        }
-		    });
-		    // Initiate the router
-		    var app_router = new AppRouter;
-			var ${className.toLowerCase()}View = {};
-		    
-		    //handler for getting a ${className} record
-		    app_router.on('route:get$className', function (idToFetch) {
-		        // Note the variable in the route definition being passed in here  
-		        var $className.toLowerCase()  = new ${className}({${domainClassIdAttributeName} : idToFetch});			
-				var result = ${className.toLowerCase()}.fetch({
-					success : function(){
-						//render the view when ${className} is fetched successfully	
-						${className.toLowerCase()}View = new ${className}EditView({ el: $("#editContainer"), model : ${className.toLowerCase()} });
-					},
-					error : function(){
-						alert("problem");
-					}
-				});
-		    });
-		    
-		    // Start Backbone history a necessary step for bookmarkable URL's
-		    Backbone.history.start();
-
-		});
-	</script>
-  </head>
-  
-  <body>
-  
-    This is my JSP22 page. <br>
-    <div id="editContainer">h</div>    
-    
-  </body>
+<title>Insert title here</title>
+<script data-main="/${projectName}/resources/js/main" src="/${projectName}/resources/js/libs/require.js"></script>
+</head>
+<body>
+	<h1>Here.</h1>
+	<div id="editContainer">h</div>
+</body>
 </html>

@@ -262,36 +262,63 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			IFolder jsFolder = resourcesFolder.getFolder(new Path("js"));
 			jsFolder.create(false, true, new NullProgressMonitor());
 			
+			//resources/js/libs
+			IFolder jsLibsFolder = jsFolder.getFolder(new Path("libs"));
+			jsLibsFolder.create(false, true, new NullProgressMonitor());
+			
 			
 			//add 3rd party JS libs
-			addFileToProject(jsFolder, new Path("backbone.js"), 
-					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/backbone.js"), monitor);
-			addFileToProject(jsFolder, new Path("ejs_fulljslint.js"), 
-					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/ejs_fulljslint.js"), monitor);
-			addFileToProject(jsFolder, new Path("jquery-1.9.1.min.js"), 
-					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/jquery-1.9.1.min.js"), monitor);
-			addFileToProject(jsFolder, new Path("require.js"), 
-					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/require.js"), monitor);
-			
-			//addFileToProject(jsFolder, new Path("jquery.dataTables.js"), 
-			//		this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/jquery.dataTables.js"), monitor);
-			addFileToProject(jsFolder, new Path("json2.js"), 
-					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/json2.js"), monitor);
-			addFileToProject(jsFolder, new Path("underscore-min.js"), 
-					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/underscore-min.js"), monitor);
+			addFileToProject(jsLibsFolder, new Path("backbone.js"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backbone.js"), monitor);
+			addFileToProject(jsLibsFolder, new Path("ejs_fulljslint.js"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/ejs_fulljslint.js"), monitor);
+			addFileToProject(jsLibsFolder, new Path("jquery.js"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/jquery-1.9.1.min.js"), monitor);
+			addFileToProject(jsLibsFolder, new Path("require.js"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/require.js"), monitor);			
+			//addFileToProject(jsLibsFolder, new Path("jquery.dataTables.js"), 
+			//		this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/jquery.dataTables.js"), monitor);
+			addFileToProject(jsLibsFolder, new Path("json2.js"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/json2.js"), monitor);
+			addFileToProject(jsLibsFolder, new Path("underscore.js"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/underscore-min.js"), monitor);
+
+			//ANOMALY, why does text.js have to be outside the libs folder
+			addFileToProject(jsFolder, new Path("text.js"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/text.js"), monitor);
 
 			
 			//resources/js/yourjs
-			IFolder yourJsFolder = jsFolder.getFolder(new Path("yourjs"));
-			yourJsFolder.create(false, true, new NullProgressMonitor());
+			//IFolder yourJsFolder = jsFolder.getFolder(new Path("yourjs"));
+			//yourJsFolder.create(false, true, new NullProgressMonitor());
+			
+			//resources/js/models
+			IFolder modelsFolder = jsFolder.getFolder(new Path("models"));
+			modelsFolder.create(false, true, new NullProgressMonitor());
+			
+			//resources/js/views
+			IFolder viewsFolder = jsFolder.getFolder(new Path("views"));
+			viewsFolder.create(false, true, new NullProgressMonitor());
 			
 			Map<String, Object> mapOfValues = new HashMap<String, Object>();
 			mapOfValues.put("className", domainClassName);
 			mapOfValues.put("projectName", proj.getName());
 			mapOfValues.put("domainClassIdAttributeName", domainClassIdAttributeName);
-			addFileToProject(yourJsFolder, new Path("components.js"), 
-					TemplateMerger.merge("/bsbuilder/resources/web/js/components.js", mapOfValues), monitor);
-			
+			//addFileToProject(yourJsFolder, new Path("components.js"), 
+			//		TemplateMerger.merge("/bsbuilder/resources/web/js/components.js", mapOfValues), monitor);
+			addFileToProject(modelsFolder, new Path(domainClassName + "Model.js"), 
+					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/models/model-template.js", mapOfValues), monitor);
+			addFileToProject(viewsFolder, new Path(domainClassName + "EditView.js"), 
+					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/views/view-template.js", mapOfValues), monitor);
+
+			addFileToProject(jsFolder, new Path("main.js"), 
+					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/main/main-template.js", mapOfValues), monitor);
+			addFileToProject(jsFolder, new Path("app.js"), 
+					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/main/app-template.js", mapOfValues), monitor);
+			addFileToProject(jsFolder, new Path("router.js"), 
+					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/routers/router-template.js", mapOfValues), monitor);
+
+						
 			//resources/templates
 			IFolder templatesFolder = resourcesFolder.getFolder(new Path("templates"));
 			templatesFolder.create(false, true, new NullProgressMonitor());
@@ -308,8 +335,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			addFileToProject(srcFolder51, new Path("applicationContext.xml"),
 					TemplateMerger.merge("/bsbuilder/resources/maven/applicationContext.xml-template", proj.getName(),basePackageName,controllerPackageName), monitor);
 		
-			
-			
+						
 			/* Add a default html file */
 			addFileToProject(srcFolder41, new Path("index.html"),
 					BackbonePageNewWizard.openContentStream("Welcome to "
@@ -323,14 +349,12 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			Map<String, Object> modelAttributes = pageThree.getModelAttributes();
 			/* Add a default jsp file.  This is dependent on the Java Model generation */
 			addFileToProject(srcFolder51, new Path("index.jsp"),
-					TemplateMerger.merge("/bsbuilder/resources/web/jsps/index.jsp-template", domainPackageName, 
-							domainClassName, domainClassIdAttributeName, modelAttributes), monitor);
+					TemplateMerger.merge("/bsbuilder/resources/web/jsps/index.jsp-template", proj.getName(),"",""), monitor);
 	
 			
-			/*Add a backbone template file.  This is dependent on the Java Model generation*/
-			
+			/*Add a backbone template file.  This is dependent on the Java Model generation*/			
 			addFileToProject(templatesFolder, new Path("EditTemplate.htm"), 
-					TemplateMerger.mergeMap("/bsbuilder/resources/web/js/template/EditTemplate.htm-template", domainClassName ,modelAttributes ), monitor);
+					TemplateMerger.mergeMap("/bsbuilder/resources/web/js/backbone/templates/EditTemplate.htm-template", domainClassName ,modelAttributes ), monitor);
 
 			
 			/* Add a Controller*/
