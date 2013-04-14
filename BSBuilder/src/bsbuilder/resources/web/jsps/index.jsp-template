@@ -6,6 +6,7 @@
 <head>
 
 <title>Insert title here</title>
+<link rel="stylesheet" href="/${projectName}/resources/js/libs/backgrid.css" />
 <script data-main="/${projectName}/resources/js/main" src="/${projectName}/resources/js/libs/require.js"></script>
 </head>
 <body>

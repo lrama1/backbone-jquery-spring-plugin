@@ -282,7 +282,12 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/json2.js"), monitor);
 			addFileToProject(jsLibsFolder, new Path("underscore.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/underscore-min.js"), monitor);
+			addFileToProject(jsLibsFolder, new Path("backgrid.js"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid.js"), monitor);
+			addFileToProject(jsLibsFolder, new Path("backgrid.css"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid.css"), monitor);
 
+			
 			//ANOMALY, why does text.js have to be outside the libs folder
 			addFileToProject(jsFolder, new Path("text.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/text.js"), monitor);
@@ -296,6 +301,10 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			IFolder modelsFolder = jsFolder.getFolder(new Path("models"));
 			modelsFolder.create(false, true, new NullProgressMonitor());
 			
+			//resources/js/collections
+			IFolder collectionsFolder = jsFolder.getFolder(new Path("collections"));
+			collectionsFolder.create(false, true, new NullProgressMonitor());
+			
 			//resources/js/views
 			IFolder viewsFolder = jsFolder.getFolder(new Path("views"));
 			viewsFolder.create(false, true, new NullProgressMonitor());
@@ -304,13 +313,19 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			mapOfValues.put("className", domainClassName);
 			mapOfValues.put("projectName", proj.getName());
 			mapOfValues.put("domainClassIdAttributeName", domainClassIdAttributeName);
+			mapOfValues.put("attrs", pageThree.getModelAttributes());
 			//addFileToProject(yourJsFolder, new Path("components.js"), 
 			//		TemplateMerger.merge("/bsbuilder/resources/web/js/components.js", mapOfValues), monitor);
 			addFileToProject(modelsFolder, new Path(domainClassName + "Model.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/models/model-template.js", mapOfValues), monitor);
+			addFileToProject(collectionsFolder, new Path(domainClassName + "Collection.js"), 
+					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/collections/collection-template.js", mapOfValues), monitor);
 			addFileToProject(viewsFolder, new Path(domainClassName + "EditView.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/views/view-template.js", mapOfValues), monitor);
+			addFileToProject(viewsFolder, new Path(domainClassName + "CollectionView.js"), 
+					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/views/collection-view-template.js", mapOfValues), monitor);
 
+			
 			addFileToProject(jsFolder, new Path("main.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/main/main-template.js", mapOfValues), monitor);
 			addFileToProject(jsFolder, new Path("app.js"), 

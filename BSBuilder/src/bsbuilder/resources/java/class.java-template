@@ -19,7 +19,7 @@ public class $className {
 	
 	public void populateWithSample(){
 		#foreach($key in $attrs.keySet() )
-			$key = "Sample Value $foreach.count";
+			$key = "Sample Value $foreach.count" + Math.random();
 		#end
 	}
 	

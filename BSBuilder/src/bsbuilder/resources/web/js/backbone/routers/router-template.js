@@ -1,11 +1,14 @@
 // Filename: router.js
 define([        
-'jquery', 
-'underscore',
-'backbone',
+ 'jquery', 
+ 'underscore',
+ 'backbone',
+ 'backgrid',
  'views/${className}EditView',
- 'models/${className}Model'
-], function($,_,Backbone, ${className}EditView, ${className}Model) {
+ 'models/${className}Model',
+ 'collections/${className}Collection',
+ 'views/${className}CollectionView'
+], function($,_,Backbone, Backgrid ,${className}EditView, ${className}Model, ${className}Collection, ${className}CollectionView) {
 	
 	//change underscore delims to using {{}}
 	_.templateSettings = {
@@ -15,7 +18,8 @@ define([
   
 	var AppRouter = Backbone.Router.extend({
 		  routes: {
-	          "${className.toLowerCase()}/:id": "get${className} " // matches http://example.com/#/${className.toLowerCase()}/{id}
+	          "${className.toLowerCase()}/:id": "get${className} ", // matches http://example.com/#/${className.toLowerCase()}/{id}
+	          "${className.toLowerCase()}s" : "get${className}List" 
 	      }
 	});
   
@@ -39,6 +43,21 @@ define([
 					alert("problem");
 				}
 			});
+	    });
+	    
+	    app_router.on('route:get${className}List', function () {
+	    	var ${className.toLowerCase()}CollectionView = {};
+	    	var ${className.toLowerCase()}s = new ${className}Collection();
+	    	alert('getting a list of ${className.toLowerCase()}s' + JSON.stringify(${className.toLowerCase()}s));
+	    	${className.toLowerCase()}s.fetch({
+	    		success : function(data){
+	    			alert("List from Server" + JSON.stringify(data));
+	    			${className.toLowerCase()}CollectionView = new ${className}CollectionView({ el: $("#editContainer"), collection : ${className.toLowerCase()}s });
+	    		},
+	    		error : function(){
+	    			alert("Problem retrieving list");
+	    		}
+	    	});
 	    });
 	    
 	    // Start Backbone history a necessary step for bookmarkable URL's

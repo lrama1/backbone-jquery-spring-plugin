@@ -5,6 +5,7 @@ require.config({
     jquery:     '/${projectName}/resources/js/libs/jquery',
     underscore: '/${projectName}/resources/js/libs/underscore',
     backbone:   '/${projectName}/resources/js/libs/backbone',
+    backgrid :  '/${projectName}/resources/js/libs/backgrid',
     templates:  '/${projectName}/resources/templates'
     	
   },
@@ -15,7 +16,11 @@ require.config({
 	    backbone: {
 	      deps: ["underscore", "jquery"],
 	      exports: "Backbone"
-	    }
+	    },
+	    backgrid: {
+	    	deps: ["underscore", "jquery", "backbone"],
+		      exports: 'Backgrid'
+		}
   }
 
 });
