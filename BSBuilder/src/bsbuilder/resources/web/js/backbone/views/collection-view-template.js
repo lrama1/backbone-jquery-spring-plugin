@@ -12,7 +12,7 @@ define([
 	    },
 	    render: function(myEl, modelToRender){    	
 	    	
-	    	alert("MOdels" + JSON.stringify(this.collection.models));
+	    	console.log("MOdels" + JSON.stringify(this.collection.models));
 	    	var data = {
 	    			${className.toLowerCase()}s: this.collection.models,
 	    	        _: _ 
@@ -38,18 +38,7 @@ define([
 		    	#end
 	    	];
 	    	
-//	    	var columns = [
-//	    	    {
-//	        	  name: "vin", 
-//	        	  label: "VIN", 
-//	        	  editable: false, 
-//	        	  cell: "string"
-//	        	}, {
-//	        	  name: "model",
-//	        	  label: "Model",
-//	        	  cell: "string" 
-//	        	}
-//	        	];
+
 
 	        	// Initialize a new Grid instance
 	        	var grid = new Backgrid.Grid({

@@ -29,7 +29,7 @@ ${className}EditView = Backbone.View.extend({
      	"click #saveNew${className}": "saveNew${className}"  //binding the saveNewButton of template using id attr as selector
     },
     save${className} : function(){
-    	alert(JSON.stringify(this.model));
+    	console.log(JSON.stringify(this.model));
     	this.model.save();
     },
     saveNew${className} : function(){

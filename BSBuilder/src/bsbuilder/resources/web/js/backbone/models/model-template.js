@@ -8,7 +8,7 @@ define([
 	  idAttribute : '${domainClassIdAttributeName}',	
 	  urlRoot : '/${projectName}/controller/${className.toLowerCase()}',	  
 	  validate : function(attributes){
-		alert('test');
+		//alert('test');
 	  }	
   });
 

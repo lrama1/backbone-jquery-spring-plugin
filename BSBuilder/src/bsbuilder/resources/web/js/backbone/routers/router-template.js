@@ -48,10 +48,9 @@ define([
 	    app_router.on('route:get${className}List', function () {
 	    	var ${className.toLowerCase()}CollectionView = {};
 	    	var ${className.toLowerCase()}s = new ${className}Collection();
-	    	alert('getting a list of ${className.toLowerCase()}s' + JSON.stringify(${className.toLowerCase()}s));
 	    	${className.toLowerCase()}s.fetch({
 	    		success : function(data){
-	    			alert("List from Server" + JSON.stringify(data));
+	    			console.log("List from Server" + JSON.stringify(data));
 	    			${className.toLowerCase()}CollectionView = new ${className}CollectionView({ el: $("#editContainer"), collection : ${className.toLowerCase()}s });
 	    		},
 	    		error : function(){
