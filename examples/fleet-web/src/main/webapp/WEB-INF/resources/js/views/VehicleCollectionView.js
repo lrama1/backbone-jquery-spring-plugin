@@ -36,7 +36,7 @@ define([
 	        	});
 	    		$("#editContainer").append(grid.render().$el);
 
-	    		this.collection.fetch();
+	    		this.collection.fetch({reset : true});
 	        	// Render the grid and attach the root to your HTML document	        	
 //	        	$.when(this.collection.fetch()).done(function(data){	        		
 //	        		this.collection = new VehicleCollection(data);
