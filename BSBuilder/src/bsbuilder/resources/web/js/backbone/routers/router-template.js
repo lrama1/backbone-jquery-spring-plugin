@@ -4,11 +4,13 @@ define([
  'underscore',
  'backbone',
  'backgrid',
- 'views/${className}EditView',
- 'models/${className}Model',
- 'collections/${className}Collection',
- 'views/${className}CollectionView'
-], function($,_,Backbone, Backgrid ,${className}EditView, ${className}Model, ${className}Collection, ${className}CollectionView) {
+  'views/${className}EditView',
+  'models/${className}Model', 
+  'collections/${className}Collection',
+  'views/${className}CollectionView',
+  'globals/global'
+  
+], function($,_,Backbone, Backgrid ,${className}EditView, ${className}Model, ${className}Collection, ${className}CollectionView, Global) {
 	
 	//change underscore delims to using {{}}
 	_.templateSettings = {
@@ -48,15 +50,8 @@ define([
 	    app_router.on('route:get${className}List', function () {
 	    	var ${className.toLowerCase()}CollectionView = {};
 	    	var ${className.toLowerCase()}s = new ${className}Collection();
-	    	${className.toLowerCase()}s.fetch({
-	    		success : function(data){
-	    			console.log("List from Server" + JSON.stringify(data));
-	    			${className.toLowerCase()}CollectionView = new ${className}CollectionView({ el: $("#editContainer"), collection : ${className.toLowerCase()}s });
-	    		},
-	    		error : function(){
-	    			alert("Problem retrieving list");
-	    		}
-	    	});
+	    	Global.log("getting the list of ${className}s.");
+	    	${className.toLowerCase()}CollectionView = new ${className}CollectionView({ el: $("#editContainer"), collection : new ${className}Collection()});
 	    });
 	    
 	    // Start Backbone history a necessary step for bookmarkable URL's

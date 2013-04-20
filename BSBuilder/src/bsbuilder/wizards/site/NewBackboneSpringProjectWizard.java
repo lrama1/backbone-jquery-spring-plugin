@@ -286,6 +286,12 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid.js"), monitor);
 			addFileToProject(jsLibsFolder, new Path("backgrid.css"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid.css"), monitor);
+			addFileToProject(jsLibsFolder, new Path("backgrid-paginator.css"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid-paginator.css"), monitor);
+			addFileToProject(jsLibsFolder, new Path("backgrid-paginator.js"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid-paginator.js"), monitor);			
+			addFileToProject(jsLibsFolder, new Path("backbone-pageable.js"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backbone-pageable.js"), monitor);
 
 			
 			//ANOMALY, why does text.js have to be outside the libs folder
@@ -304,6 +310,10 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			//resources/js/collections
 			IFolder collectionsFolder = jsFolder.getFolder(new Path("collections"));
 			collectionsFolder.create(false, true, new NullProgressMonitor());
+			
+			//resources/js/globals
+			IFolder globalsFolder = jsFolder.getFolder(new Path("globals"));
+			globalsFolder.create(false, true, new NullProgressMonitor());
 			
 			//resources/js/views
 			IFolder viewsFolder = jsFolder.getFolder(new Path("views"));
@@ -324,6 +334,8 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/views/view-template.js", mapOfValues), monitor);
 			addFileToProject(viewsFolder, new Path(domainClassName + "CollectionView.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/views/collection-view-template.js", mapOfValues), monitor);
+			addFileToProject(globalsFolder, new Path("global.js"), 
+					TemplateMerger.merge("/bsbuilder/resources/web/js/libs/global.js", mapOfValues), monitor);
 
 			
 			addFileToProject(jsFolder, new Path("main.js"), 
@@ -370,6 +382,8 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			/*Add a backbone template file.  This is dependent on the Java Model generation*/			
 			addFileToProject(templatesFolder, new Path("EditTemplate.htm"), 
 					TemplateMerger.mergeMap("/bsbuilder/resources/web/js/backbone/templates/EditTemplate.htm-template", domainClassName ,modelAttributes ), monitor);
+			addFileToProject(templatesFolder, new Path("ListTemplate.htm"), 
+					TemplateMerger.mergeMap("/bsbuilder/resources/web/js/backbone/templates/ListTemplate.htm-template", domainClassName ,modelAttributes ), monitor);
 
 			
 			/* Add a Controller*/

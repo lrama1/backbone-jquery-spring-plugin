@@ -3,8 +3,10 @@ define([
   'underscore',
   'backbone',
   'backgrid',
-  //'text!templates/ListTemplate.htm'
-], function($, _, Backbone, Backgrid){
+  'backgrid-paginator',
+  'collections/${className}Collection',
+  'text!templates/ListTemplate.htm'
+], function($, _, Backbone, Backgrid, BackgridPaginator, ${className}Collection, collectionTemplate){
 	
 	var ${className}CollectionView = Backbone.View.extend({
 	    initialize: function(){    	
@@ -43,12 +45,14 @@ define([
 	        	// Initialize a new Grid instance
 	        	var grid = new Backgrid.Grid({
 	        	  columns: columns,
-	        	  collection: this.collection
+	        	  collection: this.collection,
+	        	  footer: Backgrid.Extension.Paginator
 	        	});
 
-	        	// Render the grid and attach the root to your HTML document
-	        	//$("#editContainer").append(grid.render().$el);
-	        	$("#editContainer").html(grid.render().$el);
+	        	// Render the grid and attach the root to your HTML document	        	
+	        	//$("#editContainer").html(grid.render().$el);
+	        	$("#editContainer").append(grid.render().$el);
+	        	this.collection.fetch({reset : true});
 	    }
 	    
 	});

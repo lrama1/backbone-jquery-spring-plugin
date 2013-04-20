@@ -7,10 +7,11 @@
 
 <title>Insert title here</title>
 <link rel="stylesheet" href="/${projectName}/resources/js/libs/backgrid.css" />
+<link rel="stylesheet" href="/${projectName}/resources/js/libs/backgrid-paginator.css" />
 <script data-main="/${projectName}/resources/js/main" src="/${projectName}/resources/js/libs/require.js"></script>
 </head>
 <body>
 	<h1>Here.</h1>
-	<div id="editContainer">h</div>
+	<div id="editContainer" class="backgrid-container">h</div>
 </body>
 </html>

@@ -1,0 +1,12 @@
+
+<div>
+
+ Testing axl
+ {{=${domainClassName.toLowerCase()}s}}
+ 
+ {{
+ 	_.each(${domainClassName.toLowerCase()}s, function(${domainClassName.toLowerCase()}){
+ 		console.log(${domainClassName.toLowerCase()}.get("vin"));
+ 	});
+ }}
+</div>
