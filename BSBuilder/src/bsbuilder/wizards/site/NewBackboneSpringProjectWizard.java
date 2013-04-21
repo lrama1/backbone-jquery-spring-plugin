@@ -483,6 +483,11 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 				"/bsbuilder/resources/settings/org.eclipse.wst.jsdt.ui.superType.name.template");
 		addFileToProject(settingsFolder, new Path("org.eclipse.wst.jsdt.ui.superType.name"),
 				wstJsdtName, monitor);
+		
+		InputStream jsdtScope = this.getClass().getResourceAsStream(
+				"/bsbuilder/resources/settings/jsdtscope.template");
+		addFileToProject(settingsFolder, new Path(".jsdtscope"),
+				jsdtScope, monitor);
 	}
 	
 	/*
