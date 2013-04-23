@@ -12,6 +12,6 @@
 </head>
 <body>
 	<h1>Here.</h1>
-	<div id="editContainer" class="backgrid-container">h</div>
+	<div id="editContainer" class="backgrid-container">Default Home</div>
 </body>
 </html>

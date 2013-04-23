@@ -1,10 +1,15 @@
 
 <div>
-		
-	#foreach($key in $valuesToPlug.keySet() )
-		<input type='text' id="$key" name='$key' value="{{=$key}}"/>
-	#end
 	
+	<table>	
+		<tbody>
+			#foreach($key in $valuesToPlug.keySet() )
+				<tr>
+					<td>$key</td><td><input type='text' id="$key" name='$key' value="{{=$key}}"/></td>
+				</tr>
+			#end
+		</tbody>
+	</table>
 	<input type="button" class="save" id="save${domainClassName}" value="Save" />
-	<input type="button" class="save" id="saveNew${domainClassName}" value="Save NEw" />
+	<input type="button" class="save" id="saveNew${domainClassName}" value="Save New" />
 </div>

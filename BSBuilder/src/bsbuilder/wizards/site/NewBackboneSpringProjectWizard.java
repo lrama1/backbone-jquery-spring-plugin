@@ -75,8 +75,8 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		 */
 		wizardPage = new WizardNewProjectCreationPage(
 				"NewExampleComSiteProject");
-		wizardPage.setDescription("Create a new Example.com Site Project.");
-		wizardPage.setTitle("New Example.com Site Project");
+		wizardPage.setDescription("Create a new Pre-Scaffolded Backbone/Spring Web Project.");
+		wizardPage.setTitle("Pre-Scaffolded Backbone/Spring Web Project");
 		addPage(wizardPage);
 		
 		pageTwo = new BackboneProjectWizardPageTwo("test");

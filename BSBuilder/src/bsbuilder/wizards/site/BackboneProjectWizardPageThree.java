@@ -57,11 +57,12 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 	public void createControl(Composite parent) {
 		Composite container = new Composite(parent, SWT.NULL);
 		GridLayout layout = new GridLayout();
-		layout.numColumns = 3;
+		layout.numColumns = 4;
 		container.setLayout(layout);
 		layout.verticalSpacing = 9;
 		
 		setControl(container);
+		new Label(container, SWT.NONE);
 		new Label(container, SWT.NONE);
 		new Label(container, SWT.NONE);
 		new Label(container, SWT.NONE);
@@ -78,6 +79,7 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 			}
 		});
 		textSampleDomainClass.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		new Label(container, SWT.NONE);
 		
 		table = new Table(container, SWT.BORDER | SWT.FULL_SELECTION);
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
@@ -91,6 +93,7 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 		TableColumn tblclmnNewColumn = new TableColumn(table, SWT.NONE);
 		tblclmnNewColumn.setWidth(208);
 		tblclmnNewColumn.setText("Data Type");
+		new Label(container, SWT.NONE);
 		new Label(container, SWT.NONE);
 		new Label(container, SWT.NONE);
 				
@@ -200,6 +203,9 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 		
 		
 		Button btnNewButton = new Button(container, SWT.NONE);
+		GridData gd_btnNewButton = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_btnNewButton.widthHint = 164;
+		btnNewButton.setLayoutData(gd_btnNewButton);
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
@@ -215,7 +221,9 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 				newEditor.addModifyListener(new ModifyListener() {					
 					@Override
 					public void modifyText(ModifyEvent arg0) {
-					  tableItem.setText(0, ((Text)arg0.getSource()).getText());													
+					  String value = ((Text)arg0.getSource()).getText();	
+					  tableItem.setText(0, value);		
+					  validateAttrName(value);
 					}
 				});							
 				column1Editor.setEditor(newEditor, tableItem, 0);
@@ -262,10 +270,14 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 					}
 				});
 			    column3Editor.setEditor(radioButtonEditor, tableItem, 2);
-			    
+			    validateAttrsPresence();
 			}
 		});
 		btnNewButton.setText("Add Row");
+		new Label(container, SWT.NONE);
+		new Label(container, SWT.NONE);
+		new Label(container, SWT.NONE);
+		new Label(container, SWT.NONE);
 		
 		Button btnNewButton_1 = new Button(container, SWT.NONE);
 		btnNewButton_1.addMouseListener(new MouseAdapter() {
@@ -277,8 +289,7 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 				}
 			}
 		});
-		btnNewButton_1.setText("New Button");
-		new Label(container, SWT.NONE);
+		btnNewButton_1.setText("?");
 		
 		
 		validatePackage(textSampleDomainClass.getText());
@@ -293,17 +304,27 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 			updateStatus("Please capitalize the first letter.");
 			return;	
 		}		
+		if(!validateAttrsPresence()){
+			return;
+		}
 		updateStatus(null);
 	}
 	
-	private void validateAllAttributes(TableItem[] tableItems){
-		for(int i = 0; i < tableItems.length; i++){
-			String attributeName = tableItems[i].getText(0);
-			if(attributeName.trim().substring(0, 1).matches("[A-Z]")){
-				updateStatus("Please lowercase the first letter of attribute " + attributeName);
-				return;
-			}			
+	private boolean validateAttrsPresence(){
+		if(table.getItemCount() == 0){
+			updateStatus("Please add at least 1 attribute");
+			return false;
 		}
+		updateStatus(null);
+		return true;
+	}
+	
+	private void validateAttrName(String attributeName){
+		if(attributeName.trim().substring(0, 1).matches("[A-Z]")){
+			updateStatus("Attribute Name must start with a lowercase letter.");
+			return;
+		}
+		updateStatus(null);
 	}
 	
 	private void updateStatus(String message) {
