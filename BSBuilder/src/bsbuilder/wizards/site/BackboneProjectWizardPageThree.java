@@ -50,7 +50,7 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 		super(pageName);
 		setTitle("Sample Domain Class");
 		setDescription("Create a sample domain class which will be wired to" +
-				" a sample Restful Controller");
+				" a sample Restful Controller");		
 	}
 
 	@Override
@@ -236,7 +236,8 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 				CCombo combo = new CCombo(table, SWT.NONE);
 			    combo.setText("String");
 			    combo.add("String");
-			    combo.add("Date");			    
+			    combo.add("Date");		
+			    combo.add("Number");
 			    combo.addModifyListener(new ModifyListener() {
 					@Override
 					public void modifyText(ModifyEvent arg0) {
@@ -340,7 +341,15 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 		TableItem[] tableItems = table.getItems();
 				
 		for(TableItem tableItem : tableItems){
-			attrs.put(tableItem.getText(0), tableItem.getText(1));
+			String dataType = tableItem.getText(1);
+			String qualifiedType = "";
+			if(dataType.equals("String"))
+				qualifiedType = "String";
+			else if(dataType.equals("Date"))
+				qualifiedType = "java.util.Date";
+			else if(dataType.equals("Number"))
+				qualifiedType = "Integer";
+			attrs.put(tableItem.getText(0), qualifiedType);
 		}
 		
 		InputStream is = 

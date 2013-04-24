@@ -19,7 +19,15 @@ public class $className {
 	
 	public void populateWithSample(){
 		#foreach($key in $attrs.keySet() )
-			$key = "Sample Value $foreach.count" + Math.random();
+			#if($attrs.get($key) == 'String')
+				$key = "Sample Value $foreach.count" + Math.random();
+			#elseif($attrs.get($key) == 'java.util.Date')
+				$key = new java.util.Date();	
+			#elseif($attrs.get($key) == 'Integer')
+				$key = 0;
+			#else
+				$key = "";	
+			#end			
 		#end
 	}
 	

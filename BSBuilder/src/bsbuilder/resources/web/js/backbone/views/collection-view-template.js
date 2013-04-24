@@ -51,7 +51,7 @@ define([
 
 	        	// Render the grid and attach the root to your HTML document	        	
 	        	//$("#editContainer").html(grid.render().$el);
-	        	$("#editContainer").append(grid.render().$el);
+	        	$("#editContainer").html(grid.render().$el);
 	        	this.collection.fetch({reset : true});
 	    }
 	    
