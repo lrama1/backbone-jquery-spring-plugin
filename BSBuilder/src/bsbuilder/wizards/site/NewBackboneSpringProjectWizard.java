@@ -3,6 +3,7 @@ package bsbuilder.wizards.site;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.util.HashMap;
@@ -41,7 +42,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
-
+import bsbuilder.wizards.site.utils.CommonUtils;
 
 
 
@@ -66,6 +67,8 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 	private IStructuredSelection selection;
 
 	private IProject project;
+	
+	private Map<String, IFolder> folders = new HashMap<String, IFolder>();
 
 	@Override
 	public void addPages() {
@@ -198,7 +201,6 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		try {
 
 			monitor.beginTask("", 2000);
-
 			proj.create(description, new SubProgressMonitor(monitor, 1000));
 
 			if (monitor.isCanceled()) {
@@ -215,188 +217,112 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			IContainer container = (IContainer) proj;			
 
 			/* Add an pom file */
-			addFileToProject(container, new Path("pom.xml"),
+			CommonUtils.addFileToProject(container, new Path("pom.xml"),
 					TemplateMerger.merge("/bsbuilder/resources/maven/pom.xml-template", proj.getName(),
-							basePackageName,controllerPackageName), monitor);
-			
+							basePackageName,controllerPackageName), monitor);			
 
-			IFolder outputFolder = container.getFolder(new Path("target"));
-			outputFolder.create(true, true, monitor);
-
-			IFolder outputFolder2 = outputFolder.getFolder(new Path("classes"));
-			outputFolder2.create(true, true, monitor);
-			
-			IFolder outputFolder3 = outputFolder.getFolder(new Path("test-classes"));
-			outputFolder3.create(true, true, monitor);
-						
-
-			IFolder srcFolder = container.getFolder(new Path("src"));
-			srcFolder.create(false, true, new NullProgressMonitor());
-			
-			IFolder srcFolder21 = srcFolder.getFolder(new Path("main"));
-			srcFolder21.create(false, true, new NullProgressMonitor());
-			
-			IFolder srcFolder22 = srcFolder.getFolder(new Path("test"));
-			srcFolder22.create(false, true, new NullProgressMonitor());
-			
-			IFolder srcFolder31 = srcFolder21.getFolder(new Path("java"));
-			srcFolder31.create(false, true, new NullProgressMonitor());
-			
-			IFolder srcFolder32 = srcFolder22.getFolder(new Path("java"));
-			srcFolder32.create(false, true, new NullProgressMonitor());
-			
-			IFolder srcFolder41 = srcFolder21.getFolder(new Path("webapp"));
-			srcFolder41.create(false, true, new NullProgressMonitor());
-			
-			IFolder srcFolder51 = srcFolder41.getFolder(new Path("WEB-INF"));
-			srcFolder51.create(false, true, new NullProgressMonitor());
-			
-			IFolder settingsFolder = container.getFolder(new Path(".settings"));
-			settingsFolder.create(false, true, new NullProgressMonitor());
-			
-			//resources
-			IFolder resourcesFolder = srcFolder51.getFolder(new Path("resources"));
-			resourcesFolder.create(false, true, new NullProgressMonitor());
-			
-			//resources/js
-			IFolder jsFolder = resourcesFolder.getFolder(new Path("js"));
-			jsFolder.create(false, true, new NullProgressMonitor());
-			
-			//resources/js/libs
-			IFolder jsLibsFolder = jsFolder.getFolder(new Path("libs"));
-			jsLibsFolder.create(false, true, new NullProgressMonitor());
-			
+			//call create folders here
+			createFolderStructures(container, monitor);			
 			
 			//add 3rd party JS libs
-			addFileToProject(jsLibsFolder, new Path("backbone.js"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backbone.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backbone.js"), monitor);
-			addFileToProject(jsLibsFolder, new Path("ejs_fulljslint.js"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("ejs_fulljslint.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/ejs_fulljslint.js"), monitor);
-			addFileToProject(jsLibsFolder, new Path("jquery.js"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("jquery.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/jquery-1.9.1.min.js"), monitor);
-			addFileToProject(jsLibsFolder, new Path("require.js"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("require.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/require.js"), monitor);			
-			//addFileToProject(jsLibsFolder, new Path("jquery.dataTables.js"), 
+			//CommonUtils.CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("jquery.dataTables.js"), 
 			//		this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/jquery.dataTables.js"), monitor);
-			addFileToProject(jsLibsFolder, new Path("json2.js"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("json2.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/json2.js"), monitor);
-			addFileToProject(jsLibsFolder, new Path("underscore.js"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("underscore.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/underscore-min.js"), monitor);
-			addFileToProject(jsLibsFolder, new Path("backgrid.js"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backgrid.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid.js"), monitor);
-			addFileToProject(jsLibsFolder, new Path("backgrid.css"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backgrid.css"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid.css"), monitor);
-			addFileToProject(jsLibsFolder, new Path("backgrid-paginator.css"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backgrid-paginator.css"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid-paginator.css"), monitor);
-			addFileToProject(jsLibsFolder, new Path("backgrid-paginator.js"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backgrid-paginator.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid-paginator.js"), monitor);			
-			addFileToProject(jsLibsFolder, new Path("backbone-pageable.js"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backbone-pageable.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backbone-pageable.js"), monitor);
-
 			
 			//ANOMALY, why does text.js have to be outside the libs folder
-			addFileToProject(jsFolder, new Path("text.js"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js"), new Path("text.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/text.js"), monitor);
-
-			
-			//resources/js/yourjs
-			//IFolder yourJsFolder = jsFolder.getFolder(new Path("yourjs"));
-			//yourJsFolder.create(false, true, new NullProgressMonitor());
-			
-			//resources/js/models
-			IFolder modelsFolder = jsFolder.getFolder(new Path("models"));
-			modelsFolder.create(false, true, new NullProgressMonitor());
-			
-			//resources/js/collections
-			IFolder collectionsFolder = jsFolder.getFolder(new Path("collections"));
-			collectionsFolder.create(false, true, new NullProgressMonitor());
-			
-			//resources/js/globals
-			IFolder globalsFolder = jsFolder.getFolder(new Path("globals"));
-			globalsFolder.create(false, true, new NullProgressMonitor());
-			
-			//resources/js/views
-			IFolder viewsFolder = jsFolder.getFolder(new Path("views"));
-			viewsFolder.create(false, true, new NullProgressMonitor());
-			
+						
 			Map<String, Object> mapOfValues = new HashMap<String, Object>();
 			mapOfValues.put("className", domainClassName);
 			mapOfValues.put("projectName", proj.getName());
 			mapOfValues.put("domainClassIdAttributeName", domainClassIdAttributeName);
 			mapOfValues.put("attrs", pageThree.getModelAttributes());
-			//addFileToProject(yourJsFolder, new Path("components.js"), 
+			//CommonUtils.CommonUtils.addFileToProject(yourJsFolder, new Path("components.js"), 
 			//		TemplateMerger.merge("/bsbuilder/resources/web/js/components.js", mapOfValues), monitor);
-			addFileToProject(modelsFolder, new Path(domainClassName + "Model.js"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/models"), new Path(domainClassName + "Model.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/models/model-template.js", mapOfValues), monitor);
-			addFileToProject(collectionsFolder, new Path(domainClassName + "Collection.js"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/collections"), new Path(domainClassName + "Collection.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/collections/collection-template.js", mapOfValues), monitor);
-			addFileToProject(viewsFolder, new Path(domainClassName + "EditView.js"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/views"), new Path(domainClassName + "EditView.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/views/view-template.js", mapOfValues), monitor);
-			addFileToProject(viewsFolder, new Path(domainClassName + "CollectionView.js"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/views"), new Path(domainClassName + "CollectionView.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/views/collection-view-template.js", mapOfValues), monitor);
-			addFileToProject(globalsFolder, new Path("global.js"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/globals"), new Path("global.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/libs/global.js", mapOfValues), monitor);
-
 			
-			addFileToProject(jsFolder, new Path("main.js"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js"), new Path("main.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/main/main-template.js", mapOfValues), monitor);
-			addFileToProject(jsFolder, new Path("app.js"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js"), new Path("app.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/main/app-template.js", mapOfValues), monitor);
-			addFileToProject(jsFolder, new Path("router.js"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js"), new Path("router.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/routers/router-template.js", mapOfValues), monitor);
-
-						
-			//resources/templates
-			IFolder templatesFolder = resourcesFolder.getFolder(new Path("templates"));
-			templatesFolder.create(false, true, new NullProgressMonitor());
 			
-			addVariousSettings(settingsFolder, proj, basePackageName,controllerPackageName ,monitor);
+			addVariousSettings(folders.get(".settings"), proj, basePackageName,controllerPackageName ,monitor);
 			
 			/* Add web-xml file */
-			addFileToProject(srcFolder51, new Path("web.xml"),
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF"), new Path("web.xml"),
 					TemplateMerger.merge("/bsbuilder/resources/maven/web.xml-template", proj.getName(),basePackageName,controllerPackageName), monitor);
 			/* Add Spring servlet dispathcer mapping file */
-			addFileToProject(srcFolder51, new Path("yourdispatcher-servlet.xml"),
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF"), new Path("yourdispatcher-servlet.xml"),
 					TemplateMerger.merge("/bsbuilder/resources/maven/yourdispatcher-servlet.xml-template", proj.getName(),basePackageName,controllerPackageName), monitor);
 			/* Add Spring applicationContext file */
-			addFileToProject(srcFolder51, new Path("applicationContext.xml"),
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF"), new Path("applicationContext.xml"),
 					TemplateMerger.merge("/bsbuilder/resources/maven/applicationContext.xml-template", proj.getName(),basePackageName,controllerPackageName), monitor);
-		
 						
 			/* Add a default html file */
-			addFileToProject(srcFolder41, new Path("index.html"),
+			CommonUtils.addFileToProject(folders.get("src/main/webapp"), new Path("index.html"),
 					BackbonePageNewWizard.openContentStream("Welcome to "
 							+ proj.getName()), monitor);
-			
-						
 					
-			/* Add a java file */
-			createPackageAndClass(srcFolder31, domainPackageName, domainClassName, domainClassSourceCode , monitor);
+			/* Add a java model */
+			CommonUtils.createPackageAndClass(folders.get("src/main/java"), domainPackageName, domainClassName, domainClassSourceCode , monitor);
 			
 			Map<String, Object> modelAttributes = pageThree.getModelAttributes();
 			/* Add a default jsp file.  This is dependent on the Java Model generation */
-			addFileToProject(srcFolder51, new Path("index.jsp"),
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF"), new Path("index.jsp"),
 					TemplateMerger.merge("/bsbuilder/resources/web/jsps/index.jsp-template", proj.getName(),"",""), monitor);
 	
 			
 			/*Add a backbone template file.  This is dependent on the Java Model generation*/			
-			addFileToProject(templatesFolder, new Path("EditTemplate.htm"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/templates"), new Path(domainClassName + "EditTemplate.htm"), 
 					TemplateMerger.mergeMap("/bsbuilder/resources/web/js/backbone/templates/EditTemplate.htm-template", domainClassName ,modelAttributes ), monitor);
-			addFileToProject(templatesFolder, new Path("ListTemplate.htm"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/templates"), new Path(domainClassName + "ListTemplate.htm"), 
 					TemplateMerger.mergeMap("/bsbuilder/resources/web/js/backbone/templates/ListTemplate.htm-template", domainClassName ,modelAttributes ), monitor);
 
 			
 			/* Add a Controller*/
-			createPackageAndClass(srcFolder31, controllerPackageName, controllerClassName, controllerSourceCode , monitor);
+			CommonUtils.createPackageAndClass(folders.get("src/main/java"), controllerPackageName, controllerClassName, controllerSourceCode , monitor);
 			
 			IJavaProject javaProject = JavaCore.create(proj);
 			
 			//Create classpath entries which really creates the ".classpath" file of the Eclipse project
-			createClassPathEntries(outputFolder2, outputFolder3, srcFolder31,
-					srcFolder32, javaProject);
+			createClassPathEntries(folders.get("target/classes"), folders.get("target/test-classes"), folders.get("src/main/java"),
+					folders.get("src/test/java"), javaProject);
 			
-			
-			
+			//add bsbuilder-specific settings
+			addBSBuilderSettings(folders.get(".settings"), project, basePackageName, monitor);
 			
 		} catch (Throwable ioe) {
 			IStatus status = new Status(IStatus.ERROR, "NewFileWizard", IStatus.OK,
@@ -407,18 +333,99 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		}
 	}
 	
-	private void createPackageAndClass(IFolder parentFolder, String packageName, 
-			String className, String sourceCode, IProgressMonitor monitor ) throws Exception{
-		String[] path = packageName.split("\\.");
-		for(int i = 0; i < path.length; i++){
-			IFolder javaSrc = parentFolder.getFolder(new Path(path[i]));
-			if(!javaSrc.exists())
-				javaSrc.create(false, true, new NullProgressMonitor());
-			parentFolder = javaSrc;
-		}		
-		addFileToProject(parentFolder, new Path(className + ".java"),
-				new ByteArrayInputStream(sourceCode.getBytes()), monitor);		
+	private void createFolderStructures(IContainer container, IProgressMonitor monitor)
+		throws Exception
+	{
+		//target
+		IFolder outputFolder = container.getFolder(new Path("target"));
+		outputFolder.create(true, true, monitor);
+		folders.put("target", outputFolder);
+
+		//target/classes
+		IFolder outputFolder2 = outputFolder.getFolder(new Path("classes"));
+		outputFolder2.create(true, true, monitor);
+		folders.put("target/classes", outputFolder2);
+		
+		//target/test-classes
+		IFolder outputFolder3 = outputFolder.getFolder(new Path("test-classes"));
+		outputFolder3.create(true, true, monitor);	
+		folders.put("target/test-classes", outputFolder3);
+
+		//
+		IFolder srcFolder = container.getFolder(new Path("src"));
+		//src/main/java
+		srcFolder.create(false, true, new NullProgressMonitor());		
+		IFolder srcFolder21 = srcFolder.getFolder(new Path("main"));
+		srcFolder21.create(false, true, new NullProgressMonitor());
+		IFolder srcFolder31 = srcFolder21.getFolder(new Path("java"));
+		srcFolder31.create(false, true, new NullProgressMonitor());
+		folders.put("src/main/java", srcFolder31);
+		
+		//src/test/java
+		IFolder srcFolder22 = srcFolder.getFolder(new Path("test"));
+		srcFolder22.create(false, true, new NullProgressMonitor());
+		IFolder srcFolder32 = srcFolder22.getFolder(new Path("java"));
+		srcFolder32.create(false, true, new NullProgressMonitor());
+		folders.put("src/test/java", srcFolder32);
+		
+		//src/main/webapp
+		IFolder srcFolder41 = srcFolder21.getFolder(new Path("webapp"));
+		srcFolder41.create(false, true, new NullProgressMonitor());
+		folders.put("src/main/webapp", srcFolder41);
+		
+		//src/main/webapp/WEB-INF
+		IFolder srcFolder51 = srcFolder41.getFolder(new Path("WEB-INF"));
+		srcFolder51.create(false, true, new NullProgressMonitor());
+		folders.put("src/main/webapp/WEB-INF", srcFolder51);
+		
+		//.settings
+		IFolder settingsFolder = container.getFolder(new Path(".settings"));
+		settingsFolder.create(false, true, new NullProgressMonitor());
+		folders.put(".settings", settingsFolder);
+		
+		
+		//src/main/webapp/WEB-INF/resources
+		IFolder resourcesFolder = srcFolder51.getFolder(new Path("resources"));
+		resourcesFolder.create(false, true, new NullProgressMonitor());
+		folders.put("src/main/webapp/WEB-INF/resources", resourcesFolder);
+		
+		//src/main/webapp/WEB-INF/resources/js
+		IFolder jsFolder = resourcesFolder.getFolder(new Path("js"));
+		jsFolder.create(false, true, new NullProgressMonitor());
+		folders.put("src/main/webapp/WEB-INF/resources/js", jsFolder);
+		
+		//src/main/webapp/WEB-INF/resources/js/libs
+		IFolder jsLibsFolder = jsFolder.getFolder(new Path("libs"));
+		jsLibsFolder.create(false, true, new NullProgressMonitor());
+		folders.put("src/main/webapp/WEB-INF/resources/js/libs", jsLibsFolder);
+		
+		//src/main/webapp/WEB-INF/resources/js/models
+		IFolder modelsFolder = jsFolder.getFolder(new Path("models"));
+		modelsFolder.create(false, true, new NullProgressMonitor());
+		folders.put("src/main/webapp/WEB-INF/resources/js/models", modelsFolder);
+		
+		//src/main/webapp/WEB-INF/resources/js/collections
+		IFolder collectionsFolder = jsFolder.getFolder(new Path("collections"));
+		collectionsFolder.create(false, true, new NullProgressMonitor());
+		folders.put("src/main/webapp/WEB-INF/resources/js/collections", collectionsFolder);
+		
+		//src/main/webapp/WEB-INF/resources/js/globals
+		IFolder globalsFolder = jsFolder.getFolder(new Path("globals"));
+		globalsFolder.create(false, true, new NullProgressMonitor());
+		folders.put("src/main/webapp/WEB-INF/resources/js/globals", globalsFolder);
+		
+		//src/main/webapp/WEB-INF/resources/js/views
+		IFolder viewsFolder = jsFolder.getFolder(new Path("views"));
+		viewsFolder.create(false, true, new NullProgressMonitor());
+		folders.put("src/main/webapp/WEB-INF/resources/js/views", viewsFolder);
+		
+		//src/main/webapp/WEB-INF/resources/templates
+		IFolder templatesFolder = resourcesFolder.getFolder(new Path("templates"));
+		templatesFolder.create(false, true, new NullProgressMonitor());
+		folders.put("src/main/webapp/WEB-INF/resources/templates", templatesFolder);
 	}
+	
+	
 	
 
 
@@ -456,38 +463,47 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		//TODO Add value substitution capability for setting values within settings files
 		InputStream jdtCorePref = this.getClass().getResourceAsStream(
 				"/bsbuilder/resources/settings/org.eclipse.jdt.core.prefs.template");
-		addFileToProject(settingsFolder, new Path("org.eclipse.jdt.core.prefs"),
+		CommonUtils.addFileToProject(settingsFolder, new Path("org.eclipse.jdt.core.prefs"),
 				jdtCorePref, monitor);
 		
 		InputStream m2eCorePref = this.getClass().getResourceAsStream(
 				"/bsbuilder/resources/settings/org.eclipse.m2e.core.prefs.template");
-		addFileToProject(settingsFolder, new Path("org.eclipse.m2e.core.prefs"),
+		CommonUtils.addFileToProject(settingsFolder, new Path("org.eclipse.m2e.core.prefs"),
 				m2eCorePref, monitor);
 		
 		//InputStream wstCommonComponent = this.getClass().getResourceAsStream(
 		//		"/bsbuilder/resources/settings/org.eclipse.wst.common.component.template");
-		addFileToProject(settingsFolder, new Path("org.eclipse.wst.common.component"),
+		CommonUtils.addFileToProject(settingsFolder, new Path("org.eclipse.wst.common.component"),
 				TemplateMerger.merge("/bsbuilder/resources/settings/org.eclipse.wst.common.component.template", project.getName(),basePackageName,controllerPackageName), monitor);
 		
 		InputStream wstCommonProject = this.getClass().getResourceAsStream(
 				"/bsbuilder/resources/settings/org.eclipse.wst.common.project.facet.core.xml.template");
-		addFileToProject(settingsFolder, new Path("org.eclipse.wst.common.project.facet.core.xml"),
+		CommonUtils.addFileToProject(settingsFolder, new Path("org.eclipse.wst.common.project.facet.core.xml"),
 				wstCommonProject, monitor);
 		
 		InputStream wstJsdtContainer = this.getClass().getResourceAsStream(
 				"/bsbuilder/resources/settings/org.eclipse.wst.jsdt.ui.superType.container.template");
-		addFileToProject(settingsFolder, new Path("org.eclipse.wst.jsdt.ui.superType.container"),
+		CommonUtils.addFileToProject(settingsFolder, new Path("org.eclipse.wst.jsdt.ui.superType.container"),
 				wstJsdtContainer, monitor);
 		
 		InputStream wstJsdtName = this.getClass().getResourceAsStream(
 				"/bsbuilder/resources/settings/org.eclipse.wst.jsdt.ui.superType.name.template");
-		addFileToProject(settingsFolder, new Path("org.eclipse.wst.jsdt.ui.superType.name"),
+		CommonUtils.addFileToProject(settingsFolder, new Path("org.eclipse.wst.jsdt.ui.superType.name"),
 				wstJsdtName, monitor);
 		
 		InputStream jsdtScope = this.getClass().getResourceAsStream(
 				"/bsbuilder/resources/settings/jsdtscope.template");
-		addFileToProject(settingsFolder, new Path(".jsdtscope"),
+		CommonUtils.addFileToProject(settingsFolder, new Path(".jsdtscope"),
 				jsdtScope, monitor);
+	}
+	
+	private void addBSBuilderSettings(IFolder settingsFolder, IProject project, 
+			String basePackageName, IProgressMonitor monitor)
+			throws Exception{		
+		String props = "basePackage=" + basePackageName;
+        InputStream stream = new ByteArrayInputStream(props.getBytes());
+		CommonUtils.addFileToProject(settingsFolder, new Path("org.bsbuilder.settings"),
+				stream, monitor);
 	}
 	
 	/*
@@ -511,25 +527,6 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		this.config = config;
 	}
 
-	/**
-	 * Adds a new file to the project.
-	 * 
-	 * @param container
-	 * @param path
-	 * @param contentStream
-	 * @param monitor
-	 * @throws CoreException
-	 */
-	private void addFileToProject(IContainer container, Path path,
-			InputStream contentStream, IProgressMonitor monitor)
-			throws CoreException {
-		final IFile file = container.getFile(path);
-
-		if (file.exists()) {
-			file.setContents(contentStream, true, true, monitor);
-		} else {
-			file.create(contentStream, true, monitor);
-		}
-	}
+	
 
 }

@@ -67,6 +67,8 @@ public class TemplateMerger {
 		return new ByteArrayInputStream(sw.toString().getBytes());
 	}
 	
+	
+	
 	public static InputStream merge(String templateName, Map<String, Object> valuesToPlug){
 		Velocity.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath"); 
 		Velocity.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());

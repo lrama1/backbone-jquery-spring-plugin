@@ -34,7 +34,7 @@ public class ${domainClassName}Controller {
 		#end
 	}
 
-	@RequestMapping("/controller/home")
+	@RequestMapping("/controller/${domainClassName.toLowerCase()}/home")
 	public String showHomePage(){
 		return "/WEB-INF/index.jsp";
 	}

@@ -46,7 +46,7 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 	private Table table;
 	private Map<String, Object> attrs = new LinkedHashMap<String, Object>();
 
-	protected BackboneProjectWizardPageThree(String pageName) {
+	public BackboneProjectWizardPageThree(String pageName) {
 		super(pageName);
 		setTitle("Sample Domain Class");
 		setDescription("Create a sample domain class which will be wired to" +

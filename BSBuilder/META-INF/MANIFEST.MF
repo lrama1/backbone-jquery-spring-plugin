@@ -16,4 +16,5 @@ Require-Bundle: org.eclipse.ui,
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: libs/velocity-1.7-dep.jar,
- .
+ .,
+ libs/commons-io-2.4.jar

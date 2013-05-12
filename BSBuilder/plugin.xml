@@ -23,6 +23,37 @@
             name="Spring Backbone Project Wizard"
             project="true">
       </wizard>
+      <wizard
+            name="Backbone Model Page"
+            icon="icons/sample.gif"
+            category="BSBuilder"
+            class="bsbuilder.wizards.backbone.BackboneNewModelWizard"
+            id="bsbuilder.wizards.backbone.BackboneNewModelWizard">
+      </wizard>
+   </extension>
+   
+   <!--This is for adding more Models outside of the main project wizard -->
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            objectClass="org.eclipse.core.resources.IProject"
+            id="Oleng2.contribution1">
+         <menu
+               label="BSBuilder"
+               path="additions"
+               id="Oleng2.menu1">
+            <separator
+                  name="group1">
+            </separator>
+         </menu>
+         <action
+               label="New Model"
+               class="bsbuilder.wizards.backbone.actions.AddNewModelAction"
+               menubarPath="Oleng2.menu1/group1"
+               enablesFor="1"
+               id="Oleng2.newAction">
+         </action>
+      </objectContribution>
    </extension>
 
 </plugin>

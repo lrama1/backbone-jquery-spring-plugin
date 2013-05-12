@@ -2,7 +2,7 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'text!templates/EditTemplate.htm'
+  'text!templates/${className}EditTemplate.htm'
 ], function($, _, Backbone, editTemplate){
 	
 	var ${className}EditView = Backbone.View.extend({

@@ -5,7 +5,7 @@ define([
   'backgrid',
   'backgrid-paginator',
   'collections/${className}Collection',
-  'text!templates/ListTemplate.htm'
+  'text!templates/${className}ListTemplate.htm'
 ], function($, _, Backbone, Backgrid, BackgridPaginator, ${className}Collection, collectionTemplate){
 	
 	var ${className}CollectionView = Backbone.View.extend({
