@@ -268,7 +268,8 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 				else
 					buffer.insert(0, stringToInsert);
 			}
-			newFileContents = fileContents.replaceAll(expression, buffer.toString().replace("$", "\\$"));
+			//newFileContents = fileContents.replaceAll(expression, buffer.toString().replace("$", "\\$"));
+			newFileContents = fileContents.replaceFirst(expression, buffer.toString().replace("$", "\\$"));
 		
 		return newFileContents;
 	}
