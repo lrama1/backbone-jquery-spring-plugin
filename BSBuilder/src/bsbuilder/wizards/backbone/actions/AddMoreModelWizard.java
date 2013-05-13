@@ -228,7 +228,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 				functionParamStringToInsert, ")");
 		
 		
-		String routeDefinitionStringToInsert = "," + "\"" + domainClassName.toLowerCase() + "/:id\" : " +
+		String routeDefinitionStringToInsert = "\n," + "\"" + domainClassName.toLowerCase() + "/:id\" : " +
 				"\"get" + domainClassName + "\",\n" +
 				"\"" + domainClassName.toLowerCase() + "s\" : " + "\"get" + domainClassName + "List\"\n";
 		String routeDefinitionRegex = "routes\\s*:\\s*\\{[\\d\\w\\s\\\"\\/:,]*\\}";
