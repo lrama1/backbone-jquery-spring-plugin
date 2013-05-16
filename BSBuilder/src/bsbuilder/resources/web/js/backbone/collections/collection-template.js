@@ -8,7 +8,7 @@ define([
 ], function($, _, Backbone, backgrid ,${className}Model) {
 	var ${className}Collection = Backbone.PageableCollection.extend({
         model: ${className}Model,
-        url : '/${projectName}/controller/${className.toLowerCase()}s',
+        url : '/${projectName}/${className.toLowerCase()}s',
         state: {
             pageSize: 5
         },

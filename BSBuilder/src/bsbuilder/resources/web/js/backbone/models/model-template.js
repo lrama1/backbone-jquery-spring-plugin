@@ -6,7 +6,7 @@ define([
   
   var ${className}Model = Backbone.Model.extend({
 	  idAttribute : '${domainClassIdAttributeName}',	
-	  urlRoot : '/${projectName}/controller/${className.toLowerCase()}',	  
+	  urlRoot : '/${projectName}/${className.toLowerCase()}',	  
 	  validate : function(attributes){
 		//alert('test');
 	  }	,

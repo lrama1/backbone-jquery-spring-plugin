@@ -4,7 +4,7 @@ ${className} = Backbone.Model.extend({
 	//defaults : {firstName : "", lastName : ""},
 	idAttribute : '${domainClassIdAttributeName}'
 	,	
-	urlRoot : '/${projectName}/controller/${className.toLowerCase()}'
+	urlRoot : '/${projectName}/${className.toLowerCase()}'
 	,
 	validate : function(attributes){
 		
