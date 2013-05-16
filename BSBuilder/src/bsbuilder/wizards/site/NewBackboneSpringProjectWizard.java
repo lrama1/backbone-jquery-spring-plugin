@@ -303,6 +303,9 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			/* Add a default jsp file.  This is dependent on the Java Model generation */
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF"), new Path("index.jsp"),
 					TemplateMerger.merge("/bsbuilder/resources/web/jsps/index.jsp-template", proj.getName(),"",""), monitor);
+			
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("bootstrap.min.css"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/css/bootstrap.min.css"), monitor);
 	
 			
 			/*Add a backbone template file.  This is dependent on the Java Model generation*/			

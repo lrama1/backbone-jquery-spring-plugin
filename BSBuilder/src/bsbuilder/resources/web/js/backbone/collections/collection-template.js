@@ -18,7 +18,7 @@ define([
   	    	this.state.lastPage = response.lastPage;
   	    	console.log("Last Page: " + this.state.lastPage);
   	    	//alert(JSON.stringify(this.state));
-  	    	return response.${className.toLowerCase()}s;
+  	    	return response.${className.substring(0,1).toLowerCase()}${className.substring(1)}s;
   	    },
   	    
         mode: "server"        

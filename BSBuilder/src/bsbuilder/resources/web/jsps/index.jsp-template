@@ -5,7 +5,8 @@
 <html>
 <head>
 
-<title>Insert title here</title>
+<title>${projectName}</title>
+<link rel="stylesheet" href="/${projectName}/resources/js/libs/bootstrap.min.css" />
 <link rel="stylesheet" href="/${projectName}/resources/js/libs/backgrid.css" />
 <link rel="stylesheet" href="/${projectName}/resources/js/libs/backgrid-paginator.css" />
 <script data-main="/${projectName}/resources/js/main" src="/${projectName}/resources/js/libs/require.js"></script>
