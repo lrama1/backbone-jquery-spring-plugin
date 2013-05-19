@@ -1,6 +1,6 @@
 
-<div>
-	
+<div class="span2"><!--EMPTY --></div>
+<div class="span10">
 	<table>	
 		<tbody>
 			#foreach($key in $valuesToPlug.keySet() )
@@ -10,6 +10,6 @@
 			#end
 		</tbody>
 	</table>
-	<input type="button" class="save" id="save${domainClassName}" value="Save" />
-	<input type="button" class="save" id="saveNew${domainClassName}" value="Save New" />
+	<input type="button" class="btn btn-primary" id="save${domainClassName}" value="Save" />
+	<input type="button" class="btn btn-primary" id="saveNew${domainClassName}" value="Save New" />
 </div>

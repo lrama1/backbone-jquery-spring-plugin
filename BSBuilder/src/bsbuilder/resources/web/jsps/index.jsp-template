@@ -12,7 +12,28 @@
 <script data-main="/${projectName}/resources/js/main" src="/${projectName}/resources/js/libs/require.js"></script>
 </head>
 <body>
-	<h1>Here.</h1>
-	<div id="editContainer" class="backgrid-container">Default Home</div>
+	<div class="container">
+		<div class="masthead">
+			<h3 class="muted">${projectName}</h3>
+			<div class="navbar">
+				<div class="navbar-inner">
+					<div class="container">
+						<ul class="nav">
+							<li class="active"><a href="#">Home</a></li>
+							<li><a href="#">Projects</a></li>
+							<li><a href="#">About</a></li>
+							<li><a href="#">Contact</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<!-- /.navbar -->
+		</div>
+		<hr>
+		<div class="row-fluid">
+			<div id="editContainer" class="backgrid-container">Default Home</div>
+		</div>
+		<hr>
+	</div>
 </body>
 </html>
