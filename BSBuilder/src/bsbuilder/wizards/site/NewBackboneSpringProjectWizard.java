@@ -249,6 +249,11 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid-paginator.js"), monitor);			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backbone-pageable.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backbone-pageable.js"), monitor);
+			//
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("bootstrap-datepicker.js"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/bootstrap-datepicker.js"), monitor);
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("datepicker.css"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/datepicker.css"), monitor);
 			
 			//ANOMALY, why does text.js have to be outside the libs folder
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js"), new Path("text.js"), 

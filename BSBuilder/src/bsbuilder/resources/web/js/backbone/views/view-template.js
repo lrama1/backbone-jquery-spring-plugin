@@ -2,13 +2,28 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'text!templates/${className}EditTemplate.htm'
-], function($, _, Backbone, editTemplate){
+  'text!templates/${className}EditTemplate.htm',
+  'bootstrap-datepicker'
+], function($, _, Backbone, editTemplate, datePicker){
 	
 	var ${className}EditView = Backbone.View.extend({
 		defaults : {model : {}},
 	    initialize: function(){    	
 	        this.render(this.$el, this.model);
+	        
+//	        $('#accountId').datepicker({
+//	    		format: 'mm-dd-yyyy',
+//	    		setTime : 'true'
+//	    	});
+//	       THE ID IS : ${domainClassIdAttributeName} 
+	        #foreach($key in $attrs.keySet() )
+	        	#if ($attrs.get($key) == "java.util.Date")
+	        		$('#${key}').datepicker({
+	    	    		format: 'mm-dd-yyyy',
+	    	    		setTime : 'true'
+	    	    	});
+	        	#end	
+	        #end
 	    },
 	    render: function(myEl, modelToRender){    	
 //			$.get("resources/templates/EditTemplate.htm", function(templateText){			

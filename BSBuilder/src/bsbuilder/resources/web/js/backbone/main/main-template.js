@@ -8,6 +8,7 @@ require.config({
     backgrid :         '/${projectName}/resources/js/libs/backgrid',
     'backbone-pageable': '/${projectName}/resources/js/libs/backbone-pageable',
     'backgrid-paginator': '/${projectName}/resources/js/libs/backgrid-paginator',
+    'bootstrap-datepicker': '/${projectName}/resources/js/libs/bootstrap-datepicker',
     templates:  '/${projectName}/resources/templates'	
   },
   shim: {
