@@ -10,12 +10,6 @@ define([
 		defaults : {model : {}},
 	    initialize: function(){    	
 	        this.render(this.$el, this.model);
-	        
-//	        $('#accountId').datepicker({
-//	    		format: 'mm-dd-yyyy',
-//	    		setTime : 'true'
-//	    	});
-//	       THE ID IS : ${domainClassIdAttributeName} 
 	        #foreach($key in $attrs.keySet() )
 	        	#if ($attrs.get($key) == "java.util.Date")
 	        		$('#${key}').datepicker({

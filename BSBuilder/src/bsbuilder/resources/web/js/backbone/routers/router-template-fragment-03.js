@@ -1,4 +1,4 @@
-		//FROM a Fragment
+	//FROM a Fragment
 		//handler for getting a ${className} record
 	    app_router.on('route:get${className}', function (idToFetch) {
 	        // Note the variable in the route definition being passed in here  

@@ -1,2 +1,2 @@
 "${className.toLowerCase()}/:id": "get${className}", 
-"${className.toLowerCase()}s" : "get${className}List"
+	"${className.toLowerCase()}s" : "get${className}List"
