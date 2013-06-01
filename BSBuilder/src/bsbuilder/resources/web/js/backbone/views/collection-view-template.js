@@ -9,11 +9,12 @@ define([
 ], function($, _, Backbone, Backgrid, BackgridPaginator, ${className}Collection, collectionTemplate){
 	
 	var ${className}CollectionView = Backbone.View.extend({
+		//standard backbone function called when a view is constructed
 	    initialize: function(){    	
-	        this.render(this.$el, this.collection);	        
+	        this.render(this.collection);	        
 	    },
-	    render: function(myEl, modelToRender){
-	    	console.log("MOdels" + JSON.stringify(this.collection.models));	    	
+	    render: function(){
+	    	console.log("Models" + JSON.stringify(this.collection.models));	    	
 	    	var columns = [
 		    	#foreach($key in $attrs.keySet() )
 		    		#if($foreach.count == 1)
@@ -40,7 +41,6 @@ define([
 	        });
 
 	        // Render the grid and attach the root to your HTML document	        	
-	        //$("#editContainer").html(grid.render().$el);
 	        $("#editContainer").html(grid.render().$el);
 	        this.collection.fetch({reset : true});
 	    }

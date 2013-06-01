@@ -8,6 +8,7 @@ define([
 	
 	var ${className}EditView = Backbone.View.extend({
 		defaults : {model : {}},
+		//standard backbone function called when a view is constructed
 	    initialize: function(){    	
 	        this.render(this.$el, this.model);
 	        #foreach($key in $attrs.keySet() )
@@ -32,7 +33,6 @@ define([
 	     	"click #saveNew${className}": "saveNew${className}"  //binding the saveNewButton of template using id attr as selector
 	    },
 	    save${className} : function(){
-	    	//alert(JSON.stringify(this.model));
 	    	this.model.save();
 	    },
 	    saveNew${className} : function(){
