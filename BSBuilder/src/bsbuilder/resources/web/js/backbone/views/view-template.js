@@ -33,14 +33,26 @@ define([
 	     	"click #saveNew${className}": "saveNew${className}"  //binding the saveNewButton of template using id attr as selector
 	    },
 	    save${className} : function(){
-	    	this.model.save();
+	    	this.model.save({
+	    		#foreach($key in $attrs.keySet() )
+	    			#if ($attrs.get($key) == "java.util.Date")
+                        ${key} : Date.parse(this.model.get("${key}"))
+	    			#end	
+	    		#end
+	    	});	    	
 	    },
 	    saveNew${className} : function(){
 	    	this.model.set("${domainClassIdAttributeName}", null);
-	    	this.model.save();
+	    	this.model.save({
+	    		#foreach($key in $attrs.keySet() )
+	    			#if ($attrs.get($key) == "java.util.Date")
+                        ${key} : Date.parse(this.model.get("${key}"))
+	    			#end	
+	    		#end
+	    	});
 	    },
-	    change : function(){  //we are relying that the id of the template elements are the same as the model attrs
-	    	var target = event.target;        
+	    change : function(evt){  //we are relying that the id of the template elements are the same as the model attrs
+	    	var target = evt.target;        
 	        this.model.set(target.id, target.value);
 	    }
 	    
