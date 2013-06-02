@@ -32,7 +32,7 @@
 		</div>
 		<hr>
 		<div class="row-fluid">
-			<div id="editContainer" class="backgrid-container">Default Home</div>
+			<div id="bodyContainer">Default Home</div>
 		</div>
 		<hr>
 	</div>

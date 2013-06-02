@@ -3,14 +3,11 @@ define([
  'jquery', 
  'underscore',
  'backbone',
- 'backgrid',
-  'views/${className}EditView',
-  'models/${className}Model', 
-  'collections/${className}Collection',
-  'views/${className}CollectionView',
-  'globals/global'
+ 'backgrid',  
+ 'backgrid-paginator', 
+ 'globals/global'
   
-], function($,_,Backbone, Backgrid ,${className}EditView, ${className}Model, ${className}Collection, ${className}CollectionView, Global) {
+], function($,_,Backbone, Backgrid, BackgridPaginator, Global) {
 	
 	//change underscore delims to using {{}}
 	_.templateSettings = {

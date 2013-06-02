@@ -205,8 +205,6 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		mapOfValues.put("domainClassIdAttributeName", pageThree.getDomainClassAttributeName());
 		mapOfValues.put("attrs", pageThree.getModelAttributes());
 		
-		
-		
 		File file = routerFile.getRawLocation().toFile();
 		String backboneModelName = domainClassName + "Model";
 		String backboneModelViewName = domainClassName + "EditView";
@@ -215,19 +213,23 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		String defineStringToInsert = ",'models/" + backboneModelName + "'" +
 				",'views/" + backboneModelViewName + "'" + 
 				",'collections/" + backboneCollectionName + "'" + 
-				",'views/" + backboneCollectionViewName + "'\n";		
+				",'views/" + backboneCollectionViewName + "'\n";	
 		
-		String defineModifierRegex = "define\\s*\\(\\[[\\d\\w\\s\\'\\,\\/]*\\]";
+		//insert params into the 'define'
+		/*String defineModifierRegex = "define\\s*\\(\\[[\\d\\w\\s\\'\\,\\/]*\\]";
 		String modifiedFile = modifier(file, defineModifierRegex,
 				defineStringToInsert, "]");
 		
+		//insert corresponding params into the function
 		String functionParamStringToInsert = ", " + backboneModelName + ", " + backboneModelViewName +
 				", " + backboneCollectionName + ", " + backboneCollectionViewName;
+		
 		String functionModifierRegex = "function\\s*\\([\\d\\w\\s\\$\\,]*\\)";
 		modifiedFile = modifier(modifiedFile, functionModifierRegex,
 				functionParamStringToInsert, ")");
+		*/		
 		
-		
+		String modifiedFile = FileUtils.readFileToString(file);
 		String routeDefinitionStringToInsert = "\n," + "\"" + domainClassName.toLowerCase() + "/:id\" : " +
 				"\"get" + domainClassName + "\",\n" +
 				"\"" + domainClassName.toLowerCase() + "s\" : " + "\"get" + domainClassName + "List\"\n";

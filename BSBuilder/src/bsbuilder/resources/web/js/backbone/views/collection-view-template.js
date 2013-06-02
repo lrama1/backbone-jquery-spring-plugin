@@ -2,16 +2,15 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'backgrid',
-  'backgrid-paginator',
+  'backgrid',  
   'collections/${className}Collection',
   'text!templates/${className}ListTemplate.htm'
-], function($, _, Backbone, Backgrid, BackgridPaginator, ${className}Collection, collectionTemplate){
+], function($, _, Backbone, Backgrid, ${className}Collection, collectionTemplate){
 	
 	var ${className}CollectionView = Backbone.View.extend({
 		//standard backbone function called when a view is constructed
 	    initialize: function(){    	
-	        this.render(this.collection);	        
+	        this.render();	        
 	    },
 	    render: function(){
 	    	console.log("Models" + JSON.stringify(this.collection.models));	    	
@@ -40,8 +39,13 @@ define([
 	          footer: Backgrid.Extension.Paginator
 	        });
 
-	        // Render the grid and attach the root to your HTML document	        	
-	        $("#editContainer").html(grid.render().$el);
+
+	        // Render the grid and attach the root to your HTML document
+	        #[[
+	        this.$el.html(_.template(collectionTemplate, ''));
+	        $("#listContainer").html(grid.render().$el);
+	        ]]#
+	        
 	        this.collection.fetch({reset : true});
 	    }
 	    
