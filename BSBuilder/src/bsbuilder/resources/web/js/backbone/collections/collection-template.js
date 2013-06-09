@@ -10,7 +10,7 @@ define([
         model: ${className}Model,
         url : '/${projectName}/${className.toLowerCase()}s',
         state: {
-            pageSize: 5
+            pageSize: 10
         },
         parse : function(response){
   	    	this.state.totalRecords = response.totalRecords;

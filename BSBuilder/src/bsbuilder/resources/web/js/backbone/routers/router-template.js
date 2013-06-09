@@ -4,10 +4,11 @@ define([
  'underscore',
  'backbone',
  'backgrid',  
- 'backgrid-paginator', 
+ 'backgrid-paginator',
+ 'backgrid-select-all',
  'globals/global'
   
-], function($,_,Backbone, Backgrid, BackgridPaginator, Global) {
+], function($,_,Backbone, Backgrid, BackgridPaginator, BackgridSelectAll ,Global) {
 	
 	//change underscore delims to using {{}}
 	_.templateSettings = {

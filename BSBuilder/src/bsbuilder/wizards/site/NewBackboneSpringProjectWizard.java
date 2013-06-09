@@ -243,10 +243,19 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid.js"), monitor);
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backgrid.css"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid.css"), monitor);
+			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backgrid-paginator.css"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid-paginator.css"), monitor);
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backgrid-paginator.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid-paginator.js"), monitor);			
+			
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backgrid-select-all.css"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid-select-all.css"), monitor);
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backgrid-select-all.js"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid-select-all.js"), monitor);			
+			
+			
+			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backbone-pageable.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backbone-pageable.js"), monitor);
 			//

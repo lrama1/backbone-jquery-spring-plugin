@@ -9,6 +9,7 @@ require.config({
     'backbone-pageable': '/${projectName}/resources/js/libs/backbone-pageable',
     'backgrid-paginator': '/${projectName}/resources/js/libs/backgrid-paginator',
     'bootstrap-datepicker': '/${projectName}/resources/js/libs/bootstrap-datepicker',
+    'backgrid-select-all' : '/${projectName}/resources/js/libs/backgrid-select-all',
     templates:  '/${projectName}/resources/templates'	
   },
   shim: {
@@ -25,8 +26,11 @@ require.config({
 	    init: function(_, Backbone, PageableCollection) {
 	        this.Backbone.PageableCollection = PageableCollection;
 	    }
-	}	    ,
+	},
 	'backgrid-paginator' : {
+	  	deps: ['underscore', 'backbone', 'backgrid']
+	},
+	'backgrid-select-all' : {
 	  	deps: ['underscore', 'backbone', 'backgrid']
 	}
   }

@@ -1,3 +1,5 @@
 <div>
-	<div id="listContainer" class="backgrid-container">none</div> 
+	<!--div id="listContainer" class="backgrid-container">none</div--> 
+	<div id="listContainer">none</div> 
+	<div><input type="button" class="btn btn-primary" id="editButton" value="Edit" /></div>
 </div>

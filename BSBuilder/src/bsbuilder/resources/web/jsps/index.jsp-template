@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="/${projectName}/resources/js/libs/backgrid.css" />
 <link rel="stylesheet" href="/${projectName}/resources/js/libs/backgrid-paginator.css" />
 <link rel="stylesheet" href="/${projectName}/resources/js/libs/datepicker.css" />
+<link rel="stylesheet" href="/${projectName}/resources/js/libs/backgrid-select-all.css" />
 <script data-main="/${projectName}/resources/js/main" src="/${projectName}/resources/js/libs/require.js"></script>
 </head>
 <body>

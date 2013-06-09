@@ -17,6 +17,11 @@ define([
 	    	var columns = [
 		    	#foreach($key in $attrs.keySet() )
 		    		#if($foreach.count == 1)
+		    			{
+		    			name : "",
+		    			cell : "select-row",
+		    			headerCell: "select-all"
+		    			},
 			    		{
 			    			name : "${key}",
 			    			label : "${key.toUpperCase()}",
@@ -35,19 +40,31 @@ define([
 	        // Initialize a new Grid instance
 	        var grid = new Backgrid.Grid({
 	          columns: columns,
-	          collection: this.collection,
-	          footer: Backgrid.Extension.Paginator
+	          collection: this.collection
+	          //,footer: Backgrid.Extension.Paginator
 	        });
+	        //lets expose the grid
+	        this.grid = grid;
 
+	       // Initialize the paginator
+			var paginator = new Backgrid.Extension.Paginator({
+			  collection: this.collection
+			});
 
 	        // Render the grid and attach the root to your HTML document
 	        #[[
 	        this.$el.html(_.template(collectionTemplate, ''));
 	        $("#listContainer").html(grid.render().$el);
+	        $("#listContainer").append(paginator.render().$el);
 	        ]]#
 	        
 	        this.collection.fetch({reset : true});
-	    }
+	    },
+		events : {
+			"click #editButton" : function(){
+				alert(this.grid.getSelectedModels());
+			}
+		}
 	    
 	});
 

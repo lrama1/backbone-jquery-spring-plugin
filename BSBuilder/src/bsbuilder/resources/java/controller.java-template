@@ -60,7 +60,10 @@ public class ${domainClassName}Controller {
 	}
 	
 	@RequestMapping("/${domainClassName.toLowerCase()}s")
-	public @ResponseBody ListWrapper getAll${domainClassName}s(@RequestParam("page") int page, @RequestParam("per_page") int pageSize){
+	public @ResponseBody ListWrapper getAll${domainClassName}s(@RequestParam("page") int page, 
+			@RequestParam("per_page") int pageSize,
+			@RequestParam(value = "sort_by", required = false) String sortByAttributeName,
+			@RequestParam(value = "order", required = false) String sortDirection){
 		
 		List<${domainClassName}> partialPage = new ArrayList<${domainClassName}>();
 		int end = (page * pageSize);
