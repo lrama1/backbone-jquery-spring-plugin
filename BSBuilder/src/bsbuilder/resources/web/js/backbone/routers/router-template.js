@@ -6,9 +6,10 @@ define([
  'backgrid',  
  'backgrid-paginator',
  'backgrid-select-all',
+ 'bootstrap.min',
  'globals/global'
   
-], function($,_,Backbone, Backgrid, BackgridPaginator, BackgridSelectAll ,Global) {
+], function($,_,Backbone, Backgrid, BackgridPaginator, BackgridSelectAll ,Bootstrap, Global) {
 	
 	//change underscore delims to using {{}}
 	_.templateSettings = {

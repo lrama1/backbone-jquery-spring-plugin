@@ -62,7 +62,9 @@ define([
 	    },
 		events : {
 			"click #editButton" : function(){
-				alert(this.grid.getSelectedModels());
+				//alert(this.grid.getSelectedModels());
+				//Note: the html for this sample modal is in the ListTemplate.htm 
+				$('#sampleModal').modal({});
 			}
 		}
 	    
