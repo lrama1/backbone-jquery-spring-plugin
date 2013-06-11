@@ -134,6 +134,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		final String classSourceCode = pageThree.getClassSource(domainPackageName);
 		final String domainClassIdAttrName = pageThree.getDomainClassAttributeName();
 		final String controllerClassName = domainClassName + "Controller";
+		final String mainControllerSource = pageThree.getMainControllerSource(controllerPackageName);
 		final String controllerSourceCode = pageThree.getControllerSource(basePackageName, controllerPackageName, domainClassName);
 		
 		
@@ -147,7 +148,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		WorkspaceModifyOperation op = new WorkspaceModifyOperation() {
 			protected void execute(IProgressMonitor monitor)
 					throws CoreException {
-				createProject(desc, projectHandle, basePackageName, controllerPackageName, 
+				createProject(desc, projectHandle, basePackageName, controllerPackageName, mainControllerSource, 
 						controllerClassName, controllerSourceCode,
 						domainPackageName, domainClassName ,classSourceCode, domainClassIdAttrName , monitor);
 			}
@@ -192,7 +193,10 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 	 */
 	void createProject(IProjectDescription description, IProject proj, 
 			String basePackageName, 
-			String controllerPackageName, String controllerClassName, String controllerSourceCode,
+			String controllerPackageName, 
+			String mainControllerSourceCode,
+			String controllerClassName, 			
+			String domainControllerSourceCode,
 			String domainPackageName, 
 			String domainClassName, String domainClassSourceCode,
 			String domainClassIdAttributeName,
@@ -319,8 +323,10 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			
 			Map<String, Object> modelAttributes = pageThree.getModelAttributes();
 			/* Add a default jsp file.  This is dependent on the Java Model generation */
+			//CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF"), new Path("index.jsp"),
+			//		TemplateMerger.merge("/bsbuilder/resources/web/jsps/index.jsp-template", proj.getName(),"",""), monitor);
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF"), new Path("index.jsp"),
-					TemplateMerger.merge("/bsbuilder/resources/web/jsps/index.jsp-template", proj.getName(),"",""), monitor);
+							TemplateMerger.merge("/bsbuilder/resources/web/jsps/index.jsp-template", mapOfValues), monitor);
 			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("bootstrap.min.css"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/css/bootstrap.min.css"), monitor);
@@ -333,8 +339,9 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 					TemplateMerger.mergeMap("/bsbuilder/resources/web/js/backbone/templates/ListTemplate.htm-template", domainClassName ,modelAttributes ), monitor);
 
 			
-			/* Add a Controller*/
-			CommonUtils.createPackageAndClass(folders.get("src/main/java"), controllerPackageName, controllerClassName, controllerSourceCode , monitor);
+			/* Add Controllers*/
+			CommonUtils.createPackageAndClass(folders.get("src/main/java"), controllerPackageName, "MainController", mainControllerSourceCode , monitor);			
+			CommonUtils.createPackageAndClass(folders.get("src/main/java"), controllerPackageName, controllerClassName, domainControllerSourceCode , monitor);
 			
 			IJavaProject javaProject = JavaCore.create(proj);
 			

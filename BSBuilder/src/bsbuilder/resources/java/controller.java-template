@@ -34,13 +34,10 @@ public class ${domainClassName}Controller {
 		#end
 	}
 
-	@RequestMapping("/${domainClassName.toLowerCase()}home")
-	public String showHomePage(){
-		return "/WEB-INF/index.jsp";
-	}
 	
 	@RequestMapping(value = "/$domainClassName.toLowerCase()/{id}", method = RequestMethod.GET)
 	public @ResponseBody $domainClassName get$domainClassName(@PathVariable("id") String id){
+		 System.out.println("Retrieving ${domainClassName} object with id: " + id);
 		 $domainClassName  $domainClassName.toLowerCase() = new  $domainClassName();
 		  ${domainClassName.toLowerCase()}.populateWithSample();
 		 return $domainClassName.toLowerCase();

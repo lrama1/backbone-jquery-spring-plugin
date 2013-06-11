@@ -97,6 +97,9 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 				
 				//
 				addNewRoutesToRouter(projectContainer, projectName);
+				
+				//
+				addNewTabsToHomePage(projectContainer, pageThree.getDomainClassName());
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -192,6 +195,20 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		mapOfValues.put("attrs", pageThree.getModelAttributes());
 		CommonUtils.addFileToProject(viewsFolder, new Path(domainClassName + "CollectionView.js"), 
 				TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/views/collection-view-template.js", mapOfValues), new NullProgressMonitor());
+	}
+	
+	private void addNewTabsToHomePage(IContainer projectContainer, String className) throws Exception{
+		IFolder indexFolder = projectContainer.getFolder(new Path("src/main/webapp/WEB-INF"));
+		IFile indexJSPFile = indexFolder.getFile("index.jsp");
+		File file = indexJSPFile.getRawLocation().toFile();
+		String regex = "<!-- MARKER FOR INSERTING -->";
+		String modifiedFile = FileUtils.readFileToString(file);
+		modifiedFile = modifier(modifiedFile, regex,
+				"<li class=\"inactive navItem\"><a href=\"#" + className.toLowerCase() + "s" + "\">" + className + "s" + "</a></li>\n", "");
+		
+		InputStream modifiedFileContent = new ByteArrayInputStream(modifiedFile.getBytes());
+		indexJSPFile.delete(true, new NullProgressMonitor());
+		indexJSPFile.create(modifiedFileContent, IResource.FORCE, new NullProgressMonitor());
 	}
 	
 	private void addNewRoutesToRouter(IContainer projectContainer, String projectName) throws Exception{

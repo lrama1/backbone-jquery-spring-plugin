@@ -34,9 +34,10 @@ public class $className {
 	#end
 	
 	public void populateWithSample(){
+		int appender = getNextNumber();
 		#foreach($key in $attrs.keySet() )
 			#if($attrs.get($key) == 'String')
-				$key = "Sample Value $foreach.count" + Math.random();
+				$key = "Sample Value $key " + appender;
 			#elseif($attrs.get($key) == 'java.util.Date')
 				$key = System.currentTimeMillis();	
 			#elseif($attrs.get($key) == 'Integer')
@@ -45,6 +46,12 @@ public class $className {
 				$key = "";	
 			#end			
 		#end
+	}
+	
+	static int sampleCounter = 0;
+	private static int getNextNumber(){
+		sampleCounter++;
+		return sampleCounter;
 	}
 	
 	public String toString(){

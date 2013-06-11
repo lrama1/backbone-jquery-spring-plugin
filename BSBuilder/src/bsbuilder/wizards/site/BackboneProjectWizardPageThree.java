@@ -367,6 +367,24 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 		return stringWriter.toString();
 	}
 	
+	public String getMainControllerSource(String controllerPackageName){				
+		Map<String, Object> valuesToPlug = new LinkedHashMap<String, Object>();
+		valuesToPlug.put("controllerPackageName", controllerPackageName);
+		InputStream is = 
+				TemplateMerger.merge("/bsbuilder/resources/java/common-controller.java-template", valuesToPlug);		
+		BufferedReader br 	= new BufferedReader(new InputStreamReader(is));
+		String line = "";
+		StringWriter stringWriter = new StringWriter();
+		try{
+		while((line = br.readLine())!= null){
+			stringWriter.write(line + "\n");
+		}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return stringWriter.toString();
+	}
+	
 	public String getControllerSource(String basePackageName, String controllerPackageName, String domainClassName){				
 		//InputStream is = 
 		//		TemplateMerger.merge("/bsbuilder/resources/java/controller.java-template", controllerPackageName,textSampleDomainClass.getText());

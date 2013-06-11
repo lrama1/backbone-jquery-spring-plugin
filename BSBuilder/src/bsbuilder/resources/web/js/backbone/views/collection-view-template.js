@@ -64,7 +64,8 @@ define([
 			"click #editButton" : function(){
 				//alert(this.grid.getSelectedModels());
 				//Note: the html for this sample modal is in the ListTemplate.htm 
-				$('#sampleModal').modal({});
+				//$('#sampleModal').modal({});
+				location.hash = "${className.toLowerCase()}/" + this.grid.getSelectedModels()[0].get("${domainClassIdAttributeName}");
 			}
 		}
 	    
