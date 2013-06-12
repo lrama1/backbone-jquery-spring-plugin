@@ -18,9 +18,21 @@ define([
 	};	
   
 	var AppRouter = Backbone.Router.extend({
+		showView: function (view) {
+	        //destroy current view
+			if(this.currentView !== undefined){
+				console.log("calling cleanup");
+				this.currentView.unbind();
+				this.currentView.undelegateEvents();
+			}
+			//create new view
+			this.currentView = view;
+			this.currentView.delegateEvents();	 
+			return this.currentView;
+		},
 		routes: {
 		#parse("/bsbuilder/resources/web/js/backbone/routers/router-template-fragment-02.js")
-		}
+		}		
 	});
 	
 	var initialize = function(){		

@@ -8,7 +8,8 @@
 					var result = ${className.toLowerCase()}.fetch({
 						success : function(){
 							//render the view when ${className} is fetched successfully	
-							var ${className.toLowerCase()}View = new ${className}EditView({ el: $("#bodyContainer"), model : ${className.toLowerCase()} });
+							//var ${className.toLowerCase()}View = new ${className}EditView({ el: $("#bodyContainer"), model : ${className.toLowerCase()} });
+							app_router.showView(new ${className}EditView({ el: $("#bodyContainer"), model : ${className.toLowerCase()} }));
 						},
 						error : function(){
 							alert("problem");
@@ -21,7 +22,8 @@
 	    	Global.log("getting the list of ${className}s.");
 	    	require(['collections/${className}Collection','views/${className}CollectionView'], 
 	    	    function(${className}Collection, ${className}CollectionView){
-	    	        var ${className.toLowerCase()}CollectionView = new ${className}CollectionView({ el: $("#bodyContainer"), collection : new ${className}Collection()});
+	    	        //var ${className.toLowerCase()}CollectionView = new ${className}CollectionView({ el: $("#bodyContainer"), collection : new ${className}Collection()});
+	    			app_router.showView(new ${className}CollectionView({ el: $("#bodyContainer"), collection : new ${className}Collection()}));
 	    	    });
 	    });
 	    

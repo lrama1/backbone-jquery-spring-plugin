@@ -18,7 +18,7 @@ define([
 		    	#foreach($key in $attrs.keySet() )
 		    		#if($foreach.count == 1)
 		    			{
-		    			name : "",
+		    			name : "${className.toLowerCase()}Selector",
 		    			cell : "select-row",
 		    			headerCell: "select-all"
 		    			},
@@ -61,11 +61,15 @@ define([
 	        this.collection.fetch({reset : true});
 	    },
 		events : {
-			"click #editButton" : function(){
+			"click #edit${className}Button" : function(){
 				//alert(this.grid.getSelectedModels());
 				//Note: the html for this sample modal is in the ListTemplate.htm 
 				//$('#sampleModal').modal({});
-				location.hash = "${className.toLowerCase()}/" + this.grid.getSelectedModels()[0].get("${domainClassIdAttributeName}");
+				if(this.grid.getSelectedModels().length > 0){
+					location.hash = "${className.toLowerCase()}/" + this.grid.getSelectedModels()[0].get("${domainClassIdAttributeName}");
+				}else{
+					alert("Please select a ${className} to edit.");
+				}
 			}
 		}
 	    
