@@ -44,9 +44,6 @@ import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
 import bsbuilder.wizards.site.utils.CommonUtils;
 
-
-
-import bsbuilder.wizards.backbone.BackbonePageNewWizard;
 import bsbuilder.wizards.site.utils.TemplateMerger;
 
 public class NewBackboneSpringProjectWizard extends Wizard implements
@@ -312,11 +309,6 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			/* Add Spring applicationContext file */
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF"), new Path("applicationContext.xml"),
 					TemplateMerger.merge("/bsbuilder/resources/maven/applicationContext.xml-template", proj.getName(),basePackageName,controllerPackageName), monitor);
-						
-			/* Add a default html file */
-			CommonUtils.addFileToProject(folders.get("src/main/webapp"), new Path("index.html"),
-					BackbonePageNewWizard.openContentStream("Welcome to "
-							+ proj.getName()), monitor);
 					
 			/* Add a java model */
 			CommonUtils.createPackageAndClass(folders.get("src/main/java"), domainPackageName, domainClassName, domainClassSourceCode , monitor);

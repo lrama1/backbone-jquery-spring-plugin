@@ -233,18 +233,18 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 				column2Editor.horizontalAlignment = SWT.LEFT;
 				column2Editor.grabHorizontal = true;
 				column2Editor.minimumWidth = 50;
-				CCombo combo = new CCombo(table, SWT.NONE);
-			    combo.setText("String");
-			    combo.add("String");
-			    combo.add("Date");		
-			    combo.add("Number");
-			    combo.addModifyListener(new ModifyListener() {
+				CCombo dataTypeCombo = new CCombo(table, SWT.READ_ONLY);
+			    dataTypeCombo.setText("String");
+			    dataTypeCombo.add("String");
+			    dataTypeCombo.add("Date");		
+			    dataTypeCombo.add("Number");
+			    dataTypeCombo.addModifyListener(new ModifyListener() {
 					@Override
 					public void modifyText(ModifyEvent arg0) {
 						tableItem.setText(1, ((CCombo)arg0.getSource()).getText());
 					}
 				});
-			    column2Editor.setEditor(combo, tableItem, 1);
+			    column2Editor.setEditor(dataTypeCombo, tableItem, 1);
 			    
 			    TableEditor column3Editor = new TableEditor(table);
 			    column3Editor.horizontalAlignment = SWT.LEFT;

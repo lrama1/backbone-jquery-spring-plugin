@@ -52,8 +52,10 @@ define([
 	    	});
 	    },
 	    change : function(evt){  //we are relying that the id of the template elements are the same as the model attrs
-	    	var target = evt.target;        
-	        this.model.set(target.id, target.value);
+	    	var target = evt.target;        	        
+	        var payLoad = {};
+			payLoad[target.id] = target.value;
+			this.model.set(payLoad, {silent : false});
 	    }
 	    
 	});

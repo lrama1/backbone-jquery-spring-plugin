@@ -7,8 +7,14 @@ define([
   var ${className}Model = Backbone.Model.extend({
 	  idAttribute : '${domainClassIdAttributeName}',	
 	  urlRoot : '/${projectName}/${className.toLowerCase()}',	  
-	  validate : function(attributes){
-		//alert('test');
+	  validate : function(attributes, options){
+		  if(options !== undefined && options.silent !== undefined){
+				if(options.silent){
+					console.log("Skip validation");
+				}else{
+					console.log("Validate");
+				}
+		  }		
 	  }	,
 	  parse : function(response){		  
 		  #foreach($key in $attrs.keySet() )

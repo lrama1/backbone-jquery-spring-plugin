@@ -13,7 +13,8 @@
 						},
 						error : function(){
 							alert("problem");
-						}
+						},
+						silent : true
 					});
 	    		});
 	    });
