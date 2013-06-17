@@ -337,7 +337,7 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 		return textSampleDomainClass.getText();
 	}
 	
-	public String getClassSource(String domainPackageName){
+	public String getClassSource(String domainPackageName) throws Exception{
 		TableItem[] tableItems = table.getItems();
 				
 		for(TableItem tableItem : tableItems){
@@ -367,7 +367,7 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 		return stringWriter.toString();
 	}
 	
-	public String getMainControllerSource(String controllerPackageName){				
+	public String getMainControllerSource(String controllerPackageName) throws Exception{				
 		Map<String, Object> valuesToPlug = new LinkedHashMap<String, Object>();
 		valuesToPlug.put("controllerPackageName", controllerPackageName);
 		InputStream is = 
@@ -385,7 +385,8 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 		return stringWriter.toString();
 	}
 	
-	public String getControllerSource(String basePackageName, String controllerPackageName, String domainClassName){				
+	public String getControllerSource(String basePackageName, String controllerPackageName, String domainClassName)
+			 throws Exception{				
 		//InputStream is = 
 		//		TemplateMerger.merge("/bsbuilder/resources/java/controller.java-template", controllerPackageName,textSampleDomainClass.getText());
 		Map<String, Object> valuesToPlug = new LinkedHashMap<String, Object>();

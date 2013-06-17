@@ -90,6 +90,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 	@Override
 	public boolean performFinish() {
 
+		try{
 		if (project != null) {
 			return true;
 		}
@@ -134,10 +135,6 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		final String mainControllerSource = pageThree.getMainControllerSource(controllerPackageName);
 		final String controllerSourceCode = pageThree.getControllerSource(basePackageName, controllerPackageName, domainClassName);
 		
-		
-		//generate POJO
-		
-		
 		/*
 		 * Just like the NewFileWizard, but this time with an operation object
 		 * that modifies workspaces.
@@ -176,6 +173,10 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		BasicNewProjectResourceWizard.selectAndReveal(project, workbench
 				.getActiveWorkbenchWindow());
 
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
 		return true;
 	}
 
