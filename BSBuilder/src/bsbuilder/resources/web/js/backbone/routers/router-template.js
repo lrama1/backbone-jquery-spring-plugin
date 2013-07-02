@@ -19,7 +19,8 @@ define([
   
 	var AppRouter = Backbone.Router.extend({
 		showView: function (view) {
-	        //destroy current view
+	        //destroy current view -- we need this to address the 'ghost' view problem
+			//of inherent to apps using Backbone
 			if(this.currentView !== undefined){
 				console.log("calling cleanup");
 				this.currentView.unbind();
