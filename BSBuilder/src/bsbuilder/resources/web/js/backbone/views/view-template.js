@@ -34,9 +34,14 @@ define([
 	    },
 	    save${className} : function(){
 	    	this.model.save({
+	    		#set( $dateFieldCount = 0 )
 	    		#foreach($key in $attrs.keySet() )
 	    			#if ($attrs.get($key) == "java.util.Date")
+	    				#if ($dateFieldCount > 0)
+	    					,
+	    				#end	
                         ${key} : Date.parse(this.model.get("${key}"))
+                        #set( $dateFieldCount = $dateFieldCount + 1 )
 	    			#end	
 	    		#end
 	    	});	    	
@@ -44,9 +49,14 @@ define([
 	    saveNew${className} : function(){
 	    	this.model.set("${domainClassIdAttributeName}", null);
 	    	this.model.save({
+	    		#set( $dateFieldCount = 0 )
 	    		#foreach($key in $attrs.keySet() )
 	    			#if ($attrs.get($key) == "java.util.Date")
+	    				#if ($dateFieldCount > 0)
+	    					,
+	    				#end	
                         ${key} : Date.parse(this.model.get("${key}"))
+                        #set( $dateFieldCount = $dateFieldCount + 1 )
 	    			#end	
 	    		#end
 	    	});

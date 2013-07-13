@@ -410,6 +410,30 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 		return stringWriter.toString();
 	}
 	
+	//TODO Need to refactor this as this is merely a copy of the previous function
+	public String getControllerTestSource(String basePackageName, String controllerPackageName, String domainClassName)
+			 throws Exception{				
+		Map<String, Object> valuesToPlug = new LinkedHashMap<String, Object>();
+		valuesToPlug.put("basePackageName", basePackageName);
+		valuesToPlug.put("domainClassName", domainClassName);
+		valuesToPlug.put("controllerPackageName", controllerPackageName);
+		InputStream is = 
+				TemplateMerger.merge("/bsbuilder/resources/java/controllerTest.java-template", valuesToPlug);
+
+		
+		BufferedReader br 	= new BufferedReader(new InputStreamReader(is));
+		String line = "";
+		StringWriter stringWriter = new StringWriter();
+		try{
+		while((line = br.readLine())!= null){
+			stringWriter.write(line + "\n");
+		}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return stringWriter.toString();
+	}
+	
 	public Map<String, Object> getModelAttributes(){
 		return attrs;
 	}

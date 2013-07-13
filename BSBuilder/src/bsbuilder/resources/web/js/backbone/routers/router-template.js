@@ -17,20 +17,7 @@ define([
 		interpolate : /{{=([\s\S]+?)}}/g
 	};	
   
-	var AppRouter = Backbone.Router.extend({
-		showView: function (view) {
-	        //destroy current view -- we need this to address the 'ghost' view problem
-			//of inherent to apps using Backbone
-			if(this.currentView !== undefined){
-				console.log("calling cleanup");
-				this.currentView.unbind();
-				this.currentView.undelegateEvents();
-			}
-			//create new view
-			this.currentView = view;
-			this.currentView.delegateEvents();	 
-			return this.currentView;
-		},
+	var AppRouter = Backbone.Router.extend({		
 		routes: {
 		#parse("/bsbuilder/resources/web/js/backbone/routers/router-template-fragment-02.js")
 		}		

@@ -134,6 +134,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		final String controllerClassName = domainClassName + "Controller";
 		final String mainControllerSource = pageThree.getMainControllerSource(controllerPackageName);
 		final String controllerSourceCode = pageThree.getControllerSource(basePackageName, controllerPackageName, domainClassName);
+		final String controllerTestSourceCode = pageThree.getControllerTestSource(basePackageName, controllerPackageName, domainClassName);
 		
 		/*
 		 * Just like the NewFileWizard, but this time with an operation object
@@ -143,7 +144,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			protected void execute(IProgressMonitor monitor)
 					throws CoreException {
 				createProject(desc, projectHandle, basePackageName, controllerPackageName, mainControllerSource, 
-						controllerClassName, controllerSourceCode,
+						controllerClassName, controllerSourceCode, controllerTestSourceCode,
 						domainPackageName, domainClassName ,classSourceCode, domainClassIdAttrName , monitor);
 			}
 		};
@@ -195,6 +196,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			String mainControllerSourceCode,
 			String controllerClassName, 			
 			String domainControllerSourceCode,
+			String controllerTestSourceCode,
 			String domainPackageName, 
 			String domainClassName, String domainClassSourceCode,
 			String domainClassIdAttributeName,
@@ -307,10 +309,13 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			/* Add Spring servlet dispathcer mapping file */
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF"), new Path("yourdispatcher-servlet.xml"),
 					TemplateMerger.merge("/bsbuilder/resources/maven/yourdispatcher-servlet.xml-template", proj.getName(),basePackageName,controllerPackageName), monitor);
-			/* Add Spring applicationContext file */
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF"), new Path("applicationContext.xml"),
+			/* Add Spring context files */
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/spring"), new Path("applicationContext.xml"),
 					TemplateMerger.merge("/bsbuilder/resources/maven/applicationContext.xml-template", proj.getName(),basePackageName,controllerPackageName), monitor);
-					
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/spring"), new Path("spring-security.xml"),
+					TemplateMerger.merge("/bsbuilder/resources/maven/spring-security.xml-template", proj.getName(),basePackageName,controllerPackageName), monitor);
+			
+			
 			/* Add a java model */
 			CommonUtils.createPackageAndClass(folders.get("src/main/java"), domainPackageName, domainClassName, domainClassSourceCode , monitor);
 			
@@ -335,6 +340,10 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			/* Add Controllers*/
 			CommonUtils.createPackageAndClass(folders.get("src/main/java"), controllerPackageName, "MainController", mainControllerSourceCode , monitor);			
 			CommonUtils.createPackageAndClass(folders.get("src/main/java"), controllerPackageName, controllerClassName, domainControllerSourceCode , monitor);
+			
+			//add junit for Controllers
+			CommonUtils.createPackageAndClass(folders.get("src/test/java"), controllerPackageName, controllerClassName + "Test", controllerTestSourceCode , monitor);
+			
 			
 			IJavaProject javaProject = JavaCore.create(proj);
 			
@@ -404,6 +413,10 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		settingsFolder.create(false, true, new NullProgressMonitor());
 		folders.put(".settings", settingsFolder);
 		
+		//src/main/webapp/WEB-INF/spring
+		IFolder springFolder = srcFolder51.getFolder(new Path("spring"));
+		springFolder.create(false, true, new NullProgressMonitor());
+		folders.put("src/main/webapp/WEB-INF/spring", springFolder);
 		
 		//src/main/webapp/WEB-INF/resources
 		IFolder resourcesFolder = srcFolder51.getFolder(new Path("resources"));

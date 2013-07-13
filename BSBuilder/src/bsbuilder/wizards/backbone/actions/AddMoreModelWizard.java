@@ -204,7 +204,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		String regex = "<!-- MARKER FOR INSERTING -->";
 		String modifiedFile = FileUtils.readFileToString(file);
 		modifiedFile = modifier(modifiedFile, regex,
-				"<li class=\"inactive navItem\"><a href=\"#" + className.toLowerCase() + "s" + "\">" + className + "s" + "</a></li>\n", "");
+				"<li><a href=\"#" + className.toLowerCase() + "s" + "\" data-toggle=\"tab\">" + className + "s" + "</a></li>\n", "");
 		
 		InputStream modifiedFileContent = new ByteArrayInputStream(modifiedFile.getBytes());
 		indexJSPFile.delete(true, new NullProgressMonitor());
