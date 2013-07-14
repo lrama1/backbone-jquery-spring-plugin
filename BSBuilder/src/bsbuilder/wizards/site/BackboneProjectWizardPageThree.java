@@ -385,7 +385,8 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 		return stringWriter.toString();
 	}
 	
-	public String getControllerSource(String basePackageName, String controllerPackageName, String domainClassName)
+	public String getControllerSource(String basePackageName, String controllerPackageName, String domainClassName, 
+			String domainClassIdAttributeName)
 			 throws Exception{				
 		//InputStream is = 
 		//		TemplateMerger.merge("/bsbuilder/resources/java/controller.java-template", controllerPackageName,textSampleDomainClass.getText());
@@ -393,6 +394,7 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 		valuesToPlug.put("basePackageName", basePackageName);
 		valuesToPlug.put("domainClassName", domainClassName);
 		valuesToPlug.put("controllerPackageName", controllerPackageName);
+		valuesToPlug.put("domainClassIdAttributeName", domainClassIdAttributeName);
 		InputStream is = 
 				TemplateMerger.merge("/bsbuilder/resources/java/controller.java-template", valuesToPlug);
 
@@ -410,13 +412,15 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 		return stringWriter.toString();
 	}
 	
-	public String getSeviceSourceCode(String basePackageName, String servicePackageName,String domainClassName)
+	public String getSeviceSourceCode(String basePackageName, String servicePackageName,String domainClassName,
+			String domainClassIdAttributeName)
 			 throws Exception{				
 		
 		Map<String, Object> valuesToPlug = new LinkedHashMap<String, Object>();
 		valuesToPlug.put("basePackageName", basePackageName);
 		valuesToPlug.put("domainClassName", domainClassName);
 		valuesToPlug.put("servicePackageName", servicePackageName);
+		valuesToPlug.put("domainClassIdAttributeName", domainClassIdAttributeName);
 		InputStream is = 
 				TemplateMerger.merge("/bsbuilder/resources/java/service.java-template", valuesToPlug);
 
@@ -434,13 +438,15 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 		return stringWriter.toString();
 	}
 	
-	public String getDaoSourceCode(String basePackageName, String daoPackageName, String domainClassName)
+	public String getDaoSourceCode(String basePackageName, String daoPackageName, String domainClassName,
+			String domainClassIdAttributeName)
 			 throws Exception{				
 		
 		Map<String, Object> valuesToPlug = new LinkedHashMap<String, Object>();
 		valuesToPlug.put("basePackageName", basePackageName);
 		valuesToPlug.put("domainClassName", domainClassName);
 		valuesToPlug.put("daoPackageName", daoPackageName);
+		valuesToPlug.put("domainClassIdAttributeName", domainClassIdAttributeName);
 		InputStream is = 
 				TemplateMerger.merge("/bsbuilder/resources/java/dao.java-template", valuesToPlug);
 

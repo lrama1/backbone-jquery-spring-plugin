@@ -133,7 +133,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		final String domainClassIdAttributeName = pageThree.getDomainClassAttributeName();
 		final String controllerClassName = domainClassName + "Controller";
 		final String mainControllerSourceCode = pageThree.getMainControllerSource(controllerPackageName);
-		final String domainControllerSourceCode = pageThree.getControllerSource(basePackageName, controllerPackageName, domainClassName);
+		final String domainControllerSourceCode = pageThree.getControllerSource(basePackageName, controllerPackageName, domainClassName, domainClassIdAttributeName);
 		final String controllerTestSourceCode = pageThree.getControllerTestSource(basePackageName, controllerPackageName, domainClassName);
 		final String servicePackageName = pageTwo.getBasePackageName() + ".service";
 		final String daoPackageName = pageTwo.getBasePackageName() + ".dao";
@@ -151,9 +151,9 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		params.setDomainControllerSourceCode(domainControllerSourceCode);
 		params.setControllerTestSourceCode(controllerTestSourceCode);
 		params.setServicePackageName(servicePackageName);
-		params.setServiceSourceCode(pageThree.getSeviceSourceCode(basePackageName, servicePackageName, domainClassName));
+		params.setServiceSourceCode(pageThree.getSeviceSourceCode(basePackageName, servicePackageName, domainClassName, domainClassIdAttributeName));
 		params.setDaoPackageName(daoPackageName);
-		params.setDaoSourceCode(pageThree.getDaoSourceCode(basePackageName, daoPackageName, domainClassName));
+		params.setDaoSourceCode(pageThree.getDaoSourceCode(basePackageName, daoPackageName, domainClassName, domainClassIdAttributeName));
 		params.setCommonPackageName(commonPackageName);
 		params.setListWrapperSourceCode(pageThree.getListWrapperSourceCode(basePackageName, commonPackageName, domainClassName));
 		
