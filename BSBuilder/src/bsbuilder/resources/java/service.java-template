@@ -1,0 +1,24 @@
+package $servicePackageName;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+//import the domain
+import ${basePackageName}.web.domain.$domainClassName;
+import ${basePackageName}.common.ListWrapper;
+import ${basePackageName}.dao.${domainClassName}DAO;
+
+@Service
+public class ${domainClassName}Service {
+
+	@Autowired
+	${domainClassName}DAO ${domainClassName.substring(0,1).toLowerCase()}${domainClassName.substring(1)}DAO;
+
+	public ListWrapper<${domainClassName}> get${domainClassName}s(int pageNumber, int pageSize, String sortByAttribute, String sortDirection){
+		return ${domainClassName.substring(0,1).toLowerCase()}${domainClassName.substring(1)}DAO.get${domainClassName}s(pageNumber, pageSize, sortByAttribute, sortDirection);
+	}
+	
+	public ${domainClassName} get${domainClassName}(String id){
+		return ${domainClassName.substring(0,1).toLowerCase()}${domainClassName.substring(1)}DAO.get${domainClassName}(id);
+	}	
+}

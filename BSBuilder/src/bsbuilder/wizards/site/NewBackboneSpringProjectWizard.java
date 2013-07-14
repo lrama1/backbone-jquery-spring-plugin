@@ -129,12 +129,34 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		final String domainPackageName = pageTwo.getDomainPackage();
 		
 		final String domainClassName = pageThree.getDomainClassName();
-		final String classSourceCode = pageThree.getClassSource(domainPackageName);
-		final String domainClassIdAttrName = pageThree.getDomainClassAttributeName();
+		final String domainClassSourceCode = pageThree.getClassSource(domainPackageName);
+		final String domainClassIdAttributeName = pageThree.getDomainClassAttributeName();
 		final String controllerClassName = domainClassName + "Controller";
-		final String mainControllerSource = pageThree.getMainControllerSource(controllerPackageName);
-		final String controllerSourceCode = pageThree.getControllerSource(basePackageName, controllerPackageName, domainClassName);
+		final String mainControllerSourceCode = pageThree.getMainControllerSource(controllerPackageName);
+		final String domainControllerSourceCode = pageThree.getControllerSource(basePackageName, controllerPackageName, domainClassName);
 		final String controllerTestSourceCode = pageThree.getControllerTestSource(basePackageName, controllerPackageName, domainClassName);
+		final String servicePackageName = pageTwo.getBasePackageName() + ".service";
+		final String daoPackageName = pageTwo.getBasePackageName() + ".dao";
+		final String commonPackageName = pageTwo.getBasePackageName() + ".common";
+		
+		final SourceCodeGeneratorParameters params = new SourceCodeGeneratorParameters();
+		params.setBasePackageName(basePackageName);
+		params.setControllerPackageName(controllerPackageName);
+		params.setDomainPackageName(domainPackageName);
+		params.setDomainClassName(domainClassName);
+		params.setDomainClassSourceCode(domainClassSourceCode);
+		params.setDomainClassIdAttributeName(domainClassIdAttributeName);
+		params.setControllerClassName(controllerClassName);
+		params.setMainControllerSourceCode(mainControllerSourceCode); 
+		params.setDomainControllerSourceCode(domainControllerSourceCode);
+		params.setControllerTestSourceCode(controllerTestSourceCode);
+		params.setServicePackageName(servicePackageName);
+		params.setServiceSourceCode(pageThree.getSeviceSourceCode(basePackageName, servicePackageName, domainClassName));
+		params.setDaoPackageName(daoPackageName);
+		params.setDaoSourceCode(pageThree.getDaoSourceCode(basePackageName, daoPackageName, domainClassName));
+		params.setCommonPackageName(commonPackageName);
+		params.setListWrapperSourceCode(pageThree.getListWrapperSourceCode(basePackageName, commonPackageName, domainClassName));
+		
 		
 		/*
 		 * Just like the NewFileWizard, but this time with an operation object
@@ -143,9 +165,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		WorkspaceModifyOperation op = new WorkspaceModifyOperation() {
 			protected void execute(IProgressMonitor monitor)
 					throws CoreException {
-				createProject(desc, projectHandle, basePackageName, controllerPackageName, mainControllerSource, 
-						controllerClassName, controllerSourceCode, controllerTestSourceCode,
-						domainPackageName, domainClassName ,classSourceCode, domainClassIdAttrName , monitor);
+				createProject(desc, projectHandle, params , monitor);
 			}
 		};
 
@@ -191,15 +211,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 	 * @throws OperationCanceledException
 	 */
 	void createProject(IProjectDescription description, IProject proj, 
-			String basePackageName, 
-			String controllerPackageName, 
-			String mainControllerSourceCode,
-			String controllerClassName, 			
-			String domainControllerSourceCode,
-			String controllerTestSourceCode,
-			String domainPackageName, 
-			String domainClassName, String domainClassSourceCode,
-			String domainClassIdAttributeName,
+			SourceCodeGeneratorParameters params,
 			IProgressMonitor monitor) throws CoreException,
 			OperationCanceledException {
 		try {
@@ -223,7 +235,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			/* Add an pom file */
 			CommonUtils.addFileToProject(container, new Path("pom.xml"),
 					TemplateMerger.merge("/bsbuilder/resources/maven/pom.xml-template", proj.getName(),
-							basePackageName,controllerPackageName), monitor);			
+							params.getBasePackageName(), params.getControllerPackageName()), monitor);			
 
 			//call create folders here
 			createFolderStructures(container, monitor);			
@@ -277,19 +289,19 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/text.js"), monitor);
 						
 			Map<String, Object> mapOfValues = new HashMap<String, Object>();
-			mapOfValues.put("className", domainClassName);
+			mapOfValues.put("className",  params.getDomainClassName());
 			mapOfValues.put("projectName", proj.getName());
-			mapOfValues.put("domainClassIdAttributeName", domainClassIdAttributeName);
+			mapOfValues.put("domainClassIdAttributeName", params.getDomainClassIdAttributeName());
 			mapOfValues.put("attrs", pageThree.getModelAttributes());
 			//CommonUtils.CommonUtils.addFileToProject(yourJsFolder, new Path("components.js"), 
 			//		TemplateMerger.merge("/bsbuilder/resources/web/js/components.js", mapOfValues), monitor);
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/models"), new Path(domainClassName + "Model.js"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/models"), new Path(params.getDomainClassName()  + "Model.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/models/model-template.js", mapOfValues), monitor);
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/collections"), new Path(domainClassName + "Collection.js"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/collections"), new Path(params.getDomainClassName() + "Collection.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/collections/collection-template.js", mapOfValues), monitor);
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/views"), new Path(domainClassName + "EditView.js"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/views"), new Path(params.getDomainClassName() + "EditView.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/views/view-template.js", mapOfValues), monitor);
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/views"), new Path(domainClassName + "CollectionView.js"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/views"), new Path(params.getDomainClassName() + "CollectionView.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/views/collection-view-template.js", mapOfValues), monitor);
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/globals"), new Path("global.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/libs/global.js", mapOfValues), monitor);
@@ -301,23 +313,24 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js"), new Path("router.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/routers/router-template.js", mapOfValues), monitor);
 			
-			addVariousSettings(folders.get(".settings"), proj, basePackageName,controllerPackageName ,monitor);
+			addVariousSettings(folders.get(".settings"), proj, params.getBasePackageName(), params.getControllerPackageName() ,monitor);
 			
 			/* Add web-xml file */
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF"), new Path("web.xml"),
-					TemplateMerger.merge("/bsbuilder/resources/maven/web.xml-template", proj.getName(),basePackageName,controllerPackageName), monitor);
+					TemplateMerger.merge("/bsbuilder/resources/maven/web.xml-template", proj.getName(), params.getBasePackageName(), params.getControllerPackageName()), monitor);
 			/* Add Spring servlet dispathcer mapping file */
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF"), new Path("yourdispatcher-servlet.xml"),
-					TemplateMerger.merge("/bsbuilder/resources/maven/yourdispatcher-servlet.xml-template", proj.getName(),basePackageName,controllerPackageName), monitor);
+					TemplateMerger.merge("/bsbuilder/resources/maven/yourdispatcher-servlet.xml-template", proj.getName(),params.getBasePackageName(),params.getControllerPackageName()), monitor);
 			/* Add Spring context files */
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/spring"), new Path("applicationContext.xml"),
-					TemplateMerger.merge("/bsbuilder/resources/maven/applicationContext.xml-template", proj.getName(),basePackageName,controllerPackageName), monitor);
+					TemplateMerger.merge("/bsbuilder/resources/maven/applicationContext.xml-template", proj.getName(),params.getBasePackageName(),params.getControllerPackageName()), monitor);
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/spring"), new Path("spring-security.xml"),
-					TemplateMerger.merge("/bsbuilder/resources/maven/spring-security.xml-template", proj.getName(),basePackageName,controllerPackageName), monitor);
+					TemplateMerger.merge("/bsbuilder/resources/maven/spring-security.xml-template", proj.getName(),params.getBasePackageName(),params.getControllerPackageName()), monitor);
 			
 			
 			/* Add a java model */
-			CommonUtils.createPackageAndClass(folders.get("src/main/java"), domainPackageName, domainClassName, domainClassSourceCode , monitor);
+			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getDomainPackageName(), params.getDomainClassName(),
+					params.getDomainClassSourceCode() , monitor);
 			
 			Map<String, Object> modelAttributes = pageThree.getModelAttributes();
 			/* Add a default jsp file.  This is dependent on the Java Model generation */
@@ -331,18 +344,33 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 	
 			
 			/*Add a backbone template file.  This is dependent on the Java Model generation*/			
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/templates"), new Path(domainClassName + "EditTemplate.htm"), 
-					TemplateMerger.mergeMap("/bsbuilder/resources/web/js/backbone/templates/EditTemplate.htm-template", domainClassName ,modelAttributes ), monitor);
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/templates"), new Path(domainClassName + "ListTemplate.htm"), 
-					TemplateMerger.mergeMap("/bsbuilder/resources/web/js/backbone/templates/ListTemplate.htm-template", domainClassName ,modelAttributes ), monitor);
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/templates"), new Path(params.getDomainClassName() + "EditTemplate.htm"), 
+					TemplateMerger.mergeMap("/bsbuilder/resources/web/js/backbone/templates/EditTemplate.htm-template", params.getDomainClassName() ,modelAttributes ), monitor);
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/templates"), new Path(params.getDomainClassName() + "ListTemplate.htm"), 
+					TemplateMerger.mergeMap("/bsbuilder/resources/web/js/backbone/templates/ListTemplate.htm-template", params.getDomainClassName() ,modelAttributes ), monitor);
 
 			
 			/* Add Controllers*/
-			CommonUtils.createPackageAndClass(folders.get("src/main/java"), controllerPackageName, "MainController", mainControllerSourceCode , monitor);			
-			CommonUtils.createPackageAndClass(folders.get("src/main/java"), controllerPackageName, controllerClassName, domainControllerSourceCode , monitor);
+			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getControllerPackageName() , "MainController", 
+					params.getMainControllerSourceCode() , monitor);			
+			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getControllerPackageName(), params.getControllerClassName(), 
+					params.getDomainControllerSourceCode(), monitor);
+			
+			/* Add Service */
+			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getServicePackageName(), params.getDomainClassName() + "Service",
+					params.getServiceSourceCode() , monitor);			
+			
+			/* Add DAO */
+			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getDaoPackageName(), params.getDomainClassName() + "DAO",
+					params.getDaoSourceCode() , monitor);
+			
+			/* Add ListWrapper */
+			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getCommonPackageName(), "ListWrapper",
+					params.getListWrapperSourceCode() , monitor);
 			
 			//add junit for Controllers
-			CommonUtils.createPackageAndClass(folders.get("src/test/java"), controllerPackageName, controllerClassName + "Test", controllerTestSourceCode , monitor);
+			CommonUtils.createPackageAndClass(folders.get("src/test/java"), params.getControllerPackageName(),
+					params.getControllerClassName() + "Test", params.getControllerTestSourceCode() , monitor);
 			
 			
 			IJavaProject javaProject = JavaCore.create(proj);
@@ -352,7 +380,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 					folders.get("src/test/java"), javaProject);
 			
 			//add bsbuilder-specific settings
-			addBSBuilderSettings(folders.get(".settings"), project, basePackageName, monitor);
+			addBSBuilderSettings(folders.get(".settings"), project, params.getBasePackageName(), monitor);
 			
 		} catch (Throwable ioe) {
 			IStatus status = new Status(IStatus.ERROR, "NewFileWizard", IStatus.OK,
@@ -561,6 +589,123 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		this.config = config;
 	}
 
-	
+	public class SourceCodeGeneratorParameters{
+		String basePackageName; 
+		String controllerPackageName; 
+		String mainControllerSourceCode;
+		String controllerClassName; 			
+		String domainControllerSourceCode;
+		String controllerTestSourceCode;
+		String domainPackageName; 
+		String domainClassName; 
+		String domainClassSourceCode;
+		String domainClassIdAttributeName;
+		String servicePackageName;
+		String serviceSourceCode;
+		String daoPackageName;
+		String daoSourceCode;
+		String commonPackageName;
+		String listWrapperSourceCode;
+		
+		
+		public String getBasePackageName() {
+			return basePackageName;
+		}
+		public void setBasePackageName(String basePackageName) {
+			this.basePackageName = basePackageName;
+		}
+		public String getControllerPackageName() {
+			return controllerPackageName;
+		}
+		public void setControllerPackageName(String controllerPackageName) {
+			this.controllerPackageName = controllerPackageName;
+		}
+		public String getMainControllerSourceCode() {
+			return mainControllerSourceCode;
+		}
+		public void setMainControllerSourceCode(String mainControllerSourceCode) {
+			this.mainControllerSourceCode = mainControllerSourceCode;
+		}
+		public String getControllerClassName() {
+			return controllerClassName;
+		}
+		public void setControllerClassName(String controllerClassName) {
+			this.controllerClassName = controllerClassName;
+		}
+		public String getDomainControllerSourceCode() {
+			return domainControllerSourceCode;
+		}
+		public void setDomainControllerSourceCode(String domainControllerSourceCode) {
+			this.domainControllerSourceCode = domainControllerSourceCode;
+		}
+		public String getControllerTestSourceCode() {
+			return controllerTestSourceCode;
+		}
+		public void setControllerTestSourceCode(String controllerTestSourceCode) {
+			this.controllerTestSourceCode = controllerTestSourceCode;
+		}
+		public String getDomainPackageName() {
+			return domainPackageName;
+		}
+		public void setDomainPackageName(String domainPackageName) {
+			this.domainPackageName = domainPackageName;
+		}
+		public String getDomainClassName() {
+			return domainClassName;
+		}
+		public void setDomainClassName(String domainClassName) {
+			this.domainClassName = domainClassName;
+		}
+		public String getDomainClassSourceCode() {
+			return domainClassSourceCode;
+		}
+		public void setDomainClassSourceCode(String domainClassSourceCode) {
+			this.domainClassSourceCode = domainClassSourceCode;
+		}
+		public String getDomainClassIdAttributeName() {
+			return domainClassIdAttributeName;
+		}
+		public void setDomainClassIdAttributeName(String domainClassIdAttributeName) {
+			this.domainClassIdAttributeName = domainClassIdAttributeName;
+		}
+		public String getServicePackageName() {
+			return servicePackageName;
+		}
+		public void setServicePackageName(String servicePackageName) {
+			this.servicePackageName = servicePackageName;
+		}
+		public String getServiceSourceCode() {
+			return serviceSourceCode;
+		}
+		public void setServiceSourceCode(String serviceSourceCode) {
+			this.serviceSourceCode = serviceSourceCode;
+		}
+		public String getDaoPackageName() {
+			return daoPackageName;
+		}
+		public void setDaoPackageName(String daoPackageName) {
+			this.daoPackageName = daoPackageName;
+		}
+		public String getDaoSourceCode() {
+			return daoSourceCode;
+		}
+		public void setDaoSourceCode(String daoSourceCode) {
+			this.daoSourceCode = daoSourceCode;
+		}
+		public String getListWrapperSourceCode() {
+			return listWrapperSourceCode;
+		}
+		public void setListWrapperSourceCode(String listWrapperSourceCode) {
+			this.listWrapperSourceCode = listWrapperSourceCode;
+		}
+		public String getCommonPackageName() {
+			return commonPackageName;
+		}
+		public void setCommonPackageName(String commonPackageName) {
+			this.commonPackageName = commonPackageName;
+		}
+		
+		
+	}
 
 }

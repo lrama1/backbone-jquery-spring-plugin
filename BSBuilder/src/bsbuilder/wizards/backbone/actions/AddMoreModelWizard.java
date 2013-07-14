@@ -83,6 +83,12 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 				//createController
 				createControllerClass(projectContainer, basePackageName);
 				
+				//createService
+				createServiceClass(projectContainer, basePackageName);
+				
+				//createDao
+				createDaoClass(projectContainer, basePackageName);
+				
 				//create backbone model
 				createBackboneModel(projectContainer, projectName);
 				
@@ -145,6 +151,24 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		IFolder javaFolder = projectContainer.getFolder(new Path("src/main/java"));
 		CommonUtils.createPackageAndClass(javaFolder, controllerPackageName, controllerClassName, controllerSourceCode , new NullProgressMonitor());
 		
+	}
+	
+	private void createServiceClass(IContainer projectContainer, String basePackageName)
+	throws Exception{
+		final String serviceClassName = pageThree.getDomainClassName() + "Service";
+		String servicePackageName = basePackageName + ".service";
+		final String serviceSourceCode = pageThree.getSeviceSourceCode(basePackageName, servicePackageName, pageThree.getDomainClassName());
+		IFolder javaFolder = projectContainer.getFolder(new Path("src/main/java"));
+		CommonUtils.createPackageAndClass(javaFolder, servicePackageName, serviceClassName, serviceSourceCode , new NullProgressMonitor());
+	}
+	
+	private void createDaoClass(IContainer projectContainer, String basePackageName)
+			throws Exception{
+		final String daoClassName = pageThree.getDomainClassName() + "DAO";
+		String daoPackageName = basePackageName + ".dao";
+		final String daoSourceCode = pageThree.getDaoSourceCode(basePackageName, daoPackageName, pageThree.getDomainClassName());
+		IFolder javaFolder = projectContainer.getFolder(new Path("src/main/java"));
+		CommonUtils.createPackageAndClass(javaFolder, daoPackageName, daoClassName, daoSourceCode , new NullProgressMonitor());
 	}
 	
 	private void createBackboneModel(IContainer projectContainer, String projectName) throws Exception{

@@ -410,6 +410,80 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 		return stringWriter.toString();
 	}
 	
+	public String getSeviceSourceCode(String basePackageName, String servicePackageName,String domainClassName)
+			 throws Exception{				
+		
+		Map<String, Object> valuesToPlug = new LinkedHashMap<String, Object>();
+		valuesToPlug.put("basePackageName", basePackageName);
+		valuesToPlug.put("domainClassName", domainClassName);
+		valuesToPlug.put("servicePackageName", servicePackageName);
+		InputStream is = 
+				TemplateMerger.merge("/bsbuilder/resources/java/service.java-template", valuesToPlug);
+
+		
+		BufferedReader br 	= new BufferedReader(new InputStreamReader(is));
+		String line = "";
+		StringWriter stringWriter = new StringWriter();
+		try{
+		while((line = br.readLine())!= null){
+			stringWriter.write(line + "\n");
+		}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return stringWriter.toString();
+	}
+	
+	public String getDaoSourceCode(String basePackageName, String daoPackageName, String domainClassName)
+			 throws Exception{				
+		
+		Map<String, Object> valuesToPlug = new LinkedHashMap<String, Object>();
+		valuesToPlug.put("basePackageName", basePackageName);
+		valuesToPlug.put("domainClassName", domainClassName);
+		valuesToPlug.put("daoPackageName", daoPackageName);
+		InputStream is = 
+				TemplateMerger.merge("/bsbuilder/resources/java/dao.java-template", valuesToPlug);
+
+		
+		BufferedReader br 	= new BufferedReader(new InputStreamReader(is));
+		String line = "";
+		StringWriter stringWriter = new StringWriter();
+		try{
+		while((line = br.readLine())!= null){
+			stringWriter.write(line + "\n");
+		}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return stringWriter.toString();
+	}
+	
+	//getListWrapperSourceCode
+	public String getListWrapperSourceCode(String basePackageName, String commonPackageName,String domainClassName)
+			 throws Exception{				
+		
+		Map<String, Object> valuesToPlug = new LinkedHashMap<String, Object>();
+		valuesToPlug.put("basePackageName", basePackageName);
+		valuesToPlug.put("domainClassName", domainClassName);
+		valuesToPlug.put("commonPackageName", commonPackageName);
+		InputStream is = 
+				TemplateMerger.merge("/bsbuilder/resources/java/listWrapper.java-template", valuesToPlug);
+
+		
+		BufferedReader br 	= new BufferedReader(new InputStreamReader(is));
+		String line = "";
+		StringWriter stringWriter = new StringWriter();
+		try{
+		while((line = br.readLine())!= null){
+			stringWriter.write(line + "\n");
+		}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return stringWriter.toString();
+	}
+	
+	
 	//TODO Need to refactor this as this is merely a copy of the previous function
 	public String getControllerTestSource(String basePackageName, String controllerPackageName, String domainClassName)
 			 throws Exception{				

@@ -1,0 +1,63 @@
+package $daoPackageName;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import org.springframework.stereotype.Repository;
+
+//import the domain
+import ${basePackageName}.web.domain.$domainClassName;
+import ${basePackageName}.common.ListWrapper;
+import ${basePackageName}.dao.${domainClassName}DAO;
+
+@Repository
+public class ${domainClassName}DAO {
+
+	private List<${domainClassName}> all${domainClassName} = new ArrayList<${domainClassName}>();
+
+	@PostConstruct
+	public void init(){
+		#set($start = 0)
+		#set($end = 13)
+		#set($range = [$start..$end])
+		#foreach($i in $range)
+		   	${domainClassName} ${domainClassName.toLowerCase()}${i} = new ${domainClassName}();		
+			${domainClassName.toLowerCase()}${i}.populateWithSample();
+			all${domainClassName}.add(${domainClassName.toLowerCase()}${i});
+		#end
+	}
+	
+
+	public $domainClassName get$domainClassName(String id){
+		 System.out.println("Retrieving ${domainClassName} object with id: " + id);
+		 $domainClassName  $domainClassName.toLowerCase() = new  $domainClassName();
+		  ${domainClassName.toLowerCase()}.populateWithSample();
+		 return $domainClassName.toLowerCase();
+	}
+	
+	public ListWrapper<${domainClassName}> get${domainClassName}s(int page, 
+			int pageSize, String sortByAttributeName, String sortDirection){
+		
+		List<${domainClassName}> partialPage = new ArrayList<${domainClassName}>();
+		int end = (page * pageSize);
+		int start = (end) - pageSize;
+		int totalPages = roundUp(all${domainClassName}.size(),  pageSize);
+		
+		if(end > all${domainClassName}.size())
+			end = all${domainClassName}.size();
+		if(start < all${domainClassName}.size())
+			partialPage = all${domainClassName}.subList(start, end);
+		
+		
+		ListWrapper<${domainClassName}> listWrapper = new ListWrapper<${domainClassName}>();
+		listWrapper.setRows(partialPage);
+		listWrapper.setTotalRecords(all${domainClassName}.size());
+		listWrapper.setLastPage(totalPages);
+		return listWrapper;
+	}
+	
+	private int roundUp(int num, int divisor) {
+		return (num + divisor - 1) / divisor;
+	}
+}

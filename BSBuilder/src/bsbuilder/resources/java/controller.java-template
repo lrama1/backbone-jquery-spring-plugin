@@ -1,9 +1,6 @@
 package $controllerPackageName;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,12 +12,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 //import the domain
 import ${basePackageName}.web.domain.$domainClassName;
+import ${basePackageName}.service.${domainClassName}Service;
+import ${basePackageName}.common.ListWrapper;
 
 
 @Controller
-public class ${domainClassName}Controller {
+public class ${domainClassName}Controller {	
 
-	private List<${domainClassName}> all${domainClassName} = new ArrayList<${domainClassName}>();
+	@Autowired
+	${domainClassName}Service ${domainClassName.substring(0,1).toLowerCase()}${domainClassName.substring(1)}Service;
+	
+	/*private List<${domainClassName}> all${domainClassName} = new ArrayList<${domainClassName}>();
 
 	@PostConstruct
 	public void init(){
@@ -32,15 +34,16 @@ public class ${domainClassName}Controller {
 			${domainClassName.toLowerCase()}${i}.populateWithSample();
 			all${domainClassName}.add(${domainClassName.toLowerCase()}${i});
 		#end
-	}
+	}*/
 
 	
 	@RequestMapping(value = "/$domainClassName.toLowerCase()/{id}", method = RequestMethod.GET)
 	public @ResponseBody $domainClassName get$domainClassName(@PathVariable("id") String id){
-		 System.out.println("Retrieving ${domainClassName} object with id: " + id);
-		 $domainClassName  $domainClassName.toLowerCase() = new  $domainClassName();
-		  ${domainClassName.toLowerCase()}.populateWithSample();
-		 return $domainClassName.toLowerCase();
+		//System.out.println("Retrieving ${domainClassName} object with id: " + id);
+		// $domainClassName  $domainClassName.toLowerCase() = new  $domainClassName();
+		// ${domainClassName.toLowerCase()}.populateWithSample();
+		// return $domainClassName.toLowerCase();
+		return ${domainClassName.substring(0,1).toLowerCase()}${domainClassName.substring(1)}Service.get${domainClassName}(id);
 	}
 	
 	
@@ -56,6 +59,18 @@ public class ${domainClassName}Controller {
 		return "";
 	}
 	
+	@RequestMapping("/${domainClassName.toLowerCase()}s")
+	public @ResponseBody
+	ListWrapper<${domainClassName}> getAll${domainClassName}s(
+			@RequestParam("page") int pageNumber,
+			@RequestParam("per_page") int pageSize,
+			@RequestParam(value = "sort_by", required = false) String sortByAttributeName,
+			@RequestParam(value = "order", required = false) String sortDirection) {
+		return ${domainClassName.substring(0,1).toLowerCase()}${domainClassName.substring(1)}Service.get${domainClassName}s(pageNumber, pageSize, sortByAttributeName, sortDirection);
+		
+	}
+	
+	/*
 	@RequestMapping("/${domainClassName.toLowerCase()}s")
 	public @ResponseBody ListWrapper getAll${domainClassName}s(@RequestParam("page") int page, 
 			@RequestParam("per_page") int pageSize,
@@ -78,41 +93,6 @@ public class ${domainClassName}Controller {
 		listWrapper.setTotalRecords(all${domainClassName}.size());
 		listWrapper.setLastPage(totalPages);
 		return listWrapper;
-	}
-	
-	private  int roundUp(int num, int divisor) {
-	    return (num + divisor - 1) / divisor;
-	}
-	
-	public class ListWrapper{
-		private List<${domainClassName}> ${domainClassName.toLowerCase()}s;
-		private int totalRecords;
-		private int lastPage;
-		
-		public List<${domainClassName}> get${domainClassName}s() {
-			return ${domainClassName.toLowerCase()}s;
-		}
-
-		public void set${domainClassName}s(List<${domainClassName}> ${domainClassName.toLowerCase()}s) {
-			this.${domainClassName.toLowerCase()}s = ${domainClassName.toLowerCase()}s;
-		}
-
-		public int getTotalRecords() {
-			return totalRecords;
-		}
-
-		public void setTotalRecords(int totalRecords) {
-			this.totalRecords = totalRecords;
-		}
-
-		public int getLastPage() {
-			return lastPage;
-		}
-
-		public void setLastPage(int lastPage) {
-			this.lastPage = lastPage;
-		}
-	}
-	
+	}*/
 	
 }
