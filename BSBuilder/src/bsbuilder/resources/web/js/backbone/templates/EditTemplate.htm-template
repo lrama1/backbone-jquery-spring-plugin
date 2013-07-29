@@ -2,14 +2,14 @@
 <div class="row-fluid">
 	<div class="span1"><!--EMPTY --></div>
 	<div class="span10">
-		#foreach($key in $valuesToPlug.keySet() )
+		#foreach($key in $attrs.keySet() )
 			<label>$key</label>
 			<input type='text' id="$key" name='$key' value="{{=$key}}"/>
 		#end	
 	</div>
 	<div class="span1"><!--EMPTY --></div>
 	<div class="span12">
-		<input type="button" class="btn btn-primary" id="save${domainClassName}" value="Save" />
-		<input type="button" class="btn btn-primary" id="saveNew${domainClassName}" value="Save New" />
+		<input type="button" class="btn btn-primary" id="save${className}" value="Save" />
+		<input type="button" class="btn btn-primary" id="saveNew${className}" value="Save New" />
 	</div>
 </div>

@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -352,8 +353,12 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 			attrs.put(tableItem.getText(0), qualifiedType);
 		}
 		
+		Map<String, Object> mapOfValues = new HashMap<String, Object>();
+		mapOfValues.put("domainPackageName", domainPackageName);
+		mapOfValues.put("className", textSampleDomainClass.getText());
+		mapOfValues.put("attrs", attrs);
 		InputStream is = 
-				TemplateMerger.merge("/bsbuilder/resources/java/class.java-template", domainPackageName,textSampleDomainClass.getText(), "" ,attrs);
+				TemplateMerger.merge("/bsbuilder/resources/java/class.java-template", mapOfValues);
 		BufferedReader br 	= new BufferedReader(new InputStreamReader(is));
 		String line = "";
 		StringWriter stringWriter = new StringWriter();
@@ -450,6 +455,27 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 		InputStream is = 
 				TemplateMerger.merge("/bsbuilder/resources/java/dao.java-template", valuesToPlug);
 
+		
+		BufferedReader br 	= new BufferedReader(new InputStreamReader(is));
+		String line = "";
+		StringWriter stringWriter = new StringWriter();
+		try{
+		while((line = br.readLine())!= null){
+			stringWriter.write(line + "\n");
+		}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return stringWriter.toString();
+	}
+	
+	public String getSecurityUserDetailsServiceSourceCode(String securityPackageName)
+			 throws Exception{				
+		
+		Map<String, Object> valuesToPlug = new LinkedHashMap<String, Object>();
+		valuesToPlug.put("securityPackageName", securityPackageName);
+		InputStream is = 
+				TemplateMerger.merge("/bsbuilder/resources/java/security-userdetailsservice.java-template", valuesToPlug);
 		
 		BufferedReader br 	= new BufferedReader(new InputStreamReader(is));
 		String line = "";

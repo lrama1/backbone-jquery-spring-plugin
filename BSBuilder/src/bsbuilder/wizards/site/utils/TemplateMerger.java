@@ -33,21 +33,21 @@ public class TemplateMerger {
 		return new ByteArrayInputStream(sw.toString().getBytes());
 	}
 
-	public static InputStream merge(String templateName,
-			String domainPackageName, String className,
-			String domainClassIdAttributeName, Map<String, Object> attrs)  throws Exception{
-
-		Template template = loadTemplate(templateName);
-		VelocityContext context = new VelocityContext();
-		context.put("domainPackageName", domainPackageName);
-		context.put("className", className);
-		context.put("domainClassIdAttributeName", domainClassIdAttributeName);
-		context.put("attrs", attrs);
-
-		StringWriter sw = new StringWriter();
-		template.merge(context, sw);
-		return new ByteArrayInputStream(sw.toString().getBytes());
-	}
+//	public static InputStream merge(String templateName,
+//			String domainPackageName, String className,
+//			String domainClassIdAttributeName, Map<String, Object> attrs)  throws Exception{
+//
+//		Template template = loadTemplate(templateName);
+//		VelocityContext context = new VelocityContext();
+//		context.put("domainPackageName", domainPackageName);
+//		context.put("className", className);
+//		context.put("domainClassIdAttributeName", domainClassIdAttributeName);
+//		context.put("attrs", attrs);
+//
+//		StringWriter sw = new StringWriter();
+//		template.merge(context, sw);
+//		return new ByteArrayInputStream(sw.toString().getBytes());
+//	}
 
 	public static InputStream merge(String templateName,
 			Map<String, Object> valuesToPlug)  throws Exception{
@@ -57,19 +57,6 @@ public class TemplateMerger {
 		for (String key : valuesToPlug.keySet()) {
 			context.put(key, valuesToPlug.get(key));
 		}
-
-		StringWriter sw = new StringWriter();
-		template.merge(context, sw);
-		return new ByteArrayInputStream(sw.toString().getBytes());
-	}
-
-	public static InputStream mergeMap(String templateName,
-			String domainClassName, Map<String, Object> valuesToPlug) throws Exception {
-		Template template = loadTemplate(templateName);
-
-		VelocityContext context = new VelocityContext();
-		context.put("domainClassName", domainClassName);
-		context.put("valuesToPlug", valuesToPlug);
 
 		StringWriter sw = new StringWriter();
 		template.merge(context, sw);

@@ -138,6 +138,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		final String servicePackageName = pageTwo.getBasePackageName() + ".service";
 		final String daoPackageName = pageTwo.getBasePackageName() + ".dao";
 		final String commonPackageName = pageTwo.getBasePackageName() + ".common";
+		final String securityPackageName = pageTwo.getBasePackageName() + ".security";
 		
 		final SourceCodeGeneratorParameters params = new SourceCodeGeneratorParameters();
 		params.setBasePackageName(basePackageName);
@@ -156,7 +157,8 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		params.setDaoSourceCode(pageThree.getDaoSourceCode(basePackageName, daoPackageName, domainClassName, domainClassIdAttributeName));
 		params.setCommonPackageName(commonPackageName);
 		params.setListWrapperSourceCode(pageThree.getListWrapperSourceCode(basePackageName, commonPackageName, domainClassName));
-		
+		params.setSecurityPackageName(securityPackageName);
+		params.setSecurityUserDetailsServiceSourceCode(pageThree.getSecurityUserDetailsServiceSourceCode(securityPackageName));
 		
 		/*
 		 * Just like the NewFileWizard, but this time with an operation object
@@ -291,7 +293,9 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			Map<String, Object> mapOfValues = new HashMap<String, Object>();
 			mapOfValues.put("className",  params.getDomainClassName());
 			mapOfValues.put("projectName", proj.getName());
-			mapOfValues.put("domainClassIdAttributeName", params.getDomainClassIdAttributeName());
+			mapOfValues.put("domainClassIdAttributeName", params.getDomainClassIdAttributeName());			
+			mapOfValues.put("domainPackageName", params.getDomainPackageName());
+			
 			mapOfValues.put("attrs", pageThree.getModelAttributes());
 			//CommonUtils.CommonUtils.addFileToProject(yourJsFolder, new Path("components.js"), 
 			//		TemplateMerger.merge("/bsbuilder/resources/web/js/components.js", mapOfValues), monitor);
@@ -344,10 +348,14 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 	
 			
 			/*Add a backbone template file.  This is dependent on the Java Model generation*/			
+//			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/templates"), new Path(params.getDomainClassName() + "EditTemplate.htm"), 
+//					TemplateMerger.mergeMap("/bsbuilder/resources/web/js/backbone/templates/EditTemplate.htm-template", params.getDomainClassName() ,modelAttributes ), monitor);
+//			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/templates"), new Path(params.getDomainClassName() + "ListTemplate.htm"), 
+//					TemplateMerger.mergeMap("/bsbuilder/resources/web/js/backbone/templates/ListTemplate.htm-template", params.getDomainClassName() ,modelAttributes ), monitor);
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/templates"), new Path(params.getDomainClassName() + "EditTemplate.htm"), 
-					TemplateMerger.mergeMap("/bsbuilder/resources/web/js/backbone/templates/EditTemplate.htm-template", params.getDomainClassName() ,modelAttributes ), monitor);
+					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/EditTemplate.htm-template",  mapOfValues), monitor);
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/templates"), new Path(params.getDomainClassName() + "ListTemplate.htm"), 
-					TemplateMerger.mergeMap("/bsbuilder/resources/web/js/backbone/templates/ListTemplate.htm-template", params.getDomainClassName() ,modelAttributes ), monitor);
+			TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/ListTemplate.htm-template", mapOfValues), monitor);
 
 			
 			/* Add Controllers*/
@@ -363,6 +371,10 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			/* Add DAO */
 			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getDaoPackageName(), params.getDomainClassName() + "DAO",
 					params.getDaoSourceCode() , monitor);
+			
+			/* Add Security */
+			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getSecurityPackageName(), "SampleUserDetailsService",
+					params.getSecurityUserDetailsServiceSourceCode() , monitor);
 			
 			/* Add ListWrapper */
 			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getCommonPackageName(), "ListWrapper",
@@ -606,6 +618,9 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		String daoSourceCode;
 		String commonPackageName;
 		String listWrapperSourceCode;
+		String securityPackageName;
+		String securityUserDetailsServiceSourceCode;
+		
 		
 		
 		public String getBasePackageName() {
@@ -703,6 +718,19 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		}
 		public void setCommonPackageName(String commonPackageName) {
 			this.commonPackageName = commonPackageName;
+		}
+		public String getSecurityPackageName() {
+			return securityPackageName;
+		}
+		public void setSecurityPackageName(String securityPackageName) {
+			this.securityPackageName = securityPackageName;
+		}
+		public String getSecurityUserDetailsServiceSourceCode() {
+			return securityUserDetailsServiceSourceCode;
+		}
+		public void setSecurityUserDetailsServiceSourceCode(
+				String securityUserDetailsServiceSourceCode) {
+			this.securityUserDetailsServiceSourceCode = securityUserDetailsServiceSourceCode;
 		}
 		
 		

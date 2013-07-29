@@ -11,10 +11,7 @@
 	</http>
  
 	<authentication-manager>
-	  <authentication-provider>
-	    <user-service>
-		<user name="sampleuser" password="123456" authorities="ROLE_USER" />
-	    </user-service>
+	  <authentication-provider user-service-ref="sampleUserDetailsService">	   
 	  </authentication-provider>
 	</authentication-manager>
  

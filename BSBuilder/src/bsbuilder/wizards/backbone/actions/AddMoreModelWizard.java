@@ -18,13 +18,11 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.eclipse.core.internal.utils.FileUtil;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
@@ -132,12 +130,21 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 	private void createEditAndListTemplateFiles(IContainer projectContainer, String domainClassName,
 			Map<String, Object> modelAttributes) throws Exception{
 		IFolder templatesFolder = projectContainer.getFolder(new Path("src/main/webapp/WEB-INF/resources/templates"));
+//		CommonUtils.addFileToProject(templatesFolder, new Path(domainClassName + "EditTemplate.htm"), 
+//				TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/EditTemplate.htm-template",
+//						 "", domainClassName, "", pageThree.getModelAttributes() ), new NullProgressMonitor());
+//		CommonUtils.addFileToProject(templatesFolder, new Path(domainClassName + "ListTemplate.htm"), 
+//				TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/ListTemplate.htm-template",
+//						 "", domainClassName, "", pageThree.getModelAttributes()), new NullProgressMonitor());
+		Map<String, Object> mapOfValues = new HashMap<String, Object>();
+		mapOfValues.put("className", domainClassName);
+		mapOfValues.put("attrs", modelAttributes);
 		CommonUtils.addFileToProject(templatesFolder, new Path(domainClassName + "EditTemplate.htm"), 
-				TemplateMerger.mergeMap("/bsbuilder/resources/web/js/backbone/templates/EditTemplate.htm-template",
-						domainClassName ,modelAttributes ), new NullProgressMonitor());
+				TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/EditTemplate.htm-template",
+						 mapOfValues ), new NullProgressMonitor());
 		CommonUtils.addFileToProject(templatesFolder, new Path(domainClassName + "ListTemplate.htm"), 
-				TemplateMerger.mergeMap("/bsbuilder/resources/web/js/backbone/templates/ListTemplate.htm-template",
-						domainClassName ,modelAttributes ), new NullProgressMonitor());
+				TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/ListTemplate.htm-template",
+						 mapOfValues), new NullProgressMonitor());
 
 	}
 	

@@ -22,27 +22,9 @@ public class ${domainClassName}Controller {
 	@Autowired
 	${domainClassName}Service ${domainClassName.substring(0,1).toLowerCase()}${domainClassName.substring(1)}Service;
 	
-	/*private List<${domainClassName}> all${domainClassName} = new ArrayList<${domainClassName}>();
-
-	@PostConstruct
-	public void init(){
-		#set($start = 0)
-		#set($end = 13)
-		#set($range = [$start..$end])
-		#foreach($i in $range)
-		   	${domainClassName} ${domainClassName.toLowerCase()}${i} = new ${domainClassName}();		
-			${domainClassName.toLowerCase()}${i}.populateWithSample();
-			all${domainClassName}.add(${domainClassName.toLowerCase()}${i});
-		#end
-	}*/
-
-	
+		
 	@RequestMapping(value = "/$domainClassName.toLowerCase()/{id}", method = RequestMethod.GET)
 	public @ResponseBody $domainClassName get$domainClassName(@PathVariable("id") String id){
-		//System.out.println("Retrieving ${domainClassName} object with id: " + id);
-		// $domainClassName  $domainClassName.toLowerCase() = new  $domainClassName();
-		// ${domainClassName.toLowerCase()}.populateWithSample();
-		// return $domainClassName.toLowerCase();
 		return ${domainClassName.substring(0,1).toLowerCase()}${domainClassName.substring(1)}Service.get${domainClassName}(id);
 	}
 	
@@ -68,31 +50,5 @@ public class ${domainClassName}Controller {
 			@RequestParam(value = "order", required = false) String sortDirection) {
 		return ${domainClassName.substring(0,1).toLowerCase()}${domainClassName.substring(1)}Service.get${domainClassName}s(pageNumber, pageSize, sortByAttributeName, sortDirection);
 		
-	}
-	
-	/*
-	@RequestMapping("/${domainClassName.toLowerCase()}s")
-	public @ResponseBody ListWrapper getAll${domainClassName}s(@RequestParam("page") int page, 
-			@RequestParam("per_page") int pageSize,
-			@RequestParam(value = "sort_by", required = false) String sortByAttributeName,
-			@RequestParam(value = "order", required = false) String sortDirection){
-		
-		List<${domainClassName}> partialPage = new ArrayList<${domainClassName}>();
-		int end = (page * pageSize);
-		int start = (end) - pageSize;
-		int totalPages = roundUp(all${domainClassName}.size(),  pageSize);
-		
-		if(end > all${domainClassName}.size())
-			end = all${domainClassName}.size();
-		if(start < all${domainClassName}.size())
-			partialPage = all${domainClassName}.subList(start, end);
-		
-		
-		ListWrapper listWrapper = new ListWrapper();
-		listWrapper.set${domainClassName}s(partialPage);
-		listWrapper.setTotalRecords(all${domainClassName}.size());
-		listWrapper.setLastPage(totalPages);
-		return listWrapper;
-	}*/
-	
+	}	
 }
