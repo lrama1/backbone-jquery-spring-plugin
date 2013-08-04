@@ -22,7 +22,13 @@ public class CommonUtils {
 				javaSrc.create(false, true, new NullProgressMonitor());
 			parentFolder = javaSrc;
 		}		
-		addFileToProject(parentFolder, new Path(className + ".java"),
+		String filename = "";
+		if(className.indexOf(".") == -1)
+			filename = className + ".java";
+		else
+			filename = className;
+			
+		addFileToProject(parentFolder, new Path(filename),
 				new ByteArrayInputStream(sourceCode.getBytes()), monitor);		
 	}
 	

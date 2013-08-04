@@ -159,6 +159,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		params.setListWrapperSourceCode(pageThree.getListWrapperSourceCode(basePackageName, commonPackageName, domainClassName));
 		params.setSecurityPackageName(securityPackageName);
 		params.setSecurityUserDetailsServiceSourceCode(pageThree.getSecurityUserDetailsServiceSourceCode(securityPackageName));
+		params.setSampleMessageBundleContent(pageThree.getMessageBundleContent("", "", ""));
 		
 		/*
 		 * Just like the NewFileWizard, but this time with an operation object
@@ -380,6 +381,10 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getCommonPackageName(), "ListWrapper",
 					params.getListWrapperSourceCode() , monitor);
 			
+			/* Add message bundles */
+			CommonUtils.createPackageAndClass(folders.get("src/main/resources"), "locales", "messages_en.properties",
+					params.getSampleMessageBundleContent() , monitor);
+			
 			//add junit for Controllers
 			CommonUtils.createPackageAndClass(folders.get("src/test/java"), params.getControllerPackageName(),
 					params.getControllerClassName() + "Test", params.getControllerTestSourceCode() , monitor);
@@ -389,7 +394,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			
 			//Create classpath entries which really creates the ".classpath" file of the Eclipse project
 			createClassPathEntries(folders.get("target/classes"), folders.get("target/test-classes"), folders.get("src/main/java"),
-					folders.get("src/test/java"), javaProject);
+					folders.get("src/test/java"), folders.get("src/main/resources"), folders.get("src/test/resources"), javaProject);
 			
 			//add bsbuilder-specific settings
 			addBSBuilderSettings(folders.get(".settings"), project, params.getBasePackageName(), monitor);
@@ -431,12 +436,22 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		srcFolder31.create(false, true, new NullProgressMonitor());
 		folders.put("src/main/java", srcFolder31);
 		
+		//src/main/resources
+		IFolder srcFolder42 = srcFolder21.getFolder(new Path("resources"));
+		srcFolder42.create(false, true, new NullProgressMonitor());
+		folders.put("src/main/resources", srcFolder42);
+		
 		//src/test/java
 		IFolder srcFolder22 = srcFolder.getFolder(new Path("test"));
 		srcFolder22.create(false, true, new NullProgressMonitor());
 		IFolder srcFolder32 = srcFolder22.getFolder(new Path("java"));
 		srcFolder32.create(false, true, new NullProgressMonitor());
 		folders.put("src/test/java", srcFolder32);
+		
+		//src/test/resources
+		IFolder srcFolder43 = srcFolder22.getFolder(new Path("resources"));
+		srcFolder43.create(false, true, new NullProgressMonitor());
+		folders.put("src/test/resources", srcFolder43);
 		
 		//src/main/webapp
 		IFolder srcFolder41 = srcFolder21.getFolder(new Path("webapp"));
@@ -505,17 +520,31 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 
 	private void createClassPathEntries(IFolder outputFolder2,
 			IFolder outputFolder3, IFolder srcFolder31, IFolder srcFolder32,
+			IFolder mainResourcesFolder, IFolder testResourcesFolder,
 			IJavaProject javaProject) throws JavaModelException {
 		IClasspathEntry javasrc = JavaCore.newSourceEntry(srcFolder31.getFullPath(), null, null, outputFolder2.getFullPath(), 
 				new IClasspathAttribute[] { 
 					JavaCore.newClasspathAttribute("optional", "true"),
 					JavaCore.newClasspathAttribute("maven.pomderived", "true")
 					});
+		
+		IClasspathEntry mainResources = JavaCore.newSourceEntry(mainResourcesFolder.getFullPath(), null, null, outputFolder2.getFullPath(), 
+				new IClasspathAttribute[] { 
+					JavaCore.newClasspathAttribute("optional", "true"),
+					JavaCore.newClasspathAttribute("maven.pomderived", "true")
+					});
+		
 		IClasspathEntry testsrc = JavaCore.newSourceEntry(srcFolder32.getFullPath(), null, null, outputFolder3.getFullPath(), 
 				new IClasspathAttribute[] { 
 					JavaCore.newClasspathAttribute("optional", "true"),
 					JavaCore.newClasspathAttribute("maven.pomderived", "true")
 					});
+		IClasspathEntry testResources = JavaCore.newSourceEntry(testResourcesFolder.getFullPath(), null, null, outputFolder3.getFullPath(), 
+				new IClasspathAttribute[] { 
+					JavaCore.newClasspathAttribute("optional", "true"),
+					JavaCore.newClasspathAttribute("maven.pomderived", "true")
+					});
+		
 		IClasspathEntry jre = JavaCore.newContainerEntry(new Path("org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"),
 				new IAccessRule[0], 
 				new IClasspathAttribute[] { JavaCore.newClasspathAttribute("maven.pomderived", "true")}, false);
@@ -527,7 +556,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			 			JavaCore.newClasspathAttribute("org.eclipse.jst.component.dependency", "/WEB-INF/lib")
 					}, false);			
 
-		IClasspathEntry[] entries = new IClasspathEntry[] { javasrc,testsrc, jre, mavenContainer };			
+		IClasspathEntry[] entries = new IClasspathEntry[] { javasrc,testsrc, mainResources, testResources ,jre, mavenContainer };			
 		javaProject.setRawClasspath(entries, outputFolder2.getFullPath(), new NullProgressMonitor());
 	}
 
@@ -602,24 +631,25 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 	}
 
 	public class SourceCodeGeneratorParameters{
-		String basePackageName; 
-		String controllerPackageName; 
-		String mainControllerSourceCode;
-		String controllerClassName; 			
-		String domainControllerSourceCode;
-		String controllerTestSourceCode;
-		String domainPackageName; 
-		String domainClassName; 
-		String domainClassSourceCode;
-		String domainClassIdAttributeName;
-		String servicePackageName;
-		String serviceSourceCode;
-		String daoPackageName;
-		String daoSourceCode;
-		String commonPackageName;
-		String listWrapperSourceCode;
-		String securityPackageName;
-		String securityUserDetailsServiceSourceCode;
+		private String basePackageName; 
+		private String controllerPackageName; 
+		private String mainControllerSourceCode;
+		private String controllerClassName; 			
+		private String domainControllerSourceCode;
+		private String controllerTestSourceCode;
+		private String domainPackageName; 
+		private String domainClassName; 
+		private String domainClassSourceCode;
+		private String domainClassIdAttributeName;
+		private String servicePackageName;
+		private String serviceSourceCode;
+		private String daoPackageName;
+		private String daoSourceCode;
+		private String commonPackageName;
+		private String listWrapperSourceCode;
+		private String securityPackageName;
+		private String securityUserDetailsServiceSourceCode;
+		private String sampleMessageBundleContent;
 		
 		
 		
@@ -732,8 +762,12 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 				String securityUserDetailsServiceSourceCode) {
 			this.securityUserDetailsServiceSourceCode = securityUserDetailsServiceSourceCode;
 		}
-		
-		
+		public String getSampleMessageBundleContent() {
+			return sampleMessageBundleContent;
+		}
+		public void setSampleMessageBundleContent(String sampleMessageBundleContent) {
+			this.sampleMessageBundleContent = sampleMessageBundleContent;
+		}
 	}
 
 }

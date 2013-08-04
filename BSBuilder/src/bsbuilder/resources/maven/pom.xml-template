@@ -3,11 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>mysamples</groupId>
-  <artifactId>$projectName</artifactId>
+  <artifactId>${projectName}</artifactId>
   <packaging>war</packaging>
   <version>0.0.1-SNAPSHOT</version>
 
-  <name>eli-web</name>
+  <name>${projectName}</name>
   <url>http://maven.apache.org</url>
 
   <dependencies>
