@@ -127,18 +127,20 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		final String basePackageName = pageTwo.getBasePackageName(); 
 		final String controllerPackageName = pageTwo.getControllerPackage();
 		final String domainPackageName = pageTwo.getDomainPackage();
+		final String utilPackageName = pageTwo.getBasePackageName() + ".util"; 
 		
 		final String domainClassName = pageThree.getDomainClassName();
 		final String domainClassSourceCode = pageThree.getClassSource(domainPackageName);
 		final String domainClassIdAttributeName = pageThree.getDomainClassAttributeName();
 		final String controllerClassName = domainClassName + "Controller";
-		final String mainControllerSourceCode = pageThree.getMainControllerSource(controllerPackageName);
+		final String mainControllerSourceCode = pageThree.getMainControllerSource(controllerPackageName, utilPackageName);
 		final String domainControllerSourceCode = pageThree.getControllerSource(basePackageName, controllerPackageName, domainClassName, domainClassIdAttributeName);
 		final String controllerTestSourceCode = pageThree.getControllerTestSource(basePackageName, controllerPackageName, domainClassName);
 		final String servicePackageName = pageTwo.getBasePackageName() + ".service";
 		final String daoPackageName = pageTwo.getBasePackageName() + ".dao";
 		final String commonPackageName = pageTwo.getBasePackageName() + ".common";
 		final String securityPackageName = pageTwo.getBasePackageName() + ".security";
+		
 		
 		final SourceCodeGeneratorParameters params = new SourceCodeGeneratorParameters();
 		params.setBasePackageName(basePackageName);
@@ -160,6 +162,9 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		params.setSecurityPackageName(securityPackageName);
 		params.setSecurityUserDetailsServiceSourceCode(pageThree.getSecurityUserDetailsServiceSourceCode(securityPackageName));
 		params.setSampleMessageBundleContent(pageThree.getMessageBundleContent("", "", ""));
+		params.setSampleMessageBundleContentEs(pageThree.getMessageBundleContentEs("", "", ""));
+		params.setUtilPackageName(utilPackageName);
+		params.setResourceBundleUtilSourceCode(pageThree.getResourceBundleSourceCode(utilPackageName));
 		
 		/*
 		 * Just like the NewFileWizard, but this time with an operation object
@@ -238,7 +243,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			/* Add an pom file */
 			CommonUtils.addFileToProject(container, new Path("pom.xml"),
 					TemplateMerger.merge("/bsbuilder/resources/maven/pom.xml-template", proj.getName(),
-							params.getBasePackageName(), params.getControllerPackageName()), monitor);			
+							params.getBasePackageName(), params.getControllerPackageName(), params.getUtilPackageName()), monitor);			
 
 			//call create folders here
 			createFolderStructures(container, monitor);			
@@ -322,15 +327,15 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			
 			/* Add web-xml file */
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF"), new Path("web.xml"),
-					TemplateMerger.merge("/bsbuilder/resources/maven/web.xml-template", proj.getName(), params.getBasePackageName(), params.getControllerPackageName()), monitor);
+					TemplateMerger.merge("/bsbuilder/resources/maven/web.xml-template", proj.getName(), params.getBasePackageName(), params.getControllerPackageName(), params.getUtilPackageName()), monitor);
 			/* Add Spring servlet dispathcer mapping file */
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF"), new Path("yourdispatcher-servlet.xml"),
-					TemplateMerger.merge("/bsbuilder/resources/maven/yourdispatcher-servlet.xml-template", proj.getName(),params.getBasePackageName(),params.getControllerPackageName()), monitor);
+					TemplateMerger.merge("/bsbuilder/resources/maven/yourdispatcher-servlet.xml-template", proj.getName(),params.getBasePackageName(),params.getControllerPackageName(), params.getUtilPackageName()), monitor);
 			/* Add Spring context files */
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/spring"), new Path("applicationContext.xml"),
-					TemplateMerger.merge("/bsbuilder/resources/maven/applicationContext.xml-template", proj.getName(),params.getBasePackageName(),params.getControllerPackageName()), monitor);
+					TemplateMerger.merge("/bsbuilder/resources/maven/applicationContext.xml-template", proj.getName(),params.getBasePackageName(),params.getControllerPackageName(), params.getUtilPackageName()), monitor);
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/spring"), new Path("spring-security.xml"),
-					TemplateMerger.merge("/bsbuilder/resources/maven/spring-security.xml-template", proj.getName(),params.getBasePackageName(),params.getControllerPackageName()), monitor);
+					TemplateMerger.merge("/bsbuilder/resources/maven/spring-security.xml-template", proj.getName(),params.getBasePackageName(),params.getControllerPackageName(), params.getUtilPackageName()), monitor);
 			
 			
 			/* Add a java model */
@@ -339,8 +344,6 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			
 			Map<String, Object> modelAttributes = pageThree.getModelAttributes();
 			/* Add a default jsp file.  This is dependent on the Java Model generation */
-			//CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF"), new Path("index.jsp"),
-			//		TemplateMerger.merge("/bsbuilder/resources/web/jsps/index.jsp-template", proj.getName(),"",""), monitor);
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF"), new Path("index.jsp"),
 							TemplateMerger.merge("/bsbuilder/resources/web/jsps/index.jsp-template", mapOfValues), monitor);
 			
@@ -348,15 +351,14 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 					this.getClass().getResourceAsStream("/bsbuilder/resources/css/bootstrap.min.css"), monitor);
 	
 			
-			/*Add a backbone template file.  This is dependent on the Java Model generation*/			
-//			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/templates"), new Path(params.getDomainClassName() + "EditTemplate.htm"), 
-//					TemplateMerger.mergeMap("/bsbuilder/resources/web/js/backbone/templates/EditTemplate.htm-template", params.getDomainClassName() ,modelAttributes ), monitor);
-//			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/templates"), new Path(params.getDomainClassName() + "ListTemplate.htm"), 
-//					TemplateMerger.mergeMap("/bsbuilder/resources/web/js/backbone/templates/ListTemplate.htm-template", params.getDomainClassName() ,modelAttributes ), monitor);
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/templates"), new Path(params.getDomainClassName() + "EditTemplate.htm"), 
-					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/EditTemplate.htm-template",  mapOfValues), monitor);
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/templates"), new Path(params.getDomainClassName() + "ListTemplate.htm"), 
-			TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/ListTemplate.htm-template", mapOfValues), monitor);
+			/*Add a backbone template file.  This is dependent on the Java Model generation.
+			 * Instead of using plain html, we are going to use JSP so we can use Spring's
+			 * Message Bundles for localization.
+			 * */			
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/templates"), new Path(params.getDomainClassName() + "EditTemplate.jsp"), 
+					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/EditTemplate.jsp-template",  mapOfValues), monitor);
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/templates"), new Path(params.getDomainClassName() + "ListTemplate.jsp"), 
+			TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/ListTemplate.jsp-template", mapOfValues), monitor);
 
 			
 			/* Add Controllers*/
@@ -381,9 +383,15 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getCommonPackageName(), "ListWrapper",
 					params.getListWrapperSourceCode() , monitor);
 			
+			/* Add Resource Bundle wrapper */
+			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getUtilPackageName(), "ExposedResourceBundleMessageSource",
+					params.getResourceBundleUtilSourceCode() , monitor);
+			
 			/* Add message bundles */
 			CommonUtils.createPackageAndClass(folders.get("src/main/resources"), "locales", "messages_en.properties",
 					params.getSampleMessageBundleContent() , monitor);
+			CommonUtils.createPackageAndClass(folders.get("src/main/resources"), "locales", "messages_es.properties",
+					params.getSampleMessageBundleContentEs() , monitor);
 			
 			//add junit for Controllers
 			CommonUtils.createPackageAndClass(folders.get("src/test/java"), params.getControllerPackageName(),
@@ -577,7 +585,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		//InputStream wstCommonComponent = this.getClass().getResourceAsStream(
 		//		"/bsbuilder/resources/settings/org.eclipse.wst.common.component.template");
 		CommonUtils.addFileToProject(settingsFolder, new Path("org.eclipse.wst.common.component"),
-				TemplateMerger.merge("/bsbuilder/resources/settings/org.eclipse.wst.common.component.template", project.getName(),basePackageName,controllerPackageName), monitor);
+				TemplateMerger.merge("/bsbuilder/resources/settings/org.eclipse.wst.common.component.template", project.getName(),basePackageName,controllerPackageName, ""), monitor);
 		
 		InputStream wstCommonProject = this.getClass().getResourceAsStream(
 				"/bsbuilder/resources/settings/org.eclipse.wst.common.project.facet.core.xml.template");
@@ -649,8 +657,11 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		private String listWrapperSourceCode;
 		private String securityPackageName;
 		private String securityUserDetailsServiceSourceCode;
+		private String utilPackageName;
+		private String resourceBundleUtilSourceCode;
 		private String sampleMessageBundleContent;
-		
+		private String sampleMessageBundleContentEs;
+
 		
 		
 		public String getBasePackageName() {
@@ -768,6 +779,24 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		public void setSampleMessageBundleContent(String sampleMessageBundleContent) {
 			this.sampleMessageBundleContent = sampleMessageBundleContent;
 		}
+		public String getSampleMessageBundleContentEs() {
+			return sampleMessageBundleContentEs;
+		}
+		public void setSampleMessageBundleContentEs(String sampleMessageBundleContentEs) {
+			this.sampleMessageBundleContentEs = sampleMessageBundleContentEs;
+		}
+		public String getUtilPackageName() {
+			return utilPackageName;
+		}
+		public void setUtilPackageName(String utilPackageName) {
+			this.utilPackageName = utilPackageName;
+		}
+		public String getResourceBundleUtilSourceCode() {
+			return resourceBundleUtilSourceCode;
+		}
+		public void setResourceBundleUtilSourceCode(String resourceBundleUtilSourceCode) {
+			this.resourceBundleUtilSourceCode = resourceBundleUtilSourceCode;
+		}		
 	}
 
 }

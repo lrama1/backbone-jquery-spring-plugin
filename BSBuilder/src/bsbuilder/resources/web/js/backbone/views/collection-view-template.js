@@ -5,8 +5,9 @@ define([
   'backgrid',  
   'collections/${className}Collection',
   'globals/global',
-  'text!templates/${className}ListTemplate.htm'
-], function($, _, Backbone, Backgrid, ${className}Collection, Global, collectionTemplate){
+  'localizedmessages',
+  'text!templates/${className}ListTemplate' /* the request for this template actually goes thru the MainController*/
+], function($, _, Backbone, Backgrid, ${className}Collection, Global, Messages ,collectionTemplate){
 	
 	var ${className}CollectionView = Backbone.View.extend({
 		//standard backbone function called when a view is constructed
@@ -25,13 +26,13 @@ define([
 		    			},
 			    		{
 			    			name : "${key}",
-			    			label : "${key.toUpperCase()}",
+			    			label : Messages["${key.toUpperCase()}"],
 			    			cell : "string"
 			    		}
 					#else
 						,{
 			    			name : "${key}",
-			    			label : "${key.toUpperCase()}",
+			    			label : Messages["${key.toUpperCase()}"],
 			    			cell : "string"
 			    		}
 					#end

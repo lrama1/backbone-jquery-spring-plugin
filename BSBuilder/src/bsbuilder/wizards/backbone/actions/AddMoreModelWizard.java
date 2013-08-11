@@ -130,20 +130,14 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 	private void createEditAndListTemplateFiles(IContainer projectContainer, String domainClassName,
 			Map<String, Object> modelAttributes) throws Exception{
 		IFolder templatesFolder = projectContainer.getFolder(new Path("src/main/webapp/WEB-INF/resources/templates"));
-//		CommonUtils.addFileToProject(templatesFolder, new Path(domainClassName + "EditTemplate.htm"), 
-//				TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/EditTemplate.htm-template",
-//						 "", domainClassName, "", pageThree.getModelAttributes() ), new NullProgressMonitor());
-//		CommonUtils.addFileToProject(templatesFolder, new Path(domainClassName + "ListTemplate.htm"), 
-//				TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/ListTemplate.htm-template",
-//						 "", domainClassName, "", pageThree.getModelAttributes()), new NullProgressMonitor());
 		Map<String, Object> mapOfValues = new HashMap<String, Object>();
 		mapOfValues.put("className", domainClassName);
 		mapOfValues.put("attrs", modelAttributes);
-		CommonUtils.addFileToProject(templatesFolder, new Path(domainClassName + "EditTemplate.htm"), 
-				TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/EditTemplate.htm-template",
+		CommonUtils.addFileToProject(templatesFolder, new Path(domainClassName + "EditTemplate.jsp"), 
+				TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/EditTemplate.jsp-template",
 						 mapOfValues ), new NullProgressMonitor());
-		CommonUtils.addFileToProject(templatesFolder, new Path(domainClassName + "ListTemplate.htm"), 
-				TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/ListTemplate.htm-template",
+		CommonUtils.addFileToProject(templatesFolder, new Path(domainClassName + "ListTemplate.jsp"), 
+				TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/ListTemplate.jsp-template",
 						 mapOfValues), new NullProgressMonitor());
 
 	}

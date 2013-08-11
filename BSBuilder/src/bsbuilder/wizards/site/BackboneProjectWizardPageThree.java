@@ -372,9 +372,10 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 		return stringWriter.toString();
 	}
 	
-	public String getMainControllerSource(String controllerPackageName) throws Exception{				
+	public String getMainControllerSource(String controllerPackageName, String utilPackageName) throws Exception{				
 		Map<String, Object> valuesToPlug = new LinkedHashMap<String, Object>();
 		valuesToPlug.put("controllerPackageName", controllerPackageName);
+		valuesToPlug.put("utilPackageName", utilPackageName);
 		InputStream is = 
 				TemplateMerger.merge("/bsbuilder/resources/java/common-controller.java-template", valuesToPlug);		
 		BufferedReader br 	= new BufferedReader(new InputStreamReader(is));
@@ -515,12 +516,54 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 		return stringWriter.toString();
 	}
 	
+	public String getResourceBundleSourceCode(String packageName)
+			 throws Exception{				
+		
+		Map<String, Object> valuesToPlug = new LinkedHashMap<String, Object>();
+		valuesToPlug.put("utilPackageName", packageName);
+		InputStream is = 
+				TemplateMerger.merge("/bsbuilder/resources/java/exposed-resource-bundle.java-template", valuesToPlug);
+
+		
+		BufferedReader br 	= new BufferedReader(new InputStreamReader(is));
+		String line = "";
+		StringWriter stringWriter = new StringWriter();
+		try{
+		while((line = br.readLine())!= null){
+			stringWriter.write(line + "\n");
+		}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return stringWriter.toString();
+	}
+	
 	public String getMessageBundleContent(String basePackageName, String commonPackageName,String domainClassName)
 			 throws Exception{				
 		
 		Map<String, Object> valuesToPlug = new LinkedHashMap<String, Object>();		
 		InputStream is = 
 				TemplateMerger.merge("/bsbuilder/resources/java/messages_en.properties", valuesToPlug);
+		
+		BufferedReader br 	= new BufferedReader(new InputStreamReader(is));
+		String line = "";
+		StringWriter stringWriter = new StringWriter();
+		try{
+		while((line = br.readLine())!= null){
+			stringWriter.write(line + "\n");
+		}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return stringWriter.toString();
+	}
+	
+	public String getMessageBundleContentEs(String basePackageName, String commonPackageName,String domainClassName)
+			 throws Exception{				
+		
+		Map<String, Object> valuesToPlug = new LinkedHashMap<String, Object>();		
+		InputStream is = 
+				TemplateMerger.merge("/bsbuilder/resources/java/messages_es.properties", valuesToPlug);
 		
 		BufferedReader br 	= new BufferedReader(new InputStreamReader(is));
 		String line = "";

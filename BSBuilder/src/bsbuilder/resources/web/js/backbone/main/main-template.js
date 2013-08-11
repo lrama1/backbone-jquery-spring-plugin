@@ -6,6 +6,7 @@ require.config({
     underscore: '/${projectName}/resources/js/libs/underscore',
     backbone:   '/${projectName}/resources/js/libs/backbone',
     backgrid :         '/${projectName}/resources/js/libs/backgrid',
+    localizedmessages : '/${projectName}/localizedmessages',
     'backbone-pageable': '/${projectName}/resources/js/libs/backbone-pageable',
     'backgrid-paginator': '/${projectName}/resources/js/libs/backgrid-paginator',
     'bootstrap.min': '/${projectName}/resources/js/libs/bootstrap.min',

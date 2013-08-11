@@ -20,13 +20,14 @@ public class TemplateMerger {
 	}
 
 	public static InputStream merge(String templateName, String projectName,
-			String basePackageName, String controllerPackageName)  throws Exception{
+			String basePackageName, String controllerPackageName, String utilPackageName)  throws Exception{
 		Template template = loadTemplate(templateName);
 		VelocityContext context = new VelocityContext();
 
 		context.put("projectName", projectName);
 		context.put("basePackageName", basePackageName);
 		context.put("controllerPackageName", controllerPackageName);
+		context.put("utilPackageName", utilPackageName);
 
 		StringWriter sw = new StringWriter();
 		template.merge(context, sw);

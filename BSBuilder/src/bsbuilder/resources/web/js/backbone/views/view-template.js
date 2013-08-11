@@ -2,7 +2,7 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'text!templates/${className}EditTemplate.htm',
+  'text!templates/${className}EditTemplate', /* the request for this template actually goes thru the MainController*/
   'bootstrap-datepicker'
 ], function($, _, Backbone, editTemplate, datePicker){
 	
