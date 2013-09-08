@@ -372,7 +372,7 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 		return stringWriter.toString();
 	}
 	
-	public String getMainControllerSource(String controllerPackageName, String utilPackageName) throws Exception{				
+	/*public String getMainControllerSource(String controllerPackageName, String utilPackageName) throws Exception{				
 		Map<String, Object> valuesToPlug = new LinkedHashMap<String, Object>();
 		valuesToPlug.put("controllerPackageName", controllerPackageName);
 		valuesToPlug.put("utilPackageName", utilPackageName);
@@ -389,20 +389,17 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 			e.printStackTrace();
 		}
 		return stringWriter.toString();
-	}
+	}*/
 	
-	public String getControllerSource(String basePackageName, String controllerPackageName, String domainClassName, 
-			String domainClassIdAttributeName)
-			 throws Exception{				
-		//InputStream is = 
-		//		TemplateMerger.merge("/bsbuilder/resources/java/controller.java-template", controllerPackageName,textSampleDomainClass.getText());
+	public String buildSourceCode(String basePackageName, String domainClassName, String domainClassIdAttributeName,
+			String templateName)
+	 throws Exception{
 		Map<String, Object> valuesToPlug = new LinkedHashMap<String, Object>();
 		valuesToPlug.put("basePackageName", basePackageName);
 		valuesToPlug.put("domainClassName", domainClassName);
-		valuesToPlug.put("controllerPackageName", controllerPackageName);
 		valuesToPlug.put("domainClassIdAttributeName", domainClassIdAttributeName);
 		InputStream is = 
-				TemplateMerger.merge("/bsbuilder/resources/java/controller.java-template", valuesToPlug);
+				TemplateMerger.merge("/bsbuilder/resources/java/" + templateName, valuesToPlug);
 
 		
 		BufferedReader br 	= new BufferedReader(new InputStreamReader(is));
@@ -417,58 +414,7 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 		}
 		return stringWriter.toString();
 	}
-	
-	public String getSeviceSourceCode(String basePackageName, String servicePackageName,String domainClassName,
-			String domainClassIdAttributeName)
-			 throws Exception{				
 		
-		Map<String, Object> valuesToPlug = new LinkedHashMap<String, Object>();
-		valuesToPlug.put("basePackageName", basePackageName);
-		valuesToPlug.put("domainClassName", domainClassName);
-		valuesToPlug.put("servicePackageName", servicePackageName);
-		valuesToPlug.put("domainClassIdAttributeName", domainClassIdAttributeName);
-		InputStream is = 
-				TemplateMerger.merge("/bsbuilder/resources/java/service.java-template", valuesToPlug);
-
-		
-		BufferedReader br 	= new BufferedReader(new InputStreamReader(is));
-		String line = "";
-		StringWriter stringWriter = new StringWriter();
-		try{
-		while((line = br.readLine())!= null){
-			stringWriter.write(line + "\n");
-		}
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		return stringWriter.toString();
-	}
-	
-	public String getDaoSourceCode(String basePackageName, String daoPackageName, String domainClassName,
-			String domainClassIdAttributeName)
-			 throws Exception{				
-		
-		Map<String, Object> valuesToPlug = new LinkedHashMap<String, Object>();
-		valuesToPlug.put("basePackageName", basePackageName);
-		valuesToPlug.put("domainClassName", domainClassName);
-		valuesToPlug.put("daoPackageName", daoPackageName);
-		valuesToPlug.put("domainClassIdAttributeName", domainClassIdAttributeName);
-		InputStream is = 
-				TemplateMerger.merge("/bsbuilder/resources/java/dao.java-template", valuesToPlug);
-
-		
-		BufferedReader br 	= new BufferedReader(new InputStreamReader(is));
-		String line = "";
-		StringWriter stringWriter = new StringWriter();
-		try{
-		while((line = br.readLine())!= null){
-			stringWriter.write(line + "\n");
-		}
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		return stringWriter.toString();
-	}
 	
 	public String getSecurityUserDetailsServiceSourceCode(String securityPackageName)
 			 throws Exception{				
@@ -537,27 +483,6 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 		return stringWriter.toString();
 	}
 	
-	public String getResourceBundleSourceCode(String packageName)
-			 throws Exception{				
-		
-		Map<String, Object> valuesToPlug = new LinkedHashMap<String, Object>();
-		valuesToPlug.put("utilPackageName", packageName);
-		InputStream is = 
-				TemplateMerger.merge("/bsbuilder/resources/java/exposed-resource-bundle.java-template", valuesToPlug);
-
-		
-		BufferedReader br 	= new BufferedReader(new InputStreamReader(is));
-		String line = "";
-		StringWriter stringWriter = new StringWriter();
-		try{
-		while((line = br.readLine())!= null){
-			stringWriter.write(line + "\n");
-		}
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		return stringWriter.toString();
-	}
 	
 	public String getMessageBundleContent(String basePackageName, String commonPackageName,String domainClassName)
 			 throws Exception{				

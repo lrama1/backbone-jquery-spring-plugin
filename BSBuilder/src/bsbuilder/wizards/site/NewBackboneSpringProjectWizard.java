@@ -127,14 +127,14 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		final String basePackageName = pageTwo.getBasePackageName(); 
 		final String controllerPackageName = pageTwo.getControllerPackage();
 		final String domainPackageName = pageTwo.getDomainPackage();
-		final String utilPackageName = pageTwo.getBasePackageName() + ".util"; 
+		//final String utilPackageName = pageTwo.getBasePackageName() + ".util"; 
 		
 		final String domainClassName = pageThree.getDomainClassName();
 		final String domainClassSourceCode = pageThree.getClassSource(domainPackageName);
 		final String domainClassIdAttributeName = pageThree.getDomainClassAttributeName();
 		final String controllerClassName = domainClassName + "Controller";
-		final String mainControllerSourceCode = pageThree.getMainControllerSource(controllerPackageName, utilPackageName);
-		final String domainControllerSourceCode = pageThree.getControllerSource(basePackageName, controllerPackageName, domainClassName, domainClassIdAttributeName);
+		//final String mainControllerSourceCode = pageThree.getMainControllerSource(controllerPackageName, utilPackageName);
+		//final String domainControllerSourceCode = pageThree.getControllerSource(basePackageName, controllerPackageName, domainClassName, domainClassIdAttributeName);
 		final String controllerTestSourceCode = pageThree.getControllerTestSource(basePackageName, controllerPackageName, domainClassName);
 		final String servicePackageName = pageTwo.getBasePackageName() + ".service";
 		final String daoPackageName = pageTwo.getBasePackageName() + ".dao";
@@ -150,13 +150,17 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		params.setDomainClassSourceCode(domainClassSourceCode);
 		params.setDomainClassIdAttributeName(domainClassIdAttributeName);
 		params.setControllerClassName(controllerClassName);
-		params.setMainControllerSourceCode(mainControllerSourceCode); 
-		params.setDomainControllerSourceCode(domainControllerSourceCode);
+		params.setMainControllerSourceCode(pageThree.buildSourceCode(basePackageName, domainClassName, domainClassIdAttributeName, "common-controller.java-template")); 
+		params.setDomainControllerSourceCode(pageThree.buildSourceCode(basePackageName, domainClassName, domainClassIdAttributeName, "controller.java-template"));
 		params.setControllerTestSourceCode(controllerTestSourceCode);
 		params.setServicePackageName(servicePackageName);
-		params.setServiceSourceCode(pageThree.getSeviceSourceCode(basePackageName, servicePackageName, domainClassName, domainClassIdAttributeName));
+		//params.setServiceSourceCode(pageThree.getSeviceSourceCode(basePackageName, servicePackageName, domainClassName, domainClassIdAttributeName));
+		params.setServiceSourceCode(pageThree.buildSourceCode(basePackageName, domainClassName, domainClassIdAttributeName, "service.java-template"));
+		
 		params.setDaoPackageName(daoPackageName);
-		params.setDaoSourceCode(pageThree.getDaoSourceCode(basePackageName, daoPackageName, domainClassName, domainClassIdAttributeName));
+		//params.setDaoSourceCode(pageThree.getDaoSourceCode(basePackageName, daoPackageName, domainClassName, domainClassIdAttributeName));
+		params.setDaoSourceCode(pageThree.buildSourceCode(basePackageName, domainClassName, domainClassIdAttributeName, "dao.java-template"));
+				
 		params.setCommonPackageName(commonPackageName);
 		params.setListWrapperSourceCode(pageThree.getListWrapperSourceCode(basePackageName, commonPackageName, domainClassName));
 		params.setSecurityPackageName(securityPackageName);
@@ -165,8 +169,9 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		
 		params.setSampleMessageBundleContent(pageThree.getMessageBundleContent("", "", ""));
 		params.setSampleMessageBundleContentEs(pageThree.getMessageBundleContentEs("", "", ""));
-		params.setUtilPackageName(utilPackageName);
-		params.setResourceBundleUtilSourceCode(pageThree.getResourceBundleSourceCode(utilPackageName));
+		params.setUtilPackageName(basePackageName + ".util");
+		//params.setResourceBundleUtilSourceCode(pageThree.getResourceBundleSourceCode(utilPackageName));
+		params.setResourceBundleUtilSourceCode(pageThree.buildSourceCode(basePackageName, domainClassName, domainClassIdAttributeName, "exposed-resource-bundle.java-template"));
 		
 		/*
 		 * Just like the NewFileWizard, but this time with an operation object

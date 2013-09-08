@@ -1,4 +1,4 @@
-package $controllerPackageName;
+package ${basePackageName}.controller;
 
 import java.io.StringWriter;
 import java.util.Locale;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.HandlerMapping;
 
-import ${utilPackageName}.ExposedResourceBundleMessageSource;
+import ${basePackageName}.util.ExposedResourceBundleMessageSource;
 
 @Controller
 public class MainController {

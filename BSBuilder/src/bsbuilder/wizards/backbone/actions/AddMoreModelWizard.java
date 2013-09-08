@@ -148,8 +148,8 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		
 		final String controllerClassName = pageThree.getDomainClassName() + "Controller";
 		String controllerPackageName = basePackageName + ".controller";
-		final String controllerSourceCode = pageThree.getControllerSource(basePackageName, controllerPackageName, pageThree.getDomainClassName(),
-				pageThree.getDomainClassAttributeName());
+		final String controllerSourceCode = pageThree.buildSourceCode(basePackageName, pageThree.getDomainClassName(), 
+				pageThree.getDomainClassAttributeName(), "controller.java-template");
 		IFolder javaFolder = projectContainer.getFolder(new Path("src/main/java"));
 		CommonUtils.createPackageAndClass(javaFolder, controllerPackageName, controllerClassName, controllerSourceCode , new NullProgressMonitor());
 		
@@ -159,8 +159,8 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 	throws Exception{
 		final String serviceClassName = pageThree.getDomainClassName() + "Service";
 		String servicePackageName = basePackageName + ".service";
-		final String serviceSourceCode = pageThree.getSeviceSourceCode(basePackageName, servicePackageName, pageThree.getDomainClassName(),
-				pageThree.getDomainClassAttributeName());
+		final String serviceSourceCode = pageThree.buildSourceCode(basePackageName, pageThree.getDomainClassName(), 
+				pageThree.getDomainClassAttributeName(), "service.java-template");
 		IFolder javaFolder = projectContainer.getFolder(new Path("src/main/java"));
 		CommonUtils.createPackageAndClass(javaFolder, servicePackageName, serviceClassName, serviceSourceCode , new NullProgressMonitor());
 	}
@@ -169,8 +169,8 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 			throws Exception{
 		final String daoClassName = pageThree.getDomainClassName() + "DAO";
 		String daoPackageName = basePackageName + ".dao";
-		final String daoSourceCode = pageThree.getDaoSourceCode(basePackageName, daoPackageName, pageThree.getDomainClassName(),
-				pageThree.getDomainClassAttributeName());
+		final String daoSourceCode = pageThree.buildSourceCode(basePackageName, pageThree.getDomainClassName(), pageThree.getDomainClassAttributeName(),
+				"dao.java-template");
 		IFolder javaFolder = projectContainer.getFolder(new Path("src/main/java"));
 		CommonUtils.createPackageAndClass(javaFolder, daoPackageName, daoClassName, daoSourceCode , new NullProgressMonitor());
 	}
