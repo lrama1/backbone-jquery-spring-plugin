@@ -19,6 +19,9 @@ define([
 	    	    	});
 	        	#end	
 	        #end
+	        this.model.on("invalid", function(model, error) {
+	        	  alert("Error: " + error);
+	        });
 	    },
 	    render: function(myEl, modelToRender){    	
 //			$.get("resources/templates/EditTemplate.htm", function(templateText){			
@@ -44,7 +47,7 @@ define([
                         #set( $dateFieldCount = $dateFieldCount + 1 )
 	    			#end	
 	    		#end
-	    	});	    	
+	    	});
 	    },
 	    saveNew${className} : function(){
 	    	this.model.set("${domainClassIdAttributeName}", null);
@@ -65,7 +68,8 @@ define([
 	    	var target = evt.target;        	        
 	        var payLoad = {};
 			payLoad[target.id] = target.value;
-			this.model.set(payLoad, {silent : false});
+			//this.model.set(payLoad, {silent : false});
+			this.model.set(payLoad, {});
 	    }
 	    
 	});

@@ -33,9 +33,10 @@ public class SampleUserDetailsService implements UserDetailsService {
 		*/	
 		Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-		User user = new User(userId, "test", authorities);
-		
-		return user;
+		//User user = new User(userId, "test", authorities);		
+		//return user;
+		SampleUserDetails userDetails = new SampleUserDetails(userId, "testing", "SaMpLeToKeN", authorities);
+		return userDetails;
 	}
 
 }

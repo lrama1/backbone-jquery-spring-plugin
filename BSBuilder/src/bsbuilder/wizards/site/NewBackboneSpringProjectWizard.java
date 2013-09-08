@@ -161,6 +161,8 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		params.setListWrapperSourceCode(pageThree.getListWrapperSourceCode(basePackageName, commonPackageName, domainClassName));
 		params.setSecurityPackageName(securityPackageName);
 		params.setSecurityUserDetailsServiceSourceCode(pageThree.getSecurityUserDetailsServiceSourceCode(securityPackageName));
+		params.setSecurityUserDetailsSourceCode(pageThree.getSecurityUserDetailsSourceCode(securityPackageName));
+		
 		params.setSampleMessageBundleContent(pageThree.getMessageBundleContent("", "", ""));
 		params.setSampleMessageBundleContentEs(pageThree.getMessageBundleContentEs("", "", ""));
 		params.setUtilPackageName(utilPackageName);
@@ -254,7 +256,11 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("ejs_fulljslint.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/ejs_fulljslint.js"), monitor);
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("jquery.js"), 
-					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/jquery-1.9.1.min.js"), monitor);
+					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/jquery-1.10.2.min.js"), monitor);
+			
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("jquery-1.10.2.min.map"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/jquery-1.10.2.min.map"), monitor);
+			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("require.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/require.js"), monitor);			
 			//CommonUtils.CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("jquery.dataTables.js"), 
@@ -347,6 +353,10 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF"), new Path("index.jsp"),
 							TemplateMerger.merge("/bsbuilder/resources/web/jsps/index.jsp-template", mapOfValues), monitor);
 			
+			/*Add a default CSS */
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/css"), new Path("site.css"),
+					TemplateMerger.merge("/bsbuilder/resources/css/site.css-template", mapOfValues), monitor);
+			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("bootstrap.min.css"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/css/bootstrap.min.css"), monitor);
 	
@@ -378,6 +388,8 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			/* Add Security */
 			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getSecurityPackageName(), "SampleUserDetailsService",
 					params.getSecurityUserDetailsServiceSourceCode() , monitor);
+			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getSecurityPackageName(), "SampleUserDetails",
+					params.getSecurityUserDetailsSourceCode() , monitor);
 			
 			/* Add ListWrapper */
 			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getCommonPackageName(), "ListWrapper",
@@ -485,6 +497,11 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		IFolder resourcesFolder = srcFolder51.getFolder(new Path("resources"));
 		resourcesFolder.create(false, true, new NullProgressMonitor());
 		folders.put("src/main/webapp/WEB-INF/resources", resourcesFolder);
+		
+		//src/main/webapp/WEB-INF/resources/css
+		IFolder cssFolder = resourcesFolder.getFolder(new Path("css"));
+		cssFolder.create(false, true, new NullProgressMonitor());
+		folders.put("src/main/webapp/WEB-INF/resources/css", cssFolder);
 		
 		//src/main/webapp/WEB-INF/resources/js
 		IFolder jsFolder = resourcesFolder.getFolder(new Path("js"));
@@ -657,6 +674,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		private String listWrapperSourceCode;
 		private String securityPackageName;
 		private String securityUserDetailsServiceSourceCode;
+		private String securityUserDetailsSourceCode;
 		private String utilPackageName;
 		private String resourceBundleUtilSourceCode;
 		private String sampleMessageBundleContent;
@@ -796,7 +814,15 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		}
 		public void setResourceBundleUtilSourceCode(String resourceBundleUtilSourceCode) {
 			this.resourceBundleUtilSourceCode = resourceBundleUtilSourceCode;
+		}
+		public String getSecurityUserDetailsSourceCode() {
+			return securityUserDetailsSourceCode;
+		}
+		public void setSecurityUserDetailsSourceCode(
+				String securityUserDetailsSourceCode) {
+			this.securityUserDetailsSourceCode = securityUserDetailsSourceCode;
 		}		
+		
 	}
 
 }

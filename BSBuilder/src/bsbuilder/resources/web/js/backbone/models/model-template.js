@@ -8,13 +8,10 @@ define([
 	  idAttribute : '${domainClassIdAttributeName}',	
 	  urlRoot : '/${projectName}/${className.toLowerCase()}',	  
 	  validate : function(attributes, options){
-		  if(options !== undefined && options.silent !== undefined){
-				if(options.silent){
-					console.log("Skip validation");
-				}else{
-					console.log("Validate");
-				}
-		  }		
+		  //sample validation. uncomment if u want to use it
+		  //if(attributes.<ATTRBITE_NAME_HERE> == ''){				
+		  //	return '<ATTR_NAME> cant be blank.';
+		  //}		
 	  }	,
 	  parse : function(response){		  
 		  #foreach($key in $attrs.keySet() )
