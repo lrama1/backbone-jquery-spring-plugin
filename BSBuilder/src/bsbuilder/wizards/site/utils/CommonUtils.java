@@ -2,6 +2,8 @@ package bsbuilder.wizards.site.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.StringWriter;
+import java.util.List;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -51,5 +53,13 @@ public class CommonUtils {
 		} else {
 			file.create(contentStream, true, monitor);
 		}
+	}
+	
+	public static String linesToString(List<String> lines, String lineSeparator){
+		StringWriter stringWriter = new StringWriter();
+		for(String line : lines){
+			stringWriter.append(line + lineSeparator);
+		}
+		return stringWriter.toString();
 	}
 }

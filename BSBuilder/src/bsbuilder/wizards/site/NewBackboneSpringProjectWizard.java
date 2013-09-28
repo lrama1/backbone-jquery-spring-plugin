@@ -9,6 +9,7 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -173,6 +174,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		//params.setResourceBundleUtilSourceCode(pageThree.getResourceBundleSourceCode(utilPackageName));
 		params.setResourceBundleUtilSourceCode(pageThree.buildSourceCode(basePackageName, domainClassName, domainClassIdAttributeName, "exposed-resource-bundle.java-template"));
 		
+		params.setSampleESAPIProperties(CommonUtils.linesToString(IOUtils.readLines(getClass().getResourceAsStream("/bsbuilder/resources/esapi/ESAPI.properties")),"\n"));
 		/*
 		 * Just like the NewFileWizard, but this time with an operation object
 		 * that modifies workspaces.
@@ -364,6 +366,9 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("bootstrap.min.css"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/css/bootstrap.min.css"), monitor);
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("bootstrap-theme.min.css"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/css/bootstrap-theme.min.css"), monitor);
+	
 	
 			
 			/*Add a backbone template file.  This is dependent on the Java Model generation.
@@ -409,6 +414,9 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 					params.getSampleMessageBundleContent() , monitor);
 			CommonUtils.createPackageAndClass(folders.get("src/main/resources"), "locales", "messages_es.properties",
 					params.getSampleMessageBundleContentEs() , monitor);
+			
+			CommonUtils.createPackageAndClass(folders.get("src/main/resources"), "", "ESAPI.properties",
+					params.getSampleESAPIProperties() , monitor);
 			
 			//add junit for Controllers
 			CommonUtils.createPackageAndClass(folders.get("src/test/java"), params.getControllerPackageName(),
@@ -684,6 +692,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		private String resourceBundleUtilSourceCode;
 		private String sampleMessageBundleContent;
 		private String sampleMessageBundleContentEs;
+		private String sampleESAPIProperties;
 
 		
 		
@@ -826,6 +835,12 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		public void setSecurityUserDetailsSourceCode(
 				String securityUserDetailsSourceCode) {
 			this.securityUserDetailsSourceCode = securityUserDetailsSourceCode;
+		}
+		public String getSampleESAPIProperties() {
+			return sampleESAPIProperties;
+		}
+		public void setSampleESAPIProperties(String sampleESAPIProperties) {
+			this.sampleESAPIProperties = sampleESAPIProperties;
 		}		
 		
 	}

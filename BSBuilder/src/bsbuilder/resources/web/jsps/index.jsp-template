@@ -9,6 +9,7 @@
 <title>${projectName}</title>
 <link rel="stylesheet" href="/${projectName}/resources/css/site.css" />
 <link rel="stylesheet" href="/${projectName}/resources/js/libs/bootstrap.min.css" />
+<link rel="stylesheet" href="/${projectName}/resources/js/libs/bootstrap-theme.min.css" />
 <link rel="stylesheet" href="/${projectName}/resources/js/libs/backgrid.css" />
 <link rel="stylesheet" href="/${projectName}/resources/js/libs/backgrid-paginator.css" />
 <link rel="stylesheet" href="/${projectName}/resources/js/libs/datepicker.css" />
