@@ -57,6 +57,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 	private WizardNewProjectCreationPage wizardPage;
 	private BackboneProjectWizardPageTwo pageTwo;
 	private BackboneProjectWizardPageThree pageThree;
+	private BackboneProjectWizardPageFour pageFour;
 
 	private IConfigurationElement config;
 
@@ -85,6 +86,9 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		
 		pageThree = new BackboneProjectWizardPageThree("");
 		addPage(pageThree);
+		
+		pageFour = new BackboneProjectWizardPageFour("securityOptions");
+		addPage(pageFour);
 		
 	}
 
@@ -141,6 +145,8 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		final String daoPackageName = pageTwo.getBasePackageName() + ".dao";
 		final String commonPackageName = pageTwo.getBasePackageName() + ".common";
 		final String securityPackageName = pageTwo.getBasePackageName() + ".security";
+		final boolean xssSelected = pageFour.getXssCheckbox().getSelection();
+		final boolean csrfSelected = pageFour.getCsrfCheckbox().getSelection();
 		
 		
 		final SourceCodeGeneratorParameters params = new SourceCodeGeneratorParameters();
@@ -167,6 +173,10 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		params.setSecurityPackageName(securityPackageName);
 		params.setSecurityUserDetailsServiceSourceCode(pageThree.getSecurityUserDetailsServiceSourceCode(securityPackageName));
 		params.setSecurityUserDetailsSourceCode(pageThree.getSecurityUserDetailsSourceCode(securityPackageName));
+		if(xssSelected || csrfSelected){
+			params.setSecurityAspectCode(pageThree.buildSourceCode(basePackageName, domainClassName, "", "security-aspect.java-template"));
+			params.setSecuredDomainCode(pageThree.buildSourceCode(basePackageName, domainClassName, "", "security-domain.java-template"));
+		}
 		
 		params.setSampleMessageBundleContent(pageThree.getMessageBundleContent("", "", ""));
 		params.setSampleMessageBundleContentEs(pageThree.getMessageBundleContentEs("", "", ""));
@@ -291,8 +301,6 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backgrid-select-all.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid-select-all.js"), monitor);			
 			
-			
-			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backbone-pageable.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backbone-pageable.js"), monitor);
 			//
@@ -346,10 +354,12 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 					TemplateMerger.merge("/bsbuilder/resources/maven/yourdispatcher-servlet.xml-template", proj.getName(),params.getBasePackageName(),params.getControllerPackageName(), params.getUtilPackageName()), monitor);
 			/* Add Spring context files */
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/spring"), new Path("applicationContext.xml"),
-					TemplateMerger.merge("/bsbuilder/resources/maven/applicationContext.xml-template", proj.getName(),params.getBasePackageName(),params.getControllerPackageName(), params.getUtilPackageName()), monitor);
+					TemplateMerger.merge("/bsbuilder/resources/maven/applicationContext.xml-template", proj.getName(),params.getBasePackageName(),params.getControllerPackageName(), params.getUtilPackageName()), monitor);			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/spring"), new Path("spring-security.xml"),
 					TemplateMerger.merge("/bsbuilder/resources/maven/spring-security.xml-template", proj.getName(),params.getBasePackageName(),params.getControllerPackageName(), params.getUtilPackageName()), monitor);
-			
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/spring"), new Path("ehcache.xml"),
+					TemplateMerger.merge("/bsbuilder/resources/maven/ehcache.xml-template", proj.getName(),params.getBasePackageName(),params.getControllerPackageName(), params.getUtilPackageName()), monitor);
+
 			
 			/* Add a java model */
 			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getDomainPackageName(), params.getDomainClassName(),
@@ -400,6 +410,12 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 					params.getSecurityUserDetailsServiceSourceCode() , monitor);
 			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getSecurityPackageName(), "SampleUserDetails",
 					params.getSecurityUserDetailsSourceCode() , monitor);
+			if(params.getSecurityAspectCode() != null){
+				CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getSecurityPackageName(), "SecurityAspect",
+					params.getSecurityAspectCode() , monitor);
+				CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getSecurityPackageName(), "SecuredDomain",
+						params.getSecuredDomainCode() , monitor);
+			}
 			
 			/* Add ListWrapper */
 			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getCommonPackageName(), "ListWrapper",
@@ -688,6 +704,8 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		private String securityPackageName;
 		private String securityUserDetailsServiceSourceCode;
 		private String securityUserDetailsSourceCode;
+		private String securityAspectCode;
+		private String securedDomainCode;
 		private String utilPackageName;
 		private String resourceBundleUtilSourceCode;
 		private String sampleMessageBundleContent;
@@ -841,8 +859,19 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		}
 		public void setSampleESAPIProperties(String sampleESAPIProperties) {
 			this.sampleESAPIProperties = sampleESAPIProperties;
-		}		
-		
+		}
+		public String getSecurityAspectCode() {
+			return securityAspectCode;
+		}
+		public void setSecurityAspectCode(String securityAspectCode) {
+			this.securityAspectCode = securityAspectCode;
+		}
+		public String getSecuredDomainCode() {
+			return securedDomainCode;
+		}
+		public void setSecuredDomainCode(String securedDomainCode) {
+			this.securedDomainCode = securedDomainCode;
+		}	
 	}
 
 }

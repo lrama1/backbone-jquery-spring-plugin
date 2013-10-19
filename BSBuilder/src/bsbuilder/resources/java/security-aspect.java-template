@@ -1,0 +1,32 @@
+package ${basePackageName}.security;
+
+import javax.annotation.PostConstruct;
+
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
+import org.springframework.stereotype.Component;
+
+import ${basePackageName}.security.SecuredDomain;
+
+@Aspect
+@Component
+public class SecurityAspect {
+
+	@PostConstruct
+	public void init(){
+		System.out.println("Initializing Security Aspect.");
+	}
+	
+	@AfterReturning(
+		      pointcut = "execution(* ${basePackageName}.controller.*.*(..))",
+		      returning= "result")
+    public void afterReturning(JoinPoint joinPoint , Object result)  {
+		if(result.getClass().getSuperclass() != null ){
+			if(result.getClass().getSuperclass() == SecuredDomain.class){				
+				System.out.println("Token value:   " + ((SecuredDomain)result).getToken());
+			}
+		}
+		
+	}
+}
