@@ -31,6 +31,7 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
+import bsbuilder.wizards.site.BackboneProjectWizardPageFour;
 import bsbuilder.wizards.site.BackboneProjectWizardPageThree;
 import bsbuilder.wizards.site.utils.CommonUtils;
 import bsbuilder.wizards.site.utils.TemplateMerger;
@@ -38,6 +39,7 @@ import bsbuilder.wizards.site.utils.TemplateMerger;
 public class AddMoreModelWizard extends Wizard implements INewWizard {
 
 	private BackboneProjectWizardPageThree pageThree;
+	private BackboneProjectWizardPageFour pageFour;
 	private IWorkbench workbench;
 	private IStructuredSelection selection;
 	
@@ -50,7 +52,9 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 	@Override
 	public void addPages() {
 		pageThree = new BackboneProjectWizardPageThree("");
+		pageFour = new BackboneProjectWizardPageFour("");
 		addPage(pageThree);
+		addPage(pageFour);
 	}
 
 	@Override
@@ -117,7 +121,10 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 			) throws Exception{
 		IFolder javaFolder = projectContainer.getFolder(new Path("src/main/java"));
 		String domainPackageName = basePackageName + ".web.domain";
-		CommonUtils.createPackageAndClass(javaFolder, domainPackageName, className, pageThree.getClassSource(domainPackageName), new NullProgressMonitor());
+		final boolean xssSelected = pageFour.getXssCheckbox().getSelection();
+		final boolean csrfSelected = pageFour.getCsrfCheckbox().getSelection();
+		CommonUtils.createPackageAndClass(javaFolder, domainPackageName, className, pageThree.getClassSource(basePackageName, domainPackageName, xssSelected || csrfSelected), 
+				new NullProgressMonitor());
 	}
 	
 	//NOT NEEDED

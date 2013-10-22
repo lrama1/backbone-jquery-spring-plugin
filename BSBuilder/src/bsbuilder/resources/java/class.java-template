@@ -1,6 +1,10 @@
 package $domainPackageName;
 
-public class $className {	
+public class $className 
+#if(${secured})
+	extends ${basePackageName}.security.SecuredDomain
+#end	
+{	
 	#foreach($key in $attrs.keySet() )
 		#if($attrs.get($key) == 'java.util.Date')
 			private Long $key;

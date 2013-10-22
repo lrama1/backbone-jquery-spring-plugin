@@ -339,6 +339,10 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 	}
 	
 	public String getClassSource(String domainPackageName) throws Exception{
+		return this.getClassSource("", domainPackageName, false);
+	}
+	
+	public String getClassSource(String basePackageName, String domainPackageName , boolean createSecured) throws Exception{
 		TableItem[] tableItems = table.getItems();
 				
 		for(TableItem tableItem : tableItems){
@@ -354,7 +358,9 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 		}
 		
 		Map<String, Object> mapOfValues = new HashMap<String, Object>();
+		mapOfValues.put("basePackageName", basePackageName);
 		mapOfValues.put("domainPackageName", domainPackageName);
+		mapOfValues.put("secured", createSecured);
 		mapOfValues.put("className", textSampleDomainClass.getText());
 		mapOfValues.put("attrs", attrs);
 		InputStream is = 

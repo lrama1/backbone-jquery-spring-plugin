@@ -128,14 +128,16 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		commands[3].setBuilderName("org.eclipse.m2e.core.maven2Builder");
 		commands[4].setBuilderName("org.eclipse.wst.validation.validationbuilder");
 		desc.setBuildSpec(commands);
-
+		final boolean xssSelected = pageFour.getXssCheckbox().getSelection();
+		final boolean csrfSelected = pageFour.getCsrfCheckbox().getSelection();
+		
 		final String basePackageName = pageTwo.getBasePackageName(); 
 		final String controllerPackageName = pageTwo.getControllerPackage();
 		final String domainPackageName = pageTwo.getDomainPackage();
 		//final String utilPackageName = pageTwo.getBasePackageName() + ".util"; 
 		
 		final String domainClassName = pageThree.getDomainClassName();
-		final String domainClassSourceCode = pageThree.getClassSource(domainPackageName);
+		final String domainClassSourceCode = pageThree.getClassSource(basePackageName, domainPackageName, xssSelected || csrfSelected);
 		final String domainClassIdAttributeName = pageThree.getDomainClassAttributeName();
 		final String controllerClassName = domainClassName + "Controller";
 		//final String mainControllerSourceCode = pageThree.getMainControllerSource(controllerPackageName, utilPackageName);
@@ -145,8 +147,6 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		final String daoPackageName = pageTwo.getBasePackageName() + ".dao";
 		final String commonPackageName = pageTwo.getBasePackageName() + ".common";
 		final String securityPackageName = pageTwo.getBasePackageName() + ".security";
-		final boolean xssSelected = pageFour.getXssCheckbox().getSelection();
-		final boolean csrfSelected = pageFour.getCsrfCheckbox().getSelection();
 		
 		
 		final SourceCodeGeneratorParameters params = new SourceCodeGeneratorParameters();
@@ -177,6 +177,8 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			params.setSecurityAspectCode(pageThree.buildSourceCode(basePackageName, domainClassName, "", "security-aspect.java-template"));
 			params.setSecuredDomainCode(pageThree.buildSourceCode(basePackageName, domainClassName, "", "security-domain.java-template"));
 		}
+		params.setSecurityEnumCode(pageThree.buildSourceCode(basePackageName, domainClassName, domainClassIdAttributeName, "security-annotation-type.java-template"));
+		params.setSecurityAnnotationCode(pageThree.buildSourceCode(basePackageName, domainClassName, domainClassIdAttributeName, "security-field-annotation.java-template"));
 		
 		params.setSampleMessageBundleContent(pageThree.getMessageBundleContent("", "", ""));
 		params.setSampleMessageBundleContentEs(pageThree.getMessageBundleContentEs("", "", ""));
@@ -416,6 +418,10 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 				CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getSecurityPackageName(), "SecuredDomain",
 						params.getSecuredDomainCode() , monitor);
 			}
+			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getSecurityPackageName() + ".annotation", "EncodeType",
+					params.getSecurityEnumCode() , monitor);
+			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getSecurityPackageName() + ".annotation", "SecuredField",
+					params.getSecurityAnnotationCode() , monitor);
 			
 			/* Add ListWrapper */
 			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getCommonPackageName(), "ListWrapper",
@@ -705,6 +711,8 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		private String securityUserDetailsServiceSourceCode;
 		private String securityUserDetailsSourceCode;
 		private String securityAspectCode;
+		private String securityEnumCode;
+		private String securityAnnotationCode;
 		private String securedDomainCode;
 		private String utilPackageName;
 		private String resourceBundleUtilSourceCode;
@@ -871,7 +879,20 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		}
 		public void setSecuredDomainCode(String securedDomainCode) {
 			this.securedDomainCode = securedDomainCode;
-		}	
+		}
+		public String getSecurityEnumCode() {
+			return securityEnumCode;
+		}
+		public void setSecurityEnumCode(String securityEnumCode) {
+			this.securityEnumCode = securityEnumCode;
+		}
+		public String getSecurityAnnotationCode() {
+			return securityAnnotationCode;
+		}
+		public void setSecurityAnnotationCode(String securityAnnotationCode) {
+			this.securityAnnotationCode = securityAnnotationCode;
+		}
+		
 	}
 
 }

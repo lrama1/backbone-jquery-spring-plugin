@@ -12,7 +12,7 @@ public class BackboneProjectWizardPageFour extends WizardPage {
 	private Button xssCheckbox;
 	private Button csrfCheckbox;
 
-	protected BackboneProjectWizardPageFour(String pageName) {
+	public BackboneProjectWizardPageFour(String pageName) {
 		super(pageName);
 		setTitle("Add OWASP Security Features");
 		setDescription("Creates scaffolding for security features.");
