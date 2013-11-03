@@ -3,16 +3,16 @@ package ${commonPackageName};
 import java.util.List;
 
 public class ListWrapper<T>{
-	private List<T> t;
+	private List<T> rows;
 	private int totalRecords;
 	private int lastPage;
 
 	public List<T> getRows() {
-		return t;
+		return rows;
 	}
 
-	public void setRows(List<T> t) {
-		this.t = t;
+	public void setRows(List<T> rows) {
+		this.rows = rows;
 	}
 
 	public int getTotalRecords() {

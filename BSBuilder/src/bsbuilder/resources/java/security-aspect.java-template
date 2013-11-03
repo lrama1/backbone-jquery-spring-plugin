@@ -1,6 +1,12 @@
 package ${basePackageName}.security;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.List;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
@@ -8,6 +14,10 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.owasp.esapi.ESAPI;
+
+import static org.reflections.ReflectionUtils.*;
+
+import org.reflections.ReflectionUtils;
 import org.springframework.stereotype.Component;
 
 import ${basePackageName}.security.annotation.SecuredField;
@@ -26,7 +36,7 @@ public class SecurityAspect {
 		Object[] arguments = joinPoint.getArgs();
 		for(Object argument : arguments){
 			if(argument != null){
-				System.out.println("Param " + argument.getClass().getName() + " ===> " + argument.getClass().getSimpleName());
+				//System.out.println("Param " + argument.getClass().getName() + " ===> " + argument.getClass().getSimpleName());
 				Field[] fields = argument.getClass().getDeclaredFields();
 				for(Field field : fields){
 					if(field.getAnnotation(SecuredField.class) != null){
@@ -39,7 +49,61 @@ public class SecurityAspect {
 
 		
 		Object objectToReturn = joinPoint.proceed(arguments);
+		encodeFields(objectToReturn);
+		
 		return objectToReturn;
+	}
+	
+	/**
+	 * Recursively inspects any object and encodes String fields accordingly
+	 * @param objectToEncode
+	 * @throws Exception
+	 */
+	private void encodeFields(Object objectToEncode) throws Exception{
+		System.out.println("Atttempting to process " + objectToEncode.getClass().getSimpleName());
+		if(objectToEncode != null && objectToEncode instanceof List){
+			System.out.println("Encountered a list/collection........................");			
+			List<Object> listToProcess = (List<Object>)objectToEncode;
+			for(Object object : listToProcess){
+				encodeFields(object);
+			}
+		}
+		else if(objectToEncode != null){			
+			Set<Field> fields = getFields(objectToEncode.getClass());
+			for(Field field : fields){
+				if(field.getType() == String.class && field.getAnnotation(SecuredField.class) != null){		
+					Set<Method> getterMethods =  getMethods(objectToEncode.getClass(), withName(getGetterMethodName(field)), withModifier(Modifier.PUBLIC));
+					if(getterMethods.size() > 0){						
+						Object valueToEncode = getterMethods.iterator().next().invoke(objectToEncode);
+						Set<Method> setterMethods =  getMethods(objectToEncode.getClass(), withName(getSetterMethodName(field)), withModifier(Modifier.PUBLIC));
+						if(setterMethods.size() > 0){
+							Method method = setterMethods.iterator().next();
+							if(valueToEncode != null){
+								String encoded = ESAPI.encoder().encodeForHTML(valueToEncode.toString());
+								System.out.println("Securing " + field.getName() + "==============" + valueToEncode + " ==> " + encoded);								
+								method.invoke(objectToEncode, encoded);
+							}
+						}
+					}
+					
+				}else{
+					Set<Method> getterMethods =  getMethods(objectToEncode.getClass(), withName(getGetterMethodName(field)), withModifier(Modifier.PUBLIC));
+					if(getterMethods.size() > 0){
+						System.out.println("Processing complex object: " + field.getName());
+						Method method = getterMethods.iterator().next();
+						encodeFields(method.invoke(objectToEncode));	
+					}					
+				}
+			}
+		}
+	}
+	
+	private String getGetterMethodName(Field field){
+		return "get" + field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1);
+	}
+	
+	private String getSetterMethodName(Field field){
+		return "set" + field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1);
 	}
 	
 }
