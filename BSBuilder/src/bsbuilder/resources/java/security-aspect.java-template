@@ -1,5 +1,6 @@
 package ${basePackageName}.security;
 
+import org.apache.log4j.Logger;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -26,9 +27,11 @@ import ${basePackageName}.security.annotation.SecuredField;
 @Component
 public class SecurityAspect {
 
+	Logger logger = Logger.getLogger(this.getClass());
+
 	@PostConstruct
 	public void init(){
-		System.out.println("Initializing Security Aspect.");
+		logger.info("Initializing Security Aspect.");
 	}
 	
 	@Around("execution(* ${basePackageName}.controller.*.*(..))")
@@ -36,12 +39,12 @@ public class SecurityAspect {
 		Object[] arguments = joinPoint.getArgs();
 		for(Object argument : arguments){
 			if(argument != null){
-				//System.out.println("Param " + argument.getClass().getName() + " ===> " + argument.getClass().getSimpleName());
+				//logger.info("Param " + argument.getClass().getName() + " ===> " + argument.getClass().getSimpleName());
 				Field[] fields = argument.getClass().getDeclaredFields();
 				for(Field field : fields){
 					if(field.getAnnotation(SecuredField.class) != null){
 						String encodeType = field.getAnnotation(SecuredField.class).encodeFor().toString();
-						System.out.println(field.getName() + " will be encoded for " + encodeType );						
+						logger.info(field.getName() + " will be encoded for " + encodeType );						
 					}
 				}
 			}
@@ -60,9 +63,9 @@ public class SecurityAspect {
 	 * @throws Exception
 	 */
 	private void encodeFields(Object objectToEncode) throws Exception{
-		System.out.println("Atttempting to process " + objectToEncode.getClass().getSimpleName());
+		logger.info("Atttempting to process " + objectToEncode.getClass().getSimpleName());
 		if(objectToEncode != null && objectToEncode instanceof List){
-			System.out.println("Encountered a list/collection........................");			
+			logger.info("Encountered a list/collection........................");			
 			List<Object> listToProcess = (List<Object>)objectToEncode;
 			for(Object object : listToProcess){
 				encodeFields(object);
@@ -80,7 +83,7 @@ public class SecurityAspect {
 							Method method = setterMethods.iterator().next();
 							if(valueToEncode != null){
 								String encoded = ESAPI.encoder().encodeForHTML(valueToEncode.toString());
-								System.out.println("Securing " + field.getName() + "==============" + valueToEncode + " ==> " + encoded);								
+								logger.info("Securing " + field.getName() + "==============" + valueToEncode + " ==> " + encoded);								
 								method.invoke(objectToEncode, encoded);
 							}
 						}
@@ -89,7 +92,7 @@ public class SecurityAspect {
 				}else{
 					Set<Method> getterMethods =  getMethods(objectToEncode.getClass(), withName(getGetterMethodName(field)), withModifier(Modifier.PUBLIC));
 					if(getterMethods.size() > 0){
-						System.out.println("Processing complex object: " + field.getName());
+						logger.info("Processing complex object: " + field.getName());
 						Method method = getterMethods.iterator().next();
 						encodeFields(method.invoke(objectToEncode));	
 					}					

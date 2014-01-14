@@ -187,6 +187,8 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		params.setResourceBundleUtilSourceCode(pageThree.buildSourceCode(basePackageName, domainClassName, domainClassIdAttributeName, "exposed-resource-bundle.java-template"));
 		
 		params.setSampleESAPIProperties(CommonUtils.linesToString(IOUtils.readLines(getClass().getResourceAsStream("/bsbuilder/resources/esapi/ESAPI.properties")),"\n"));
+		
+		
 		/*
 		 * Just like the NewFileWizard, but this time with an operation object
 		 * that modifies workspaces.
@@ -439,6 +441,11 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			
 			CommonUtils.createPackageAndClass(folders.get("src/main/resources"), "", "ESAPI.properties",
 					params.getSampleESAPIProperties() , monitor);
+			
+			CommonUtils.addFileToProject(folders.get("src/main/resources"), new Path("log4j.properties"),
+					TemplateMerger.merge("/bsbuilder/resources/other/log4j.properties-template", proj.getName(),params.getBasePackageName(),params.getControllerPackageName(), params.getUtilPackageName()), monitor);
+
+			
 			
 			//add junit for Controllers
 			CommonUtils.createPackageAndClass(folders.get("src/test/java"), params.getControllerPackageName(),
@@ -719,7 +726,6 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		private String sampleMessageBundleContent;
 		private String sampleMessageBundleContentEs;
 		private String sampleESAPIProperties;
-
 		
 		
 		public String getBasePackageName() {
@@ -891,8 +897,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		}
 		public void setSecurityAnnotationCode(String securityAnnotationCode) {
 			this.securityAnnotationCode = securityAnnotationCode;
-		}
-		
+		}		
 	}
 
 }
