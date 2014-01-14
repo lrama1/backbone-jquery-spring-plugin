@@ -21,6 +21,7 @@ import static org.reflections.ReflectionUtils.*;
 import org.reflections.ReflectionUtils;
 import org.springframework.stereotype.Component;
 
+import ${basePackageName}.security.annotation.EncodeType;
 import ${basePackageName}.security.annotation.SecuredField;
 
 @Aspect
@@ -82,7 +83,10 @@ public class SecurityAspect {
 						if(setterMethods.size() > 0){
 							Method method = setterMethods.iterator().next();
 							if(valueToEncode != null){
-								String encoded = ESAPI.encoder().encodeForHTML(valueToEncode.toString());
+								String encoded = "";
+								if(field.getAnnotation(SecuredField.class) != null){
+									encoded = encodeField(field, valueToEncode.toString());
+								}
 								logger.info("Securing " + field.getName() + "==============" + valueToEncode + " ==> " + encoded);								
 								method.invoke(objectToEncode, encoded);
 							}
@@ -99,6 +103,18 @@ public class SecurityAspect {
 				}
 			}
 		}
+	}
+	
+	private String encodeField(Field field, String valueToEncode){
+		String encodeType = field.getAnnotation(SecuredField.class).encodeFor().toString();
+		if (encodeType.equals(EncodeType.HTML.toString())){		
+			return ESAPI.encoder().encodeForHTML(valueToEncode);
+		}else if (encodeType.equals(EncodeType.HTML_ATTRIBUTE)){	
+			return ESAPI.encoder().encodeForHTMLAttribute(valueToEncode);
+		}else if (encodeType.equals(EncodeType.JAVASCRIPT)){		
+			return ESAPI.encoder().encodeForJavaScript(valueToEncode);
+		}  
+		return valueToEncode;
 	}
 	
 	private String getGetterMethodName(Field field){
