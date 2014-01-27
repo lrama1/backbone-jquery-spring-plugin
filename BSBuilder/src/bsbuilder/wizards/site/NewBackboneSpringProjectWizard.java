@@ -179,6 +179,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		}
 		params.setSecurityEnumCode(pageThree.buildSourceCode(basePackageName, domainClassName, domainClassIdAttributeName, "security-annotation-type.java-template"));
 		params.setSecurityAnnotationCode(pageThree.buildSourceCode(basePackageName, domainClassName, domainClassIdAttributeName, "security-field-annotation.java-template"));
+		params.setSecurityTokenGeneratorCode(pageThree.buildSourceCode(basePackageName, domainClassName, domainClassIdAttributeName, "security-token-generator.java-template"));
 		
 		params.setSampleMessageBundleContent(pageThree.getMessageBundleContent("", "", ""));
 		params.setSampleMessageBundleContentEs(pageThree.getMessageBundleContentEs("", "", ""));
@@ -419,6 +420,8 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 					params.getSecurityAspectCode() , monitor);
 				CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getSecurityPackageName(), "SecuredDomain",
 						params.getSecuredDomainCode() , monitor);
+				CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getSecurityPackageName(), "SecurityTokenGenerator",
+						params.getSecurityTokenGeneratorCode() , monitor);
 			}
 			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getSecurityPackageName() + ".annotation", "EncodeType",
 					params.getSecurityEnumCode() , monitor);
@@ -721,6 +724,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		private String securityEnumCode;
 		private String securityAnnotationCode;
 		private String securedDomainCode;
+		private String securityTokenGeneratorCode;
 		private String utilPackageName;
 		private String resourceBundleUtilSourceCode;
 		private String sampleMessageBundleContent;
@@ -897,7 +901,14 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		}
 		public void setSecurityAnnotationCode(String securityAnnotationCode) {
 			this.securityAnnotationCode = securityAnnotationCode;
-		}		
+		}
+		public String getSecurityTokenGeneratorCode() {
+			return securityTokenGeneratorCode;
+		}
+		public void setSecurityTokenGeneratorCode(String securityTokenGeneratorCode) {
+			this.securityTokenGeneratorCode = securityTokenGeneratorCode;
+		}	
+		
 	}
 
 }
