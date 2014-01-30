@@ -2,7 +2,7 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'text!templates/${className}EditTemplate', /* the request for this template actually goes thru the MainController*/
+  #if($templateType == "JSP")'text!templates/${className}EditTemplate'#else 'text!templates/${className}EditTemplate.htm'#end, /* the request for this template actually goes thru the MainController*/
   'bootstrap-datepicker'
 ], function($, _, Backbone, editTemplate, datePicker){
 	

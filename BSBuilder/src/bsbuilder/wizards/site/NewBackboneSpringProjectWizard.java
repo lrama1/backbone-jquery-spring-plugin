@@ -58,6 +58,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 	private BackboneProjectWizardPageTwo pageTwo;
 	private BackboneProjectWizardPageThree pageThree;
 	private BackboneProjectWizardPageFour pageFour;
+	private BackboneProjectWizardPageFive pageFive;
 
 	private IConfigurationElement config;
 
@@ -89,6 +90,9 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		
 		pageFour = new BackboneProjectWizardPageFour("securityOptions");
 		addPage(pageFour);
+		
+		pageFive = new BackboneProjectWizardPageFive("BackboneOptions");
+		addPage(pageFive);
 		
 	}
 
@@ -188,7 +192,9 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		params.setResourceBundleUtilSourceCode(pageThree.buildSourceCode(basePackageName, domainClassName, domainClassIdAttributeName, "exposed-resource-bundle.java-template"));
 		
 		params.setSampleESAPIProperties(CommonUtils.linesToString(IOUtils.readLines(getClass().getResourceAsStream("/bsbuilder/resources/esapi/ESAPI.properties")),"\n"));
-		
+		params.setJSPTemplate(pageFive.isJSPTemplate());
+		System.out.println("JSP?*******************************" + pageFive.isJSPTemplate());
+		System.out.println("HTML?*******************************" + pageFive.isHTMLTemplate());
 		
 		/*
 		 * Just like the NewFileWizard, but this time with an operation object
@@ -327,6 +333,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			mapOfValues.put("projectName", proj.getName());
 			mapOfValues.put("domainClassIdAttributeName", params.getDomainClassIdAttributeName());			
 			mapOfValues.put("domainPackageName", params.getDomainPackageName());
+			mapOfValues.put("templateType", params.isJSPTemplate()?"JSP" : "HTML");
 			
 			mapOfValues.put("attrs", pageThree.getModelAttributes());
 			//CommonUtils.CommonUtils.addFileToProject(yourJsFolder, new Path("components.js"), 
@@ -390,11 +397,20 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			 * Instead of using plain html, we are going to use JSP so we can use Spring's
 			 * Message Bundles for localization.
 			 * */			
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/templates"), new Path(params.getDomainClassName() + "EditTemplate.jsp"), 
+			Path listTemplatePath;
+			Path editTemplatePath;
+			if(params.isJSPTemplate()){
+				listTemplatePath = new Path(params.getDomainClassName() + "ListTemplate.jsp");
+				editTemplatePath = new Path(params.getDomainClassName() + "EditTemplate.jsp");
+			}else{
+				listTemplatePath = new Path(params.getDomainClassName() + "ListTemplate.htm");
+				editTemplatePath = new Path(params.getDomainClassName() + "EditTemplate.htm");
+			}	
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/templates"), editTemplatePath, 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/EditTemplate.jsp-template",  mapOfValues), monitor);
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/templates"), new Path(params.getDomainClassName() + "ListTemplate.jsp"), 
-			TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/ListTemplate.jsp-template", mapOfValues), monitor);
-
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/templates"), listTemplatePath, 
+					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/ListTemplate.jsp-template", mapOfValues), monitor);
+		
 			
 			/* Add Controllers*/
 			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getControllerPackageName() , "MainController", 
@@ -730,6 +746,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		private String sampleMessageBundleContent;
 		private String sampleMessageBundleContentEs;
 		private String sampleESAPIProperties;
+		private boolean isJSPTemplate = true;
 		
 		
 		public String getBasePackageName() {
@@ -907,7 +924,14 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		}
 		public void setSecurityTokenGeneratorCode(String securityTokenGeneratorCode) {
 			this.securityTokenGeneratorCode = securityTokenGeneratorCode;
+		}
+		public boolean isJSPTemplate() {
+			return isJSPTemplate;
+		}
+		public void setJSPTemplate(boolean isJSPTemplate) {
+			this.isJSPTemplate = isJSPTemplate;
 		}	
+		
 		
 	}
 

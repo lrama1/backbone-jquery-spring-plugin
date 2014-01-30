@@ -6,7 +6,7 @@ define([
   'collections/${className}Collection',
   'globals/global',
   'localizedmessages',
-  'text!templates/${className}ListTemplate' /* the request for this template actually goes thru the MainController*/
+  #if($templateType == "JSP")'text!templates/${className}ListTemplate'#else 'text!templates/${className}ListTemplate.htm'#end /* the request for this template actually goes thru the MainController if its JSP*/
 ], function($, _, Backbone, Backgrid, ${className}Collection, Global, Messages ,collectionTemplate){
 	
 	var ${className}CollectionView = Backbone.View.extend({

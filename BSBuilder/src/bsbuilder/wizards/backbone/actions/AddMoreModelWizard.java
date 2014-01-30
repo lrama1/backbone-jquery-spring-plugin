@@ -31,6 +31,7 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
+import bsbuilder.wizards.site.BackboneProjectWizardPageFive;
 import bsbuilder.wizards.site.BackboneProjectWizardPageFour;
 import bsbuilder.wizards.site.BackboneProjectWizardPageThree;
 import bsbuilder.wizards.site.utils.CommonUtils;
@@ -40,6 +41,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 
 	private BackboneProjectWizardPageThree pageThree;
 	private BackboneProjectWizardPageFour pageFour;
+	private BackboneProjectWizardPageFive pageFive;
 	private IWorkbench workbench;
 	private IStructuredSelection selection;
 	
@@ -53,8 +55,10 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 	public void addPages() {
 		pageThree = new BackboneProjectWizardPageThree("");
 		pageFour = new BackboneProjectWizardPageFour("");
+		pageFive = new BackboneProjectWizardPageFive("");
 		addPage(pageThree);
 		addPage(pageFour);
+		addPage(pageFive);
 	}
 
 	@Override
@@ -140,10 +144,20 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		Map<String, Object> mapOfValues = new HashMap<String, Object>();
 		mapOfValues.put("className", domainClassName);
 		mapOfValues.put("attrs", modelAttributes);
-		CommonUtils.addFileToProject(templatesFolder, new Path(domainClassName + "EditTemplate.jsp"), 
+		Path editPath;
+		Path listPath;
+		if(pageFive.isJSPTemplate()){
+			editPath = new Path(domainClassName + "EditTemplate.jsp");
+			listPath = new Path(domainClassName + "ListTemplate.jsp");
+		}else{
+			editPath = new Path(domainClassName + "EditTemplate.htm");
+			listPath = new Path(domainClassName + "ListTemplate.htm");
+		}
+		
+		CommonUtils.addFileToProject(templatesFolder, editPath, 
 				TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/EditTemplate.jsp-template",
 						 mapOfValues ), new NullProgressMonitor());
-		CommonUtils.addFileToProject(templatesFolder, new Path(domainClassName + "ListTemplate.jsp"), 
+		CommonUtils.addFileToProject(templatesFolder, listPath, 
 				TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/ListTemplate.jsp-template",
 						 mapOfValues), new NullProgressMonitor());
 
@@ -202,7 +216,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		mapOfValues.put("className", domainClassName);
 		mapOfValues.put("projectName", projectName);
 		mapOfValues.put("domainClassIdAttributeName", pageThree.getDomainClassAttributeName());
-		mapOfValues.put("attrs", pageThree.getModelAttributes());
+		mapOfValues.put("attrs", pageThree.getModelAttributes());		
 		CommonUtils.addFileToProject(collectionsFolder, new Path(domainClassName + "Collection.js"), 
 				TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/collections/collection-template.js", mapOfValues), new NullProgressMonitor());
 	}
@@ -216,6 +230,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		mapOfValues.put("projectName", projectName);
 		mapOfValues.put("domainClassIdAttributeName", pageThree.getDomainClassAttributeName());
 		mapOfValues.put("attrs", pageThree.getModelAttributes());
+		mapOfValues.put("templateType", pageFive.isJSPTemplate()?"JSP" : "HTML");
 		CommonUtils.addFileToProject(viewsFolder, new Path(domainClassName + "EditView.js"), 
 				TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/views/view-template.js", mapOfValues), new NullProgressMonitor());
 	}
@@ -228,6 +243,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		mapOfValues.put("projectName", projectName);
 		mapOfValues.put("domainClassIdAttributeName", pageThree.getDomainClassAttributeName());
 		mapOfValues.put("attrs", pageThree.getModelAttributes());
+		mapOfValues.put("templateType", pageFive.isJSPTemplate()?"JSP" : "HTML");
 		CommonUtils.addFileToProject(viewsFolder, new Path(domainClassName + "CollectionView.js"), 
 				TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/views/collection-view-template.js", mapOfValues), new NullProgressMonitor());
 	}
