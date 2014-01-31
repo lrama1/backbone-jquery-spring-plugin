@@ -1,6 +1,9 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
 <div class="row">
+	<div class="col-md-12" id="operationMessage"></div>
+</div>
+<div class="row">
 	#foreach($key in $attrs.keySet() )
 		<div class="form-group">
 			<label  for="$key">$key</label>

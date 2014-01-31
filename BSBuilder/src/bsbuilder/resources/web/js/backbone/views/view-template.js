@@ -36,13 +36,20 @@ define([
 	     	"click #saveNew${className}": "saveNew${className}"  //binding the saveNewButton of template using id attr as selector
 	    },
 	    save${className} : function(){
-	    	this.model.save({
+	    	this.model.save(null,{
+	    		success : function(model, response, options){
+	    			#set( $attributeNameIterator =  $attrs.keySet().iterator())	    			
+	    			#set( $firstAttr = $attributeNameIterator.next().toString())
+	    			#set( $secondAttr = $attributeNameIterator.next().toString())
+					$("#operationMessage").html(model.get("${secondAttr}") + " was saved.");
+				},
+				error : function(){
+					alert("error");
+				}
 	    		#set( $dateFieldCount = 0 )
 	    		#foreach($key in $attrs.keySet() )
 	    			#if ($attrs.get($key) == "java.util.Date")
-	    				#if ($dateFieldCount > 0)
-	    					,
-	    				#end	
+	    				,	
                         ${key} : Date.parse(this.model.get("${key}"))
                         #set( $dateFieldCount = $dateFieldCount + 1 )
 	    			#end	
@@ -51,13 +58,20 @@ define([
 	    },
 	    saveNew${className} : function(){
 	    	this.model.set("${domainClassIdAttributeName}", null);
-	    	this.model.save({
+	    	this.model.save(null,{
+	    		success : function(model, response, options){
+	    			#set( $attributeNameIterator =  $attrs.keySet().iterator())	    			
+	    			#set( $firstAttr = $attributeNameIterator.next().toString())
+	    			#set( $secondAttr = $attributeNameIterator.next().toString())
+					$("#operationMessage").html(model.get("${secondAttr}") + " was saved.");
+				},
+				error : function(){
+					alert("error");
+				}
 	    		#set( $dateFieldCount = 0 )
 	    		#foreach($key in $attrs.keySet() )
 	    			#if ($attrs.get($key) == "java.util.Date")
-	    				#if ($dateFieldCount > 0)
-	    					,
-	    				#end	
+	    				,	
                         ${key} : Date.parse(this.model.get("${key}"))
                         #set( $dateFieldCount = $dateFieldCount + 1 )
 	    			#end	

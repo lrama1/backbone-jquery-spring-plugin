@@ -464,6 +464,9 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			CommonUtils.addFileToProject(folders.get("src/main/resources"), new Path("log4j.properties"),
 					TemplateMerger.merge("/bsbuilder/resources/other/log4j.properties-template", proj.getName(),params.getBasePackageName(),params.getControllerPackageName(), params.getUtilPackageName()), monitor);
 
+			CommonUtils.addFileToProject(container, new Path("readme.txt"),
+					TemplateMerger.merge("/bsbuilder/resources/other/readme.txt-template", proj.getName(),params.getBasePackageName(),params.getControllerPackageName(), params.getUtilPackageName()), monitor);
+	
 			
 			
 			//add junit for Controllers

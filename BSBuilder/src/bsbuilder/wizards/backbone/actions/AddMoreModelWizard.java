@@ -238,7 +238,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 	private void createCollectionView(IContainer projectContainer, String projectName) throws Exception{
 		IFolder viewsFolder = projectContainer.getFolder(new Path("src/main/webapp/WEB-INF/resources/js/views"));
 		String domainClassName = pageThree.getDomainClassName();
-		Map<String, Object> mapOfValues = new HashMap<String, Object>();
+		Map<String, Object> mapOfValues = new HashMap<String, Object>();		
 		mapOfValues.put("className", domainClassName);
 		mapOfValues.put("projectName", projectName);
 		mapOfValues.put("domainClassIdAttributeName", pageThree.getDomainClassAttributeName());
