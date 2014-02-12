@@ -178,6 +178,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		params.setSecurityUserDetailsServiceSourceCode(pageThree.getSecurityUserDetailsServiceSourceCode(securityPackageName));
 		params.setSecurityUserDetailsSourceCode(pageThree.getSecurityUserDetailsSourceCode(securityPackageName));
 		if(xssSelected || csrfSelected){
+			params.setGenerateSecurityCode(true);
 			params.setSecurityAspectCode(pageThree.buildSourceCode(basePackageName, domainClassName, "", "security-aspect.java-template"));
 			params.setSecuredDomainCode(pageThree.buildSourceCode(basePackageName, domainClassName, "", "security-domain.java-template"));
 		}
@@ -356,7 +357,8 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js"), new Path("router.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/routers/router-template.js", mapOfValues), monitor);
 			
-			addVariousSettings(folders.get(".settings"), proj, params.getBasePackageName(), params.getControllerPackageName() ,monitor);
+			addVariousSettings(folders.get(".settings"), proj, params.getBasePackageName(), params.getControllerPackageName(),
+					monitor);
 			
 			/* Add web-xml file */
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF"), new Path("web.xml"),
@@ -481,7 +483,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 					folders.get("src/test/java"), folders.get("src/main/resources"), folders.get("src/test/resources"), javaProject);
 			
 			//add bsbuilder-specific settings
-			addBSBuilderSettings(folders.get(".settings"), project, params.getBasePackageName(), monitor);
+			addBSBuilderSettings(folders.get(".settings"), project, params.getBasePackageName(),params.isGenerateSecurityCode(), monitor);
 			
 		} catch (Throwable ioe) {
 			IStatus status = new Status(IStatus.ERROR, "NewFileWizard", IStatus.OK,
@@ -650,7 +652,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 	}
 
 	
-	private void addVariousSettings(IFolder settingsFolder, IProject project, String basePackageName, String controllerPackageName, IProgressMonitor monitor)
+	private void addVariousSettings(IFolder settingsFolder, IProject project, String basePackageName, String controllerPackageName,IProgressMonitor monitor)
 		throws Exception{
 		//TODO Add value substitution capability for setting values within settings files
 		InputStream jdtCorePref = this.getClass().getResourceAsStream(
@@ -690,12 +692,17 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 	}
 	
 	private void addBSBuilderSettings(IFolder settingsFolder, IProject project, 
-			String basePackageName, IProgressMonitor monitor)
+			String basePackageName, boolean secureEnabled, IProgressMonitor monitor)
 			throws Exception{		
-		String props = "basePackage=" + basePackageName;
-        InputStream stream = new ByteArrayInputStream(props.getBytes());
+		//String props = "basePackage=" + basePackageName;
+		StringWriter properties = new StringWriter();
+		properties.append("basePackage=" + basePackageName);		
+		properties.append("\nsecureCodeEnabled=" + secureEnabled);
+		
+        InputStream stream = new ByteArrayInputStream(properties.toString().getBytes());
 		CommonUtils.addFileToProject(settingsFolder, new Path("org.bsbuilder.settings"),
 				stream, monitor);
+		
 	}
 	
 	/*
@@ -739,6 +746,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		private String securityPackageName;
 		private String securityUserDetailsServiceSourceCode;
 		private String securityUserDetailsSourceCode;
+		private boolean generateSecurityCode;
 		private String securityAspectCode;
 		private String securityEnumCode;
 		private String securityAnnotationCode;
@@ -933,6 +941,12 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		}
 		public void setJSPTemplate(boolean isJSPTemplate) {
 			this.isJSPTemplate = isJSPTemplate;
+		}
+		public boolean isGenerateSecurityCode() {
+			return generateSecurityCode;
+		}
+		public void setGenerateSecurityCode(boolean generateSecurityCode) {
+			this.generateSecurityCode = generateSecurityCode;
 		}	
 		
 		

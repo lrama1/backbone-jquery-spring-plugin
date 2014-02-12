@@ -3,6 +3,7 @@ package bsbuilder.wizards.backbone.actions;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,20 +45,37 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 	private BackboneProjectWizardPageFive pageFive;
 	private IWorkbench workbench;
 	private IStructuredSelection selection;
+	private Properties bsBuilderProperties = new Properties();
+	private Boolean generateSecurityCode;
 	
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		this.workbench = workbench;
 		this.selection = selection;
+		
+		Object firstElement = selection.getFirstElement();
+	    if (firstElement instanceof IAdaptable)
+        {
+            IProject project = (IProject)((IAdaptable)firstElement).getAdapter(IProject.class);
+            String basePath = project.getLocation().toOSString();
+			try {
+				bsBuilderProperties.load(new FileReader(new File(basePath + "/.settings/" + "org.bsbuilder.settings")));
+			} catch (Exception e) {
+				//man we really need to clean this up
+				e.printStackTrace();
+			} 
+		}
 	}
 	
 	@Override
 	public void addPages() {
-		pageThree = new BackboneProjectWizardPageThree("");
+		generateSecurityCode = Boolean.parseBoolean(bsBuilderProperties.getProperty("secureCodeEnabled"));
+		pageThree = new BackboneProjectWizardPageThree("");		
 		pageFour = new BackboneProjectWizardPageFour("");
 		pageFive = new BackboneProjectWizardPageFive("");
 		addPage(pageThree);
-		addPage(pageFour);
+		if(generateSecurityCode)
+			addPage(pageFour);
 		addPage(pageFive);
 	}
 
@@ -71,13 +89,9 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
         {
             IProject project = (IProject)((IAdaptable)firstElement).getAdapter(IProject.class);
             IContainer projectContainer = (IContainer) project;
-
             try {
-				Properties bsBuilderProperties = new Properties();
-				String basePath = project.getLocation().toOSString();
-				bsBuilderProperties.load(new FileReader(new File(basePath + "/.settings/" + "org.bsbuilder.settings")));
 				String projectName = project.getName();
-				String basePackageName = bsBuilderProperties.getProperty("basePackage");
+				String basePackageName = bsBuilderProperties.getProperty("basePackage");				
 				
 				//create Domain Class
 				createJavaDomainClass(projectContainer, basePackageName, pageThree.getDomainClassName());				
@@ -125,8 +139,12 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 			) throws Exception{
 		IFolder javaFolder = projectContainer.getFolder(new Path("src/main/java"));
 		String domainPackageName = basePackageName + ".web.domain";
-		final boolean xssSelected = pageFour.getXssCheckbox().getSelection();
-		final boolean csrfSelected = pageFour.getCsrfCheckbox().getSelection();
+		boolean xssSelected = false;
+		boolean csrfSelected = false;
+		if(generateSecurityCode){
+			xssSelected = pageFour.getXssCheckbox().getSelection();
+			csrfSelected = pageFour.getCsrfCheckbox().getSelection();
+		}
 		CommonUtils.createPackageAndClass(javaFolder, domainPackageName, className, pageThree.getClassSource(basePackageName, domainPackageName, xssSelected || csrfSelected), 
 				new NullProgressMonitor());
 	}
@@ -144,6 +162,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		Map<String, Object> mapOfValues = new HashMap<String, Object>();
 		mapOfValues.put("className", domainClassName);
 		mapOfValues.put("attrs", modelAttributes);
+		mapOfValues.put("templateType", pageFive.isJSPTemplate()?"JSP" : "HTML");
 		Path editPath;
 		Path listPath;
 		if(pageFive.isJSPTemplate()){

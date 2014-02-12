@@ -1,4 +1,6 @@
+#if(${templateType} == 'JSP')
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+#end
 
 <div class="row">
 	<div class="col-md-12" id="operationMessage"></div>

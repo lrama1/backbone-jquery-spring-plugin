@@ -1,4 +1,6 @@
+#if(${templateType} == 'JSP')
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+#end
 
 <div>
 	<!--div id="listContainer" class="backgrid-container">none</div--> 
