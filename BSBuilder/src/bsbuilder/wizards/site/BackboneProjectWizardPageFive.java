@@ -6,6 +6,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.layout.GridData;
 
 
 public class BackboneProjectWizardPageFive extends WizardPage {
@@ -18,6 +20,8 @@ public class BackboneProjectWizardPageFive extends WizardPage {
 
 	Button btnRadioButton;
 	Button btnRadioButton_1;
+	private Group grpTemplateOptions;
+	private Button btnInjectLocalizedMessages;
 	
 	@Override
 	public void createControl(Composite parent) {
@@ -32,13 +36,32 @@ public class BackboneProjectWizardPageFive extends WizardPage {
 		new Label(container, SWT.NONE);
 		new Label(container, SWT.NONE);
 		
-		btnRadioButton = new Button(container, SWT.RADIO);
+		grpTemplateOptions = new Group(container, SWT.NONE);
+		GridData gd_grpTemplateOptions = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_grpTemplateOptions.widthHint = 337;
+		gd_grpTemplateOptions.heightHint = 89;
+		grpTemplateOptions.setLayoutData(gd_grpTemplateOptions);
+		grpTemplateOptions.setText("Template Options");
+		
+		btnRadioButton = new Button(grpTemplateOptions, SWT.RADIO);
+		btnRadioButton.setBounds(10, 30, 188, 24);
 		btnRadioButton.setText("Generate JSP Templates");
 		btnRadioButton.setSelection(true);
+		
+		btnRadioButton_1 = new Button(grpTemplateOptions, SWT.RADIO);
+		btnRadioButton_1.setBounds(10, 60, 239, 24);
+		btnRadioButton_1.setText("Generate Plain HTML Templates");
 		new Label(container, SWT.NONE);
 		
-		btnRadioButton_1 = new Button(container, SWT.RADIO);
-		btnRadioButton_1.setText("Generate Plain HTML Templates");
+		Group grpLocalization = new Group(container, SWT.NONE);
+		GridData gd_grpLocalization = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_grpLocalization.widthHint = 281;
+		grpLocalization.setLayoutData(gd_grpLocalization);
+		grpLocalization.setText("Localization");
+		
+		btnInjectLocalizedMessages = new Button(grpLocalization, SWT.CHECK);
+		btnInjectLocalizedMessages.setBounds(10, 29, 215, 24);
+		btnInjectLocalizedMessages.setText("Inject Localized Messages");
 		
 	}
 	
@@ -49,5 +72,9 @@ public class BackboneProjectWizardPageFive extends WizardPage {
 	public boolean isHTMLTemplate(){
 		return btnRadioButton_1.getSelection();
 	}
-
+	
+	public boolean injectLocalizedMessages(){
+		return btnInjectLocalizedMessages.getSelection();
+	}
+	
 }

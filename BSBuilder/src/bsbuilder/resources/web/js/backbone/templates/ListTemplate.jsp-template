@@ -2,7 +2,16 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 #end
 
-<div>
+<div class="row">
+	#foreach($key in $attrs.keySet() )
+		<div class="form-group col-md-3">
+			<label  for="$key">$key</label>
+			<input type="text" class="form-control"  id="$key" name='$key' value="{{=$key}}"/>
+		</div>
+	#end	
+</div>
+
+<div class="row">
 	<!--div id="listContainer" class="backgrid-container">none</div--> 
 	<div id="listContainer">none</div> 
 	<div><input type="button" class="btn btn-primary" id="edit${className}Button" value="Edit ${className}" /></div>

@@ -194,6 +194,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		
 		params.setSampleESAPIProperties(CommonUtils.linesToString(IOUtils.readLines(getClass().getResourceAsStream("/bsbuilder/resources/esapi/ESAPI.properties")),"\n"));
 		params.setJSPTemplate(pageFive.isJSPTemplate());
+		params.setInjectLocalizedMessages(pageFive.injectLocalizedMessages());
 		System.out.println("JSP?*******************************" + pageFive.isJSPTemplate());
 		System.out.println("HTML?*******************************" + pageFive.isHTMLTemplate());
 		
@@ -335,6 +336,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			mapOfValues.put("domainClassIdAttributeName", params.getDomainClassIdAttributeName());			
 			mapOfValues.put("domainPackageName", params.getDomainPackageName());
 			mapOfValues.put("templateType", params.isJSPTemplate()?"JSP" : "HTML");
+			mapOfValues.put("injectMessages", params.isInjectLocalizedMessages());
 			
 			mapOfValues.put("attrs", pageThree.getModelAttributes());
 			//CommonUtils.CommonUtils.addFileToProject(yourJsFolder, new Path("components.js"), 
@@ -758,7 +760,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		private String sampleMessageBundleContentEs;
 		private String sampleESAPIProperties;
 		private boolean isJSPTemplate = true;
-		
+		private boolean injectLocalizedMessages;
 		
 		public String getBasePackageName() {
 			return basePackageName;
@@ -947,6 +949,12 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		}
 		public void setGenerateSecurityCode(boolean generateSecurityCode) {
 			this.generateSecurityCode = generateSecurityCode;
+		}
+		public boolean isInjectLocalizedMessages() {
+			return injectLocalizedMessages;
+		}
+		public void setInjectLocalizedMessages(boolean injectLocalizedMessages) {
+			this.injectLocalizedMessages = injectLocalizedMessages;
 		}	
 		
 		

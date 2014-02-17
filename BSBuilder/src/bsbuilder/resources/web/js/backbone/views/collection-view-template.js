@@ -5,9 +5,9 @@ define([
   'backgrid',  
   'collections/${className}Collection',
   'globals/global',
-  'localizedmessages',
+  #if($injectMessages)'localizedmessages',#end
   #if($templateType == "JSP")'text!templates/${className}ListTemplate'#else 'text!templates/${className}ListTemplate.htm'#end /* the request for this template actually goes thru the MainController if its JSP*/
-], function($, _, Backbone, Backgrid, ${className}Collection, Global, Messages ,collectionTemplate){
+], function($, _, Backbone, Backgrid, ${className}Collection, Global, #if($injectMessages)Messages ,#end collectionTemplate){
 	
 	var ${className}CollectionView = Backbone.View.extend({
 		//standard backbone function called when a view is constructed
@@ -26,13 +26,13 @@ define([
 		    			},
 			    		{
 			    			name : "${key}",
-			    			label : Messages["${key.toUpperCase()}"],
+			    			#if($injectMessages)label : Messages["${key.toUpperCase()}"],#end
 			    			cell : "string"
 			    		}
 					#else
 						,{
 			    			name : "${key}",
-			    			label : Messages["${key.toUpperCase()}"],
+			    			#if($injectMessages)label : Messages["${key.toUpperCase()}"],#end
 			    			cell : "string"
 			    		}
 					#end
@@ -54,8 +54,17 @@ define([
 			});
 
 	        // Render the grid and attach the root to your HTML document
+			#set( $attrVar = "" )
+			#foreach($key in $attrs.keySet() )
+				#if($foreach.count == 1)
+					#set( $attrVar = $key + ':' + "''" )
+				#else
+					#set( $attrVar = $attrVar + ', ' + $key + ':' + "''" )
+				#end	
+			#end
+			
 	        #[[
-	        this.$el.html(_.template(collectionTemplate, ''));
+	        this.$el.html(_.template(collectionTemplate, ]]#  {$attrVar}  #[[));   
 	        $("#listContainer").html(grid.render().$el);
 	        $("#listContainer").append(paginator.render().$el);
 	        ]]#

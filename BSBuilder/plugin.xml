@@ -42,16 +42,22 @@
                label="BSBuilder"
                path="additions"
                id="Oleng2.menu1">
-            <separator
-                  name="group1">
-            </separator>
+            <separator name="group1"> </separator>
+            <separator name="group2"> </separator>
          </menu>
          <action
-               label="New Model"
+               label="Add New Model.."
                class="bsbuilder.wizards.backbone.actions.AddNewModelAction"
                menubarPath="Oleng2.menu1/group1"
                enablesFor="1"
                id="Oleng2.newAction">
+         </action>
+         <action
+               label="Add Third Party JS Lib"
+               class="bsbuilder.wizards.backbone.actions.AddNewJSLibAction"
+               menubarPath="Oleng2.menu1/group2"
+               enablesFor="1"
+               id="Oleng2.newJSLib">
          </action>
       </objectContribution>
    </extension>
