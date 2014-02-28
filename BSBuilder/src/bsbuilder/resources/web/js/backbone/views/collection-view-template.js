@@ -72,7 +72,8 @@ define([
 	        //this.collection.fetch({reset : true});
 	    },
 	    events : {
-	    	"click #edit${className}Button" : "edit${className}"
+	    	"click #edit${className}Button" : "edit${className}",
+	    	"click #filterButton" : "filter"
 	    },
 	    edit${className} : function(){
 	    	if(this.grid.getSelectedModels().length > 0){
@@ -98,7 +99,10 @@ define([
 			}else{
 				alert("Please select a ${className} to edit.");
 			}
-	    }	    
+	    },
+		filter : function(){
+			alert('filtering the list');
+		}	    
 	});
 
   return ${className}CollectionView;

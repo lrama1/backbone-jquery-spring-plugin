@@ -10,6 +10,11 @@
 		</div>
 	#end	
 </div>
+<div class="row">
+	<div class="col-md-12">
+		<input type="button" class="btn btn-primary" id="filterButton" value="filter"/>
+	</div>
+</div>
 
 <div class="row">
 	<!--div id="listContainer" class="backgrid-container">none</div--> 
