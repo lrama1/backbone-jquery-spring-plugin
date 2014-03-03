@@ -17,6 +17,16 @@ define([
 	    	    		format: 'mm-dd-yyyy',
 	    	    		setTime : 'true'
 	    	    	});
+	        	#end
+	        	
+	        	#if ($fieldTypes.get($key) == "DropDown")
+	        		var ${key}DropDown = this.$('#${key}');
+	        		${key}DropDown.append("<option value=''></option>");
+					$.getJSON( "${key.toLowerCase()}s", function( data ) {									
+						$.each( data, function( key, val ) {							
+							${key}DropDown.append("<option value='" + val.name + "'>" + val.value + "</option>");
+						});
+					});	
 	        	#end	
 	        #end
 	        this.model.on("invalid", function(model, error) {

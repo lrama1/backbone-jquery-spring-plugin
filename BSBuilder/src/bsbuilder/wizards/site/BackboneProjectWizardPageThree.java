@@ -46,6 +46,7 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 	private Text textSampleDomainClass;
 	private Table table;
 	private Map<String, Object> attrs = new LinkedHashMap<String, Object>();
+	private Map<String, Object> fieldTypes = new LinkedHashMap<String, Object>();
 
 	public BackboneProjectWizardPageThree(String pageName) {
 		super(pageName);
@@ -101,6 +102,10 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 		TableColumn tblclmnIdFlag = new TableColumn(table, SWT.NONE);
 		tblclmnIdFlag.setWidth(100);
 		tblclmnIdFlag.setText("Is Id?");
+		
+		TableColumn tblclmnFieldType = new TableColumn(table, SWT.NONE);
+		tblclmnFieldType.setWidth(100);
+		tblclmnFieldType.setText("Field Type");
 		
 		
 		/*
@@ -203,15 +208,16 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 		});
 		
 		
-		Button btnNewButton = new Button(container, SWT.NONE);
-		GridData gd_btnNewButton = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_btnNewButton.widthHint = 164;
-		btnNewButton.setLayoutData(gd_btnNewButton);
-		btnNewButton.addMouseListener(new MouseAdapter() {
+		Button btnNewRowButton = new Button(container, SWT.NONE);
+		GridData gd_btnNewRowButton = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_btnNewRowButton.widthHint = 164;
+		btnNewRowButton.setLayoutData(gd_btnNewRowButton);
+		btnNewRowButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				final TableItem tableItem = new TableItem(table, SWT.NONE);
 				
+				//======================COLUMN 1 (ATTR NAME)
 				tableItem.setText(0, "changeMe");
 				TableEditor column1Editor = new TableEditor(table);
 				column1Editor.horizontalAlignment = SWT.LEFT;
@@ -229,6 +235,7 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 				});							
 				column1Editor.setEditor(newEditor, tableItem, 0);
 				
+				//======================COLUMN 2 (Data Type Dropdown)
 				tableItem.setText(1, "String");
 				TableEditor column2Editor = new TableEditor(table);
 				column2Editor.horizontalAlignment = SWT.LEFT;
@@ -247,6 +254,7 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 				});
 			    column2Editor.setEditor(dataTypeCombo, tableItem, 1);
 			    
+			    //======================COLUMN 3 (ID INDICATOR)
 			    TableEditor column3Editor = new TableEditor(table);
 			    column3Editor.horizontalAlignment = SWT.LEFT;
 			    column3Editor.grabHorizontal = true;
@@ -267,15 +275,35 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 					}
 					
 					@Override
-					public void widgetDefaultSelected(SelectionEvent arg0) {
-						
+					public void widgetDefaultSelected(SelectionEvent arg0) {						
 					}
 				});
 			    column3Editor.setEditor(radioButtonEditor, tableItem, 2);
+			    
+			  //======================COLUMN 4 (Field Type Dropdown)
+				tableItem.setText(3, "TextField");
+				TableEditor column4Editor = new TableEditor(table);
+				column4Editor.horizontalAlignment = SWT.LEFT;
+				column4Editor.grabHorizontal = true;
+				column4Editor.minimumWidth = 50;
+				CCombo fieldTypeCombo = new CCombo(table, SWT.READ_ONLY);
+				fieldTypeCombo.setText("TextField");
+				fieldTypeCombo.add("TextField");
+				fieldTypeCombo.add("DropDown");		
+				fieldTypeCombo.add("TextArea");
+				fieldTypeCombo.addModifyListener(new ModifyListener() {
+					@Override
+					public void modifyText(ModifyEvent arg0) {
+						tableItem.setText(3, ((CCombo)arg0.getSource()).getText());
+					}
+				});
+				column4Editor.setEditor(fieldTypeCombo, tableItem, 3);
+			    
+			    
 			    validateAttrsPresence();
 			}
 		});
-		btnNewButton.setText("Add Row");
+		btnNewRowButton.setText("Add Row");
 		new Label(container, SWT.NONE);
 		new Label(container, SWT.NONE);
 		new Label(container, SWT.NONE);
@@ -355,6 +383,9 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 			else if(dataType.equals("Number"))
 				qualifiedType = "Integer";
 			attrs.put(tableItem.getText(0), qualifiedType);
+			
+			String fieldType = tableItem.getText(3);
+			fieldTypes.put(tableItem.getText(0), fieldType);
 		}
 		
 		Map<String, Object> mapOfValues = new HashMap<String, Object>();
@@ -377,26 +408,7 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 		}
 		return stringWriter.toString();
 	}
-	
-	/*public String getMainControllerSource(String controllerPackageName, String utilPackageName) throws Exception{				
-		Map<String, Object> valuesToPlug = new LinkedHashMap<String, Object>();
-		valuesToPlug.put("controllerPackageName", controllerPackageName);
-		valuesToPlug.put("utilPackageName", utilPackageName);
-		InputStream is = 
-				TemplateMerger.merge("/bsbuilder/resources/java/common-controller.java-template", valuesToPlug);		
-		BufferedReader br 	= new BufferedReader(new InputStreamReader(is));
-		String line = "";
-		StringWriter stringWriter = new StringWriter();
-		try{
-		while((line = br.readLine())!= null){
-			stringWriter.write(line + "\n");
-		}
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		return stringWriter.toString();
-	}*/
-	
+		
 	public String buildSourceCode(String basePackageName, String domainClassName, String domainClassIdAttributeName,
 			String templateName)
 	 throws Exception{
@@ -404,6 +416,8 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 		valuesToPlug.put("basePackageName", basePackageName);
 		valuesToPlug.put("domainClassName", domainClassName);
 		valuesToPlug.put("domainClassIdAttributeName", domainClassIdAttributeName);
+		valuesToPlug.put("attrs", this.getModelAttributes());
+		valuesToPlug.put("fieldTypes", this.getFieldTypes());
 		InputStream is = 
 				TemplateMerger.merge("/bsbuilder/resources/java/" + templateName, valuesToPlug);
 
@@ -465,7 +479,8 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 	}
 	
 	//getListWrapperSourceCode
-	public String getListWrapperSourceCode(String basePackageName, String commonPackageName,String domainClassName)
+	public String getListWrapperSourceCode(String basePackageName, 
+			String commonPackageName,String domainClassName)
 			 throws Exception{				
 		
 		Map<String, Object> valuesToPlug = new LinkedHashMap<String, Object>();
@@ -474,6 +489,31 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 		valuesToPlug.put("commonPackageName", commonPackageName);
 		InputStream is = 
 				TemplateMerger.merge("/bsbuilder/resources/java/listWrapper.java-template", valuesToPlug);
+
+		
+		BufferedReader br 	= new BufferedReader(new InputStreamReader(is));
+		String line = "";
+		StringWriter stringWriter = new StringWriter();
+		try{
+		while((line = br.readLine())!= null){
+			stringWriter.write(line + "\n");
+		}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return stringWriter.toString();
+	}
+	
+	public String getNameValueSourceCode(String basePackageName, 
+			String commonPackageName,String domainClassName)
+			 throws Exception{				
+		
+		Map<String, Object> valuesToPlug = new LinkedHashMap<String, Object>();
+		valuesToPlug.put("basePackageName", basePackageName);
+		valuesToPlug.put("domainClassName", domainClassName);
+		valuesToPlug.put("commonPackageName", commonPackageName);
+		InputStream is = 
+				TemplateMerger.merge("/bsbuilder/resources/java/name-value.java-template", valuesToPlug);
 
 		
 		BufferedReader br 	= new BufferedReader(new InputStreamReader(is));
@@ -557,6 +597,10 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 	
 	public Map<String, Object> getModelAttributes(){
 		return attrs;
+	}
+	
+	public Map<String, Object> getFieldTypes(){
+		return fieldTypes;
 	}
 	
 	public String getDomainClassAttributeName(){

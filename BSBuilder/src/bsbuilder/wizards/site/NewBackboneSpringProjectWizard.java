@@ -174,6 +174,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 				
 		params.setCommonPackageName(commonPackageName);
 		params.setListWrapperSourceCode(pageThree.getListWrapperSourceCode(basePackageName, commonPackageName, domainClassName));
+		params.setNameValuePairSourceCode(pageThree.getNameValueSourceCode(basePackageName, commonPackageName, domainClassName));
 		params.setSecurityPackageName(securityPackageName);
 		params.setSecurityUserDetailsServiceSourceCode(pageThree.getSecurityUserDetailsServiceSourceCode(securityPackageName));
 		params.setSecurityUserDetailsSourceCode(pageThree.getSecurityUserDetailsSourceCode(securityPackageName));
@@ -339,6 +340,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			mapOfValues.put("injectMessages", params.isInjectLocalizedMessages());
 			
 			mapOfValues.put("attrs", pageThree.getModelAttributes());
+			mapOfValues.put("fieldTypes", pageThree.getFieldTypes());
 			//CommonUtils.CommonUtils.addFileToProject(yourJsFolder, new Path("components.js"), 
 			//		TemplateMerger.merge("/bsbuilder/resources/web/js/components.js", mapOfValues), monitor);
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/models"), new Path(params.getDomainClassName()  + "Model.js"), 
@@ -451,6 +453,9 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			/* Add ListWrapper */
 			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getCommonPackageName(), "ListWrapper",
 					params.getListWrapperSourceCode() , monitor);
+			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getCommonPackageName(), "NameValuePair",
+					params.getNameValuePairSourceCode() , monitor);
+			
 			
 			/* Add Resource Bundle wrapper */
 			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getUtilPackageName(), "ExposedResourceBundleMessageSource",
@@ -745,6 +750,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		private String daoSourceCode;
 		private String commonPackageName;
 		private String listWrapperSourceCode;
+		private String nameValuePairSourceCode;
 		private String securityPackageName;
 		private String securityUserDetailsServiceSourceCode;
 		private String securityUserDetailsSourceCode;
@@ -955,9 +961,13 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		}
 		public void setInjectLocalizedMessages(boolean injectLocalizedMessages) {
 			this.injectLocalizedMessages = injectLocalizedMessages;
+		}
+		public String getNameValuePairSourceCode() {
+			return nameValuePairSourceCode;
+		}
+		public void setNameValuePairSourceCode(String nameValuePairSourceCode) {
+			this.nameValuePairSourceCode = nameValuePairSourceCode;
 		}	
-		
-		
 	}
 
 }

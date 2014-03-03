@@ -163,6 +163,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		mapOfValues.put("className", domainClassName);
 		mapOfValues.put("attrs", modelAttributes);
 		mapOfValues.put("templateType", pageFive.isJSPTemplate()?"JSP" : "HTML");
+		mapOfValues.put("fieldTypes", pageThree.getFieldTypes());
 		Path editPath;
 		Path listPath;
 		if(pageFive.isJSPTemplate()){
@@ -250,6 +251,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		mapOfValues.put("domainClassIdAttributeName", pageThree.getDomainClassAttributeName());
 		mapOfValues.put("attrs", pageThree.getModelAttributes());
 		mapOfValues.put("templateType", pageFive.isJSPTemplate()?"JSP" : "HTML");
+		mapOfValues.put("fieldTypes", pageThree.getFieldTypes());
 		CommonUtils.addFileToProject(viewsFolder, new Path(domainClassName + "EditView.js"), 
 				TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/views/view-template.js", mapOfValues), new NullProgressMonitor());
 	}

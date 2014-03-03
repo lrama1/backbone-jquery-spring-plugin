@@ -16,7 +16,11 @@ import ${basePackageName}.web.domain.$domainClassName;
 import ${basePackageName}.service.${domainClassName}Service;
 import ${basePackageName}.security.SampleUserDetails;
 import ${basePackageName}.common.ListWrapper;
+import ${basePackageName}.common.NameValuePair;
 import org.springframework.security.core.Authentication;
+
+import java.util.List;
+import java.util.ArrayList;
 
 @Controller
 public class ${domainClassName}Controller {	
@@ -57,4 +61,23 @@ public class ${domainClassName}Controller {
 		return ${domainClassName.substring(0,1).toLowerCase()}${domainClassName.substring(1)}Service.get${domainClassName}s(pageNumber, pageSize, sortByAttributeName, sortDirection);
 		
 	}	
+	
+	//=============
+	#foreach($key in $attrs.keySet() )		
+		#if ($fieldTypes.get($key) == "DropDown")
+		
+			@RequestMapping("/${key.toLowerCase()}s")
+			public @ResponseBody List<NameValuePair> get$key.substring(0,1).toUpperCase()$key.substring(1)s(){
+				List<NameValuePair> pairs = new ArrayList<NameValuePair>();
+				NameValuePair nvPair1 = new NameValuePair("sample1", "Sample 1");
+				pairs.add(nvPair1);
+				
+				NameValuePair nvPair2 = new NameValuePair("sample2", "Sample 2");
+				pairs.add(nvPair2);
+			
+				return pairs;
+			}
+		
+		#end
+	#end
 }
