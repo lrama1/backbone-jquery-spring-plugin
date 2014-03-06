@@ -101,7 +101,17 @@ define([
 			}
 	    },
 		filter : function(){
+			#set( $attrSelectors = "" )
+			#foreach($key2 in $attrs.keySet() )
+				#if($foreach.count == 1)
+					#set( $attrSelectors = "'" + $key2 + "' + ':' + " + 'this.$("#' + ${key2} + '").val()' )
+				#else
+					#set( $attrSelectors = $attrSelectors + " + ';' + '" + $key2 + "' + ':' + " + 'this.$("#' + ${key2} + '").val()' )
+				#end	
+			#end
+			this.collection.queryParams.filter=$attrSelectors;
 			alert('filtering the list');
+			this.collection.fetch();
 		}	    
 	});
 
