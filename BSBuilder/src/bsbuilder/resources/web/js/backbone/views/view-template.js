@@ -9,8 +9,12 @@ define([
 	var ${className}EditView = Backbone.View.extend({
 		defaults : {model : {}},
 		//standard backbone function called when a view is constructed
-	    initialize: function(){    	
-	        this.render(this.$el, this.model);
+	    initialize: function(){    
+	    	#set( $dropDownCounter = 0 )
+	    	#set( $promiseExpr = "" )
+	    	#set( $promiseResultExpr = "" )
+	    	#set( $promiseAssignExpr = "" )
+	    	var view = this;
 	        #foreach($key in $attrs.keySet() )
 	        	#if ($attrs.get($key) == "java.util.Date")
 	        		$('#${key}').datepicker({
@@ -19,26 +23,35 @@ define([
 	    	    	});
 	        	#end
 	        	
-	        	#if ($fieldTypes.get($key) == "DropDown")
-	        		var ${key}DropDown = this.$('#${key}');
-	        		${key}DropDown.append("<option value=''></option>");
-					$.getJSON( "${key.toLowerCase()}s", function( data ) {									
-						$.each( data, function( key, val ) {							
-							${key}DropDown.append("<option value='" + val.name + "'>" + val.value + "</option>");
-						});
-					});	
+	        	#if ($fieldTypes.get($key) == "DropDown")	        		
+	        		var ${key}s = $.getJSON( "${key.toLowerCase()}s");
+	        		#if($dropDownCounter == 0)
+	        			#set($promiseExpr = ${key} + "s")
+	        			#set($promiseResultExpr = "result" + $dropDownCounter)	        			
+	        		#else
+	        			#set($promiseExpr = $promiseExpr + ", " + ${key} + "s")
+	        			#set($promiseResultExpr = $promiseResultExpr + ", result" + $dropDownCounter)
+	        		#end	
+	        		#set( $promiseAssignExpr = $promiseAssignExpr + "data." + ${key} + "s = result" + $dropDownCounter + "[0];" )
+	        		#set( $dropDownCounter = $dropDownCounter + 1 )
 	        	#end	
 	        #end
+	        
+	        $.when(${promiseExpr}).done(function($promiseResultExpr) {
+	        	var data = view.model.toJSON();
+	        	${promiseAssignExpr}
+				view.render(view.$el, data);	        	
+	        });
+	        
 	        this.model.on("invalid", function(model, error) {
 	        	  alert("Error: " + error);
 	        });
 	    },
-	    render: function(myEl, modelToRender){    	
+	    render: function(myEl, data){    	
 //			$.get("resources/templates/EditTemplate.htm", function(templateText){			
 //				 myEl.html( _.template(templateText, modelToRender.toJSON()) );
 //			});
-	    	myEl.html( _.template(editTemplate, modelToRender.toJSON()) );
-
+			myEl.html(_.template(editTemplate, data));
 	    },
 	    events: {
 	        "change input": "change",   //binding change of any input field to the change function below

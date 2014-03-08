@@ -12,8 +12,10 @@
 			#if ($fieldTypes.get($key) == "TextField")
 			<input type="text" class="form-control"  id="$key" name='$key' value="{{=$key}}"/>
 			#elseif ($fieldTypes.get($key) == "DropDown")
-			<select class="form-control"  id="$key" name='$key' value="{{=$key}}">
-			
+			<select class="form-control"  id="$key" name='$key'>
+			{{_.each(${key}s, function(${key}Object, index){ }}
+				<option  {{=(${key}Object.name==$key?"selected":"") }} value="{{=${key}Object.name}}">{{=${key}Object.value}}</option>
+			{{ }) }}
 			</select>
 			#elseif ($fieldTypes.get($key) == "TextArea")
 			<textarea rows="4" cols="60" class="form-control"  id="$key" name='$key'>{{=$key}}</textarea>

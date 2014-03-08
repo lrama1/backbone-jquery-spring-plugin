@@ -1,5 +1,6 @@
 /*This is the default css*/
 
 .form-control{
-	height : 25px
+	height : 25px;
+	padding : 0px 0px 0px 0px
 }
