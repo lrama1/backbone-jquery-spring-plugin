@@ -444,11 +444,11 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 						params.getSecuredDomainCode() , monitor);
 				CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getSecurityPackageName(), "SecurityTokenGenerator",
 						params.getSecurityTokenGeneratorCode() , monitor);
-			}
-			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getSecurityPackageName() + ".annotation", "EncodeType",
-					params.getSecurityEnumCode() , monitor);
-			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getSecurityPackageName() + ".annotation", "SecuredField",
-					params.getSecurityAnnotationCode() , monitor);
+				CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getSecurityPackageName() + ".annotation", "EncodeType",
+						params.getSecurityEnumCode() , monitor);
+				CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getSecurityPackageName() + ".annotation", "SecuredField",
+						params.getSecurityAnnotationCode() , monitor);
+			}			
 			
 			/* Add ListWrapper */
 			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getCommonPackageName(), "ListWrapper",

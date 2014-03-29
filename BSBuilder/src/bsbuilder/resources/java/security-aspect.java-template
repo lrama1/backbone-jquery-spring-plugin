@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Set;
+import java.io.StringWriter;
 
 import javax.annotation.PostConstruct;
 
@@ -132,6 +133,37 @@ public class SecurityAspect {
 			return ESAPI.encoder().encodeForJavaScript(valueToEncode);
 		}  
 		return valueToEncode;
+	}
+	
+	public String concatFields(StringWriter writer, Object objectToEncode) throws Exception{
+		//logger.info("Atttempting to process " + objectToEncode.getClass().getSimpleName());
+		if(objectToEncode != null && (objectToEncode.getClass() == String.class || objectToEncode.getClass() == Integer.class)){
+			writer.append(objectToEncode.toString());
+		}else if(objectToEncode != null && objectToEncode instanceof List){
+			//logger.info("Encountered a list/collection........................");			
+			List<Object> listToProcess = (List<Object>)objectToEncode;
+			for(Object object : listToProcess){
+					concatFields(writer, object);				
+			}
+		}else if(objectToEncode != null && objectToEncode.getClass().isArray()){
+			//logger.info("Encountered a list/collection........................");			
+			Object[] listToProcess = (Object[])objectToEncode;
+			for(Object object : listToProcess){
+					concatFields(writer, object);				
+			}
+		}
+		else if(objectToEncode != null && !(objectToEncode.getClass() == String.class)){			
+			Set<Field> fields = getFields(objectToEncode.getClass());
+			for(Field field : fields){	
+				Set<Method> getterMethods =  getMethods(objectToEncode.getClass(), withName(getGetterMethodName(field)), withModifier(Modifier.PUBLIC));
+				if(getterMethods.size() > 0){
+					//logger.info("Processing complex object: " + field.getName());
+					Method method = getterMethods.iterator().next();
+					concatFields(writer, method.invoke(objectToEncode));	
+				}
+			}
+		}
+		return writer.toString();
 	}
 	
 	private String getGetterMethodName(Field field){
