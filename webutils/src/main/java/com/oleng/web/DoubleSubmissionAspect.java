@@ -32,11 +32,13 @@ public class DoubleSubmissionAspect {
 	
 	Map<Integer, Date> mapOfSubmittedData = new HashMap<Integer, Date>();
 	
-	Logger logger = Logger.getLogger(this.getClass());
-	
+	Logger logger = Logger.getLogger(this.getClass());	
 	//60000 is 1 minute
-		private final long MAX_AGE = 60000;
-		private final long MAX_HASH_LIST_SIZE = 15;
+	private long DEFAULT_MAX_AGE = 60000;
+	private long DEFUALT_MAX_HASH_LIST_SIZE = 15;	
+	private long maxAge = 0;
+	private long maxHashListSize = 0;
+		
 	
 	@Pointcut("within(@org.springframework.stereotype.Controller *)")
     public void controllerBean() {}
@@ -51,13 +53,16 @@ public class DoubleSubmissionAspect {
 		}
 		String concatenatedString = writer.toString();
 		Integer hashCode = concatenatedString.hashCode();
-		if(mapOfSubmittedData.size() > MAX_HASH_LIST_SIZE){
+		if(maxAge  == 0){
+			maxAge = DEFAULT_MAX_AGE;
+		}
+		if(mapOfSubmittedData.size() > maxAge){
 			discardOldHashes();
 		}
 		Date existingHashAdded = mapOfSubmittedData.get(hashCode); 
 		if( existingHashAdded != null){
 			Long age = System.currentTimeMillis() - existingHashAdded.getTime();
-			if(age < MAX_AGE){
+			if(age < maxAge){
 				throw new RuntimeException("Double submission prevented. A similar submission was received before the threshold expired.");
 			}else{
 				mapOfSubmittedData.put(hashCode, new Date());
@@ -121,9 +126,12 @@ public class DoubleSubmissionAspect {
 		long currentTime = System.currentTimeMillis();
 		logger.info("Cleaning up hashes: " + mapOfSubmittedData.size());
 		List<Integer> keysOfHashesToEvict = new ArrayList<Integer>();
+		if(maxHashListSize == 0){
+			maxHashListSize = DEFUALT_MAX_HASH_LIST_SIZE;
+		}
 		for(Integer key : mapOfSubmittedData.keySet()){
 			long age = currentTime - mapOfSubmittedData.get(key).getTime();
-			if(age >= MAX_AGE){
+			if(age >= maxHashListSize){
 				logger.info("evicting " + age);								
 				keysOfHashesToEvict.add(key);
 			}
@@ -134,7 +142,23 @@ public class DoubleSubmissionAspect {
 		}		
 		logger.info("After cleaning up tokens: " + mapOfSubmittedData.size());
 	}
-	
+		
+	public long getMaxAge() {
+		return maxAge;
+	}
+
+	public void setMaxAge(long maxAge) {
+		this.maxAge = maxAge;
+	}
+
+	public long getMaxHashListSize() {
+		return maxHashListSize;
+	}
+
+	public void setMaxHashListSize(long maxHashListSize) {
+		this.maxHashListSize = maxHashListSize;
+	}
+
 	public static void main(String[] args){
 		DoubleSubmissionAspect aspect = new DoubleSubmissionAspect();
 		class Owner{
