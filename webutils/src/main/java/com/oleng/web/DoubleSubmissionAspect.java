@@ -43,7 +43,11 @@ public class DoubleSubmissionAspect {
 	@Pointcut("within(@org.springframework.stereotype.Controller *)")
     public void controllerBean() {}
 	
-	@Before("execution(public * *(..)) && controllerBean()")
+	@Pointcut("within(@org.springframework.stereotype.Controller *)")
+    public void doubleSubmitProtected() {}
+	
+	//@Before("execution(public * *(..))&& execution(@com.oleng.web.DoubleSubmitProtect * *(..)) && controllerBean()")
+	@Before("execution(public * *(..))&& execution(@com.oleng.web.DoubleSubmitProtect * *(..))")
     public void decorateForSecurity(JoinPoint joinPoint) throws Throwable {
 		Object[] arguments = joinPoint.getArgs();
 		StringWriter writer = new StringWriter();
