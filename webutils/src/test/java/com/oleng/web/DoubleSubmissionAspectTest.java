@@ -9,6 +9,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+import org.olengski.web.DoubleSubmissionAspect;
 
 public class DoubleSubmissionAspectTest {
 
