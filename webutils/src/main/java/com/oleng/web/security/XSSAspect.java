@@ -28,7 +28,7 @@ import com.oleng.web.security.annotation.XSSProtect;
 public class XSSAspect {
 	Logger logger = Logger.getLogger(this.getClass());
 	
-	@Around("execution(@com.oleng.web.security.annotation.XSSProtect * *(..))")
+	@Around("execution(public * *(..)) && execution(@com.oleng.web.security.annotation.XSSProtect * *(..))")
     public Object decorateForSecurity(ProceedingJoinPoint joinPoint) throws Throwable {
 		Object[] arguments = joinPoint.getArgs();			
 		

@@ -17,11 +17,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.owasp.esapi.ESAPI;
 import org.springframework.stereotype.Component;
 
 
@@ -55,6 +58,7 @@ public class DoubleSubmissionAspect {
 			concatFields(writer, argument);
 		}
 		String concatenatedString = writer.toString();
+		logger.info(concatenatedString);
 		Integer hashCode = concatenatedString.hashCode();
 		if(maxAge  == 0){
 			maxAge = DEFAULT_MAX_AGE;
@@ -77,9 +81,10 @@ public class DoubleSubmissionAspect {
 	}
 	
 	public String concatFields(StringWriter writer, Object objectToEncode) throws Exception{
-		//logger.info("Atttempting to process " + objectToEncode.getClass().getSimpleName());
+		logger.info("Atttempting to process " + objectToEncode.getClass().getName());
 		if(objectToEncode != null && (isOfTypeWeCareAbout(objectToEncode))){
-			writer.append(objectToEncode.toString());
+			logger.info("Adding: " + objectToEncode.getClass().getName());
+			writer.append(ESAPI.encoder().canonicalize(objectToEncode.toString()));
 		}else if(objectToEncode != null && objectToEncode instanceof List){
 			//logger.info("Encountered a list/collection........................");			
 			List<Object> listToProcess = (List<Object>)objectToEncode;
@@ -114,7 +119,9 @@ public class DoubleSubmissionAspect {
 				object.getClass() == Double.class ||
 				object.getClass() == Short.class ||
 				object.getClass() == Byte.class ||
-				object.getClass() == Date.class;
+				object.getClass() == Date.class ||
+				object instanceof HttpSession
+				;
 	}
 	
 	private String getGetterMethodName(Field field){
