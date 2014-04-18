@@ -19,7 +19,7 @@ import ${basePackageName}.util.ExposedResourceBundleMessageSource;
 
 @Controller
 public class MainController {
-	Logger logger = Logger.getLogger(this.getClass());
+	private Logger logger = Logger.getLogger(this.getClass());
 
 	@Autowired
 	protected ExposedResourceBundleMessageSource messageSource;
