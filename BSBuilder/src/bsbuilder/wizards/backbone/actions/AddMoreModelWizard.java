@@ -158,7 +158,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 	
 	private void createEditAndListTemplateFiles(IContainer projectContainer, String domainClassName,
 			Map<String, Object> modelAttributes) throws Exception{
-		IFolder templatesFolder = projectContainer.getFolder(new Path("src/main/webapp/WEB-INF/resources/templates"));
+		IFolder templatesFolder = projectContainer.getFolder(new Path("src/main/webapp/WEB-INF/resources/js/templates"));
 		Map<String, Object> mapOfValues = new HashMap<String, Object>();
 		mapOfValues.put("className", domainClassName);
 		mapOfValues.put("attrs", modelAttributes);

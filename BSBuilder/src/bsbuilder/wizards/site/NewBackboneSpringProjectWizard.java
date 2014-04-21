@@ -282,6 +282,10 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			createFolderStructures(container, monitor);			
 			
 			//add 3rd party JS libs
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources"), new Path("r.js"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/r.js"), monitor);
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("localizedmessages.js"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/localizedmessages.js"), monitor);
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backbone.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backbone.js"), monitor);
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("ejs_fulljslint.js"), 
@@ -356,6 +360,9 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js"), new Path("main.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/main/main-template.js", mapOfValues), monitor);
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources"), new Path("buildconfig.js"), 
+					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/main/buildconfig-template.js", mapOfValues), monitor);
+			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js"), new Path("app.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/main/app-template.js", mapOfValues), monitor);
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js"), new Path("router.js"), 
@@ -412,9 +419,9 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 				listTemplatePath = new Path(params.getDomainClassName() + "ListTemplate.htm");
 				editTemplatePath = new Path(params.getDomainClassName() + "EditTemplate.htm");
 			}	
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/templates"), editTemplatePath, 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/templates"), editTemplatePath, 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/EditTemplate.jsp-template",  mapOfValues), monitor);
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/templates"), listTemplatePath, 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/templates"), listTemplatePath, 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/ListTemplate.jsp-template", mapOfValues), monitor);
 		
 			
@@ -606,10 +613,10 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		viewsFolder.create(false, true, new NullProgressMonitor());
 		folders.put("src/main/webapp/WEB-INF/resources/js/views", viewsFolder);
 		
-		//src/main/webapp/WEB-INF/resources/templates
-		IFolder templatesFolder = resourcesFolder.getFolder(new Path("templates"));
+		//src/main/webapp/WEB-INF/resources/js/templates
+		IFolder templatesFolder = jsFolder.getFolder(new Path("templates"));
 		templatesFolder.create(false, true, new NullProgressMonitor());
-		folders.put("src/main/webapp/WEB-INF/resources/templates", templatesFolder);
+		folders.put("src/main/webapp/WEB-INF/resources/js/templates", templatesFolder);
 	}
 	
 	

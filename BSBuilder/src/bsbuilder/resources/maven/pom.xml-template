@@ -339,8 +339,80 @@
       </plugin>
       
       <plugin>
+	    <groupId>org.olengski</groupId>
+	    <artifactId>requirejs-optimize-plugin</artifactId>
+	    <version>0.0.1-SNAPSHOT</version>
+	    <executions>
+	      <execution>
+	        <goals>
+	          <goal>optimize</goal>
+	        </goals>
+	      </execution>
+	    </executions>
+	    <configuration>
+	        <!-- optional path to a nodejs executable -->
+	        <!-- nodeExecutable>
+	            /usr/lib/nodejs/node
+	        </nodeExecutable-->
+	        <!-- path to optimizer json config file -->
+	        <configFile>
+	            ${basedir}/src/main/webapp/WEB-INF/resources/buildconfig.js
+	        </configFile>
+	        <!-- optional path to optimizer executable -->
+	        <optimizerFile>
+	            ${basedir}/src/main/webapp/WEB-INF/resources/r.js
+	        </optimizerFile>
+	        <!-- optional parameters to optimizer executable -->
+	         <optimizerParameters>
+	            <parameter>optimize=uglify</parameter>
+	            <parameter>baseUrl=${basedir}/src/main/webapp/WEB-INF/resources/js</parameter>
+	          </optimizerParameters>
+	        <!--
+	        Whether or not to process configFile with maven filters.
+	        If you use this option, some options in your configFile
+	        must resolve to absolute paths (see below)
+	        -->
+	        <filterConfig>
+	            true
+	        </filterConfig>
+	        <!-- Skip requirejs optimization if true -->
+	        <skip>
+	            false
+	        </skip>
+	    </configuration>
+	  </plugin>
+      <plugin>
         <artifactId>maven-war-plugin</artifactId>
       </plugin>      
     </plugins>
+    <pluginManagement>
+    	<plugins>
+    		<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+    		<plugin>
+    			<groupId>org.eclipse.m2e</groupId>
+    			<artifactId>lifecycle-mapping</artifactId>
+    			<version>1.0.0</version>
+    			<configuration>
+    				<lifecycleMappingMetadata>
+    					<pluginExecutions>
+    						<pluginExecution>
+    							<pluginExecutionFilter>
+    								<groupId>org.olengski</groupId>
+    								<artifactId>requirejs-optimize-plugin</artifactId>
+    								<versionRange>[0.0.1-SNAPSHOT,)</versionRange>
+    								<goals>
+    									<goal>optimize</goal>
+    								</goals>
+    							</pluginExecutionFilter>
+    							<action>
+    								<ignore></ignore>
+    							</action>
+    						</pluginExecution>
+    					</pluginExecutions>
+    				</lifecycleMappingMetadata>
+    			</configuration>
+    		</plugin>
+    	</plugins>
+    </pluginManagement>
   </build>
 </project>

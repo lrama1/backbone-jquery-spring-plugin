@@ -2,17 +2,17 @@
 // Their usage will become more apparent futher along in the tutorial.
 require.config({
   paths: {
-	jquery:     '/${projectName}/resources/js/libs/jquery',
-    underscore: '/${projectName}/resources/js/libs/underscore',
-    backbone:   '/${projectName}/resources/js/libs/backbone',
-    backgrid :         '/${projectName}/resources/js/libs/backgrid',
+	jquery:     'libs/jquery',
+    underscore: 'libs/underscore',
+    backbone:   'libs/backbone',
+    backgrid :         'libs/backgrid',
     localizedmessages : '/${projectName}/localizedmessages',
-    'backbone-pageable': '/${projectName}/resources/js/libs/backbone-pageable',
-    'backgrid-paginator': '/${projectName}/resources/js/libs/backgrid-paginator',
-    'bootstrap.min': '/${projectName}/resources/js/libs/bootstrap.min',
-    'bootstrap-datepicker': '/${projectName}/resources/js/libs/bootstrap-datepicker',
-    'backgrid-select-all' : '/${projectName}/resources/js/libs/backgrid-select-all',
-    templates:  '/${projectName}/resources/templates'	
+    'backbone-pageable': 'libs/backbone-pageable',
+    'backgrid-paginator': 'libs/backgrid-paginator',
+    'bootstrap.min': 'libs/bootstrap.min',
+    'bootstrap-datepicker': 'libs/bootstrap-datepicker',
+    'backgrid-select-all' : 'libs/backgrid-select-all',
+    templates:  'templates'	
   },
   shim: {
 	underscore: {
