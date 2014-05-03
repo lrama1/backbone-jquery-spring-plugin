@@ -27,8 +27,8 @@ public class CSRFInterceptor implements HandlerInterceptor {
 			CSRFValidateToken csrfValidateToken = handlerMethod.getMethod().getAnnotation(CSRFValidateToken.class);
 			if(csrfValidateToken != null){
 				logger.info("Checking for token.------------------");
-				if(request.getAttribute("VALID_TOKENS") != null){
-					List<String> validTokens = (List<String>) request.getAttribute("VALID_TOKENS");
+				if(request.getSession().getAttribute("VALID_TOKENS") != null){
+					List<String> validTokens = (List<String>) request.getSession().getAttribute("VALID_TOKENS");
 					boolean isTokenValid =  validTokens.contains(request.getHeader("CSRFToken"));
 					logger.info("Token is: " + isTokenValid);
 					return isTokenValid;
@@ -69,6 +69,7 @@ public class CSRFInterceptor implements HandlerInterceptor {
 		}
 		logger.info("Issuing token: " + randomToken);
 		tokens.add(randomToken);
+		httpSession.setAttribute("VALID_TOKENS", tokens);
 		return randomToken;
 	}
 
