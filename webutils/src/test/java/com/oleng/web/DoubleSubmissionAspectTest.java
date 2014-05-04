@@ -15,7 +15,7 @@ public class DoubleSubmissionAspectTest {
 
 	DoubleSubmissionAspect doubleSubmissionAspect = new DoubleSubmissionAspect();
 	
-	class Owner{
+	public class Owner{
 		private String name;
 		private String title;			
 		
@@ -38,7 +38,7 @@ public class DoubleSubmissionAspectTest {
 		}			
 	}
 	
-	class Account{
+	public class Account{
 		private Integer accountId;
 		private String accountName;
 		private String address;
@@ -111,7 +111,7 @@ public class DoubleSubmissionAspectTest {
 		try {
 			String concatVals = aspect.concatFields(new StringWriter(), account);
 			//System.out.println(concatVals);
-			assertEquals("bbxxmrolsSat Feb 01 11:30:30 EST 2014hey youyea youtestAxl Rama9900", concatVals);
+			assertEquals("Sat Feb 01 11:30:30 EST 2014bbxxolsmrAxl Rama9900hey youyea youtest", concatVals);
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
