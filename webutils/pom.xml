@@ -6,7 +6,12 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>WebUtil</name>
 	<description>Web Utilities for various web-related operations</description>
-
+	<licenses>
+		<license>
+			<name>The MIT License (MIT)</name>
+			<url>http://opensource.org/licenses/MIT</url>
+		</license>
+	</licenses>
 	<dependencies>
 		<dependency>
 			<groupId>commons-logging</groupId>
