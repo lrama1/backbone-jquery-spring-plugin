@@ -16,6 +16,13 @@
       <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
     </repository>
   </repositories>	
+  
+  <pluginRepositories>
+  	<pluginRepository>
+  		<id>sonatype-plugins-snapshot</id>
+  		<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+  	</pluginRepository>
+  </pluginRepositories>
 
   <dependencies>
     <dependency>
