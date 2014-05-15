@@ -366,7 +366,7 @@
 	    <configuration>
 	        <!-- optional path to a nodejs executable -->
 	        <!-- nodeExecutable>
-	            /usr/lib/nodejs/node
+	            c:/Program Files/nodejs/node.exe
 	        </nodeExecutable-->
 	        <!-- path to optimizer json config file -->
 	        <configFile>
@@ -393,6 +393,9 @@
 	        <skip>
 	            false
 	        </skip>
+	        <!--userDefinedTarget>
+	        	${basedir}/src/main/webapp/WEB-INF/resources/js
+	        </userDefinedTarget-->
 	    </configuration>
 	  </plugin>
       <plugin>
