@@ -394,7 +394,7 @@
 	            false
 	        </skip>
 	        <!--userDefinedTarget>
-	        	${basedir}/src/main/webapp/WEB-INF/resources/js
+	        	${artifactId}-${version}/WEB-INF
 	        </userDefinedTarget-->
 	    </configuration>
 	  </plugin>
