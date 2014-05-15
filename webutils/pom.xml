@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.olengski</groupId>
 	<artifactId>webutils</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>WebUtil</name>
 	<description>Web Utilities for various web-related operations</description>
 	<licenses>
@@ -12,6 +12,11 @@
 			<url>http://opensource.org/licenses/MIT</url>
 		</license>
 	</licenses>
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
 	<dependencies>
 		<dependency>
 			<groupId>commons-logging</groupId>

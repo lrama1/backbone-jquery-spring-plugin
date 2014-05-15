@@ -1,6 +1,15 @@
 
 Usages
 
+Before moving on, make sure to have this repo in your pom:
+<repositories>
+    <repository>
+      <id>sonatype-snapshots</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+    </repository>
+ </repositories>
+
+
 =======================================
 Double Submit
 
