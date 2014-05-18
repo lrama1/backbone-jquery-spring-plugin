@@ -11,5 +11,5 @@ import java.lang.annotation.Target;
 public @interface XSSProtect {
 	boolean csrfProtect() default false;
 	boolean xssProtect() default false;
-	public EncodeType encodeFor() default EncodeType.HTML;
+	public EncodeType encodeFor() default EncodeType.HTML_ATTRIBUTE;
 }

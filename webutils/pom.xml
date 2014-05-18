@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.olengski</groupId>
 	<artifactId>webutils</artifactId>
-	<version>1.0</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>WebUtil</name>
 	<description>Web Utilities for various web-related operations</description>
 	<licenses>
