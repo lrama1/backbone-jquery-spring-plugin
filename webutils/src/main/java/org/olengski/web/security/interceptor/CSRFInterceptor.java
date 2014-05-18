@@ -24,6 +24,11 @@ public class CSRFInterceptor implements HandlerInterceptor {
 			HttpServletResponse response, Object handler) throws Exception {		
 		if(handler instanceof HandlerMethod){
 			HandlerMethod handlerMethod = (HandlerMethod)handler;
+			CSRFAssignToken csrfAssignToken = handlerMethod.getMethod().getAnnotation(CSRFAssignToken.class);
+			if(csrfAssignToken != null){
+				response.addHeader("CSRFToken", getNewToken(request.getSession()));
+			}
+			
 			CSRFValidateToken csrfValidateToken = handlerMethod.getMethod().getAnnotation(CSRFValidateToken.class);
 			if(csrfValidateToken != null){
 				logger.info("Checking for token.------------------");
@@ -35,11 +40,6 @@ public class CSRFInterceptor implements HandlerInterceptor {
 				}else{
 					return false;
 				}
-			}
-			
-			CSRFAssignToken csrfAssignToken = handlerMethod.getMethod().getAnnotation(CSRFAssignToken.class);
-			if(csrfAssignToken != null){
-				response.addHeader("CSRFToken", getNewToken(request.getSession()));
 			}
 		}
 		return true;
@@ -55,7 +55,6 @@ public class CSRFInterceptor implements HandlerInterceptor {
 			HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
 		// TODO Auto-generated method stub
-
 	}
 	
 	private String getNewToken(HttpSession httpSession){

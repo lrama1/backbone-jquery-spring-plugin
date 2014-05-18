@@ -48,7 +48,7 @@ XSS Aspect
 	example: @XSSProtect(encodeFor = EncodeType.HTML_ATTRIBUTE)
 	
 ================================================
-CSRFHandlerIntercepto
+CSRFHandlerInterceptor
 1.  Add Dependency
      <dependency>
          <groupId>org.olengski</groupId>
@@ -59,5 +59,23 @@ CSRFHandlerIntercepto
 	<mvc:interceptors>          
         <bean class="org.olengski.web.security.interceptor.CSRFInterceptor"></bean>
 	</mvc:interceptors>
-3.  Annotate your controller method with @CSRFAssignToken (for methods that you want to generate the token, typically your GETs)
+3.  Annotate your controller method with @CSRFAssignToken (for methods that you want to generate the token, typically your GETs,
+	But you can also add this to your PUT and POST in combination of @CSRFValidateToken so that it issues a new token after data is saved)
 4.  Annotate your controller method with @CSRFValidateToken (for methods that you want to validate the token, typically your POSTs)
+5.  On your client code, add something like the following to send/receive tokens:
+
+		var tokens = [];	
+		$.ajaxSetup({
+		    beforeSend: function(xhr) {
+		      xhr.setRequestHeader("CSRFToken",tokens.shift());    	    	
+		    },
+		    complete: function(xhr) {
+		    	if(xhr.getResponseHeader("CSRFToken") != null){
+		        	console.log(xhr.getResponseHeader("CSRFToken"));
+		        	tokens.push(xhr.getResponseHeader("CSRFToken"));
+		        }
+		    }
+		});
+		
+		//NOTE: An alternative is to put the tokens in a meta attribute of the HEAD.  That is if
+				your application is not a Single-Page-App.
