@@ -3,9 +3,7 @@ package bsbuilder.wizards.backbone.actions;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
@@ -48,6 +46,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 	private Properties bsBuilderProperties = new Properties();
 	private Boolean generateSecurityCode;
 	
+	
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		this.workbench = workbench;
@@ -80,7 +79,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 	}
 
 	@Override
-	public boolean performFinish() {
+	public boolean performFinish(){
 		// TODO Auto-generated method stub
 		//CommonUtils.addFileToProject(container, path, contentStream, monitor)
 		
@@ -159,6 +158,10 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 	private void createEditAndListTemplateFiles(IContainer projectContainer, String domainClassName,
 			Map<String, Object> modelAttributes) throws Exception{
 		IFolder templatesFolder = projectContainer.getFolder(new Path("src/main/webapp/WEB-INF/resources/js/templates"));
+		if(!templatesFolder.exists()){
+			//try another location
+			templatesFolder = projectContainer.getFolder(new Path("src/main/webapp/WEB-INF/resources/templates"));
+		}
 		Map<String, Object> mapOfValues = new HashMap<String, Object>();
 		mapOfValues.put("className", domainClassName);
 		mapOfValues.put("attrs", modelAttributes);
@@ -172,14 +175,15 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		}else{
 			editPath = new Path(domainClassName + "EditTemplate.htm");
 			listPath = new Path(domainClassName + "ListTemplate.htm");
-		}
+		}	
 		
 		CommonUtils.addFileToProject(templatesFolder, editPath, 
 				TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/EditTemplate.jsp-template",
 						 mapOfValues ), new NullProgressMonitor());
+		
 		CommonUtils.addFileToProject(templatesFolder, listPath, 
 				TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/ListTemplate.jsp-template",
-						 mapOfValues), new NullProgressMonitor());
+						 mapOfValues), new NullProgressMonitor());		
 
 	}
 	
@@ -322,7 +326,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		String routeDefinitionStringToInsert = "\n," + "\"" + domainClassName.toLowerCase() + "/:id\" : " +
 				"\"get" + domainClassName + "\",\n" +
 				"\"" + domainClassName.toLowerCase() + "s\" : " + "\"get" + domainClassName + "List\"\n";
-		String routeDefinitionRegex = "routes\\s*:\\s*\\{[\\d\\w\\s\\\"\\/:,]*\\}";
+		String routeDefinitionRegex = "routes\\s*:\\s*\\{[\\*\\d\\w\\s\\\"\\/:,]*\\}";
 		modifiedFile = modifier(modifiedFile, routeDefinitionRegex,
 				routeDefinitionStringToInsert, "}");
 		
