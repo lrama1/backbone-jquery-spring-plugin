@@ -9,11 +9,19 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 
 public class BackboneProjectWizardPageTwo extends WizardPage {
 	private Text textBasePackage;
 	private Text textControllerPackage;
 	private Text textDomainPackage;
+	private Text textMongoHost;
+	private Text textMongoPort;
+	private Text textMongoDBName;
+	private Button btnUseMongodb;
 
 	protected BackboneProjectWizardPageTwo(String pageName) {
 		super(pageName);
@@ -64,6 +72,64 @@ public class BackboneProjectWizardPageTwo extends WizardPage {
 		textDomainPackage.setEditable(false);
 		textDomainPackage.setEnabled(false);
 		textDomainPackage.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		new Label(container, SWT.NONE);
+		new Label(container, SWT.NONE);
+		new Label(container, SWT.NONE);
+		
+		btnUseMongodb = new Button(container, SWT.CHECK);
+		btnUseMongodb.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseUp(MouseEvent e) {
+				if(btnUseMongodb.getSelection()){
+					textMongoHost.setEnabled(true);
+					textMongoPort.setEnabled(true);
+					textMongoDBName.setEnabled(true);
+				}else{
+					textMongoHost.setEnabled(false);
+					textMongoPort.setEnabled(false);
+					textMongoDBName.setEnabled(false);
+				}
+			}
+		});
+		btnUseMongodb.setText("Use MongoDB");
+		new Label(container, SWT.NONE);
+		
+		Group grpMongoDbParams = new Group(container, SWT.NONE);
+		GridData gd_grpMongoDbParams = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_grpMongoDbParams.widthHint = 411;
+		gd_grpMongoDbParams.heightHint = 133;
+		grpMongoDbParams.setLayoutData(gd_grpMongoDbParams);
+		grpMongoDbParams.setText("Mongo DB Params");
+		
+		Label lblNewLabel_2 = new Label(grpMongoDbParams, SWT.NONE);
+		lblNewLabel_2.setAlignment(SWT.RIGHT);
+		lblNewLabel_2.setBounds(23, 32, 102, 17);
+		lblNewLabel_2.setText("Host Name:");
+		
+		Label lblNewLabel_3 = new Label(grpMongoDbParams, SWT.NONE);
+		lblNewLabel_3.setAlignment(SWT.RIGHT);
+		lblNewLabel_3.setBounds(23, 76, 102, 17);
+		lblNewLabel_3.setText("Port:");
+		
+		Label lblDbName = new Label(grpMongoDbParams, SWT.NONE);
+		lblDbName.setAlignment(SWT.RIGHT);
+		lblDbName.setBounds(23, 120, 102, 17);
+		lblDbName.setText("DB Name:");
+		
+		textMongoHost = new Text(grpMongoDbParams, SWT.BORDER);
+		textMongoHost.setText("localhost");
+		textMongoHost.setEnabled(false);
+		textMongoHost.setBounds(131, 27, 246, 27);
+		
+		textMongoPort = new Text(grpMongoDbParams, SWT.BORDER);
+		textMongoPort.setText("27017");
+		textMongoPort.setEnabled(false);
+		textMongoPort.setBounds(132, 71, 102, 27);
+		
+		textMongoDBName = new Text(grpMongoDbParams, SWT.BORDER);
+		textMongoDBName.setText("localdb");
+		textMongoDBName.setEnabled(false);
+		textMongoDBName.setBounds(131, 115, 149, 27);
 		
 		//Validate on display
 		validatePackage(textBasePackage.getText());
@@ -97,6 +163,22 @@ public class BackboneProjectWizardPageTwo extends WizardPage {
 	
 	public String getDomainPackage(){
 		return textDomainPackage.getText();
+	}
+	
+	public boolean useMongoDB(){
+		return btnUseMongodb.getSelection();
+	}
+	
+	public String getMongoHostName(){
+		return textMongoHost.getText();
+	}
+	
+	public String getMongoPort(){
+		return textMongoPort.getText();
+	}
+	
+	public String getMongoDBName(){
+		return textMongoDBName.getText();
 	}
 
 }

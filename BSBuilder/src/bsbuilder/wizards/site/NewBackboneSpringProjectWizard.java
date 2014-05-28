@@ -199,6 +199,11 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		System.out.println("JSP?*******************************" + pageFive.isJSPTemplate());
 		System.out.println("HTML?*******************************" + pageFive.isHTMLTemplate());
 		
+		params.setUseMongoDB(pageTwo.useMongoDB());
+		params.setMongoHostName(pageTwo.getMongoHostName());
+		params.setMongoPort(pageTwo.getMongoPort());
+		params.setMongoDBName(pageTwo.getMongoDBName());
+		
 		/*
 		 * Just like the NewFileWizard, but this time with an operation object
 		 * that modifies workspaces.
@@ -338,13 +343,19 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			Map<String, Object> mapOfValues = new HashMap<String, Object>();
 			mapOfValues.put("className",  params.getDomainClassName());
 			mapOfValues.put("projectName", proj.getName());
-			mapOfValues.put("domainClassIdAttributeName", params.getDomainClassIdAttributeName());			
+			mapOfValues.put("domainClassIdAttributeName", params.getDomainClassIdAttributeName());	
+			mapOfValues.put("basePackageName", params.getBasePackageName());
 			mapOfValues.put("domainPackageName", params.getDomainPackageName());
 			mapOfValues.put("templateType", params.isJSPTemplate()?"JSP" : "HTML");
 			mapOfValues.put("injectMessages", params.isInjectLocalizedMessages());
 			
 			mapOfValues.put("attrs", pageThree.getModelAttributes());
 			mapOfValues.put("fieldTypes", pageThree.getFieldTypes());
+			mapOfValues.put("useMongo", params.isUseMongoDB());
+			mapOfValues.put("mongoHostName", params.getMongoHostName());
+			mapOfValues.put("mongoPort", params.getMongoPort());
+			mapOfValues.put("mongoDBName", params.getMongoDBName());
+			
 			//CommonUtils.CommonUtils.addFileToProject(yourJsFolder, new Path("components.js"), 
 			//		TemplateMerger.merge("/bsbuilder/resources/web/js/components.js", mapOfValues), monitor);
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/models"), new Path(params.getDomainClassName()  + "Model.js"), 
@@ -378,8 +389,13 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF"), new Path("yourdispatcher-servlet.xml"),
 					TemplateMerger.merge("/bsbuilder/resources/maven/yourdispatcher-servlet.xml-template", proj.getName(),params.getBasePackageName(),params.getControllerPackageName(), params.getUtilPackageName()), monitor);
 			/* Add Spring context files */
+			//CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/spring"), new Path("applicationContext.xml"),
+			//		TemplateMerger.merge("/bsbuilder/resources/maven/applicationContext.xml-template", proj.getName(),params.getBasePackageName(),params.getControllerPackageName(), params.getUtilPackageName()), monitor);			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/spring"), new Path("applicationContext.xml"),
-					TemplateMerger.merge("/bsbuilder/resources/maven/applicationContext.xml-template", proj.getName(),params.getBasePackageName(),params.getControllerPackageName(), params.getUtilPackageName()), monitor);			
+					TemplateMerger.merge("/bsbuilder/resources/maven/applicationContext.xml-template", mapOfValues), monitor);			
+			
+			
+			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/spring"), new Path("spring-security.xml"),
 					TemplateMerger.merge("/bsbuilder/resources/maven/spring-security.xml-template", proj.getName(),params.getBasePackageName(),params.getControllerPackageName(), params.getUtilPackageName()), monitor);
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/spring"), new Path("ehcache.xml"),
@@ -775,6 +791,11 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		private boolean isJSPTemplate = true;
 		private boolean injectLocalizedMessages;
 		
+		private boolean useMongoDB;
+		private String mongoHostName;
+		private String mongoPort;
+		private String mongoDBName;
+		
 		public String getBasePackageName() {
 			return basePackageName;
 		}
@@ -974,7 +995,32 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		}
 		public void setNameValuePairSourceCode(String nameValuePairSourceCode) {
 			this.nameValuePairSourceCode = nameValuePairSourceCode;
+		}
+		public boolean isUseMongoDB() {
+			return useMongoDB;
+		}
+		public void setUseMongoDB(boolean useMongoDB) {
+			this.useMongoDB = useMongoDB;
+		}
+		public String getMongoHostName() {
+			return mongoHostName;
+		}
+		public void setMongoHostName(String mongoHostName) {
+			this.mongoHostName = mongoHostName;
+		}
+		public String getMongoPort() {
+			return mongoPort;
+		}
+		public void setMongoPort(String mongoPort) {
+			this.mongoPort = mongoPort;
+		}
+		public String getMongoDBName() {
+			return mongoDBName;
+		}
+		public void setMongoDBName(String mongoDBName) {
+			this.mongoDBName = mongoDBName;
 		}	
+		
 	}
 
 }
