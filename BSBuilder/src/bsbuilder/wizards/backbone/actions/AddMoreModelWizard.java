@@ -144,7 +144,14 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 			xssSelected = pageFour.getXssCheckbox().getSelection();
 			csrfSelected = pageFour.getCsrfCheckbox().getSelection();
 		}
-		CommonUtils.createPackageAndClass(javaFolder, domainPackageName, className, pageThree.getClassSource(basePackageName, domainPackageName, xssSelected || csrfSelected), 
+		Map<String, Object> mapOfValues = new HashMap<String, Object>();
+		mapOfValues.put("domainClassName",  pageThree.getDomainClassName());
+		mapOfValues.put("domainPackageName", domainPackageName);
+		mapOfValues.put("domainClassIdAttributeName", pageThree.getDomainClassAttributeName());	
+		mapOfValues.put("basePackageName", basePackageName);
+		mapOfValues.put("secured", xssSelected || csrfSelected);
+		mapOfValues.put("useMongo", bsBuilderProperties.getProperty("useMongo"));
+		CommonUtils.createPackageAndClass(javaFolder, domainPackageName, className, pageThree.getClassSource(mapOfValues), 
 				new NullProgressMonitor());
 	}
 	
@@ -193,8 +200,12 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		
 		final String controllerClassName = pageThree.getDomainClassName() + "Controller";
 		String controllerPackageName = basePackageName + ".controller";
-		final String controllerSourceCode = pageThree.buildSourceCode(basePackageName, pageThree.getDomainClassName(), 
-				pageThree.getDomainClassAttributeName(), "controller.java-template");
+		Map<String, Object> mapOfValues = new HashMap<String, Object>();
+		mapOfValues.put("domainClassName",  pageThree.getDomainClassName());
+		mapOfValues.put("domainClassIdAttributeName", pageThree.getDomainClassAttributeName());	
+		mapOfValues.put("basePackageName", basePackageName);
+		
+		final String controllerSourceCode = pageThree.buildSourceCode(mapOfValues, "controller.java-template");
 		IFolder javaFolder = projectContainer.getFolder(new Path("src/main/java"));
 		CommonUtils.createPackageAndClass(javaFolder, controllerPackageName, controllerClassName, controllerSourceCode , new NullProgressMonitor());
 		
@@ -204,8 +215,11 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 	throws Exception{
 		final String serviceClassName = pageThree.getDomainClassName() + "Service";
 		String servicePackageName = basePackageName + ".service";
-		final String serviceSourceCode = pageThree.buildSourceCode(basePackageName, pageThree.getDomainClassName(), 
-				pageThree.getDomainClassAttributeName(), "service.java-template");
+		Map<String, Object> mapOfValues = new HashMap<String, Object>();
+		mapOfValues.put("domainClassName",  pageThree.getDomainClassName());
+		mapOfValues.put("domainClassIdAttributeName", pageThree.getDomainClassAttributeName());	
+		mapOfValues.put("basePackageName", basePackageName);
+		final String serviceSourceCode = pageThree.buildSourceCode(mapOfValues, "service.java-template");
 		IFolder javaFolder = projectContainer.getFolder(new Path("src/main/java"));
 		CommonUtils.createPackageAndClass(javaFolder, servicePackageName, serviceClassName, serviceSourceCode , new NullProgressMonitor());
 	}
@@ -214,7 +228,12 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 			throws Exception{
 		final String daoClassName = pageThree.getDomainClassName() + "DAO";
 		String daoPackageName = basePackageName + ".dao";
-		final String daoSourceCode = pageThree.buildSourceCode(basePackageName, pageThree.getDomainClassName(), pageThree.getDomainClassAttributeName(),
+		Map<String, Object> mapOfValues = new HashMap<String, Object>();
+		mapOfValues.put("domainClassName",  pageThree.getDomainClassName());
+		mapOfValues.put("domainClassIdAttributeName", pageThree.getDomainClassAttributeName());	
+		mapOfValues.put("basePackageName", basePackageName);
+		mapOfValues.put("useMongo", bsBuilderProperties.getProperty("useMongo"));
+		final String daoSourceCode = pageThree.buildSourceCode(mapOfValues,
 				"dao.java-template");
 		IFolder javaFolder = projectContainer.getFolder(new Path("src/main/java"));
 		CommonUtils.createPackageAndClass(javaFolder, daoPackageName, daoClassName, daoSourceCode , new NullProgressMonitor());

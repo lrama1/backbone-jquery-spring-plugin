@@ -8,7 +8,12 @@ import java.util.LinkedHashMap;
 
 import javax.annotation.PostConstruct;
 import org.springframework.stereotype.Repository;
-
+#if(${useMongo} == true)
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+#end
 //import the domain
 import ${basePackageName}.web.domain.$domainClassName;
 import ${basePackageName}.common.ListWrapper;
@@ -16,6 +21,10 @@ import ${basePackageName}.dao.${domainClassName}DAO;
 
 @Repository
 public class ${domainClassName}DAO {
+	#if(${useMongo} == true)
+	@Autowired
+	private MongoTemplate mongoTemplate;
+	#end
 
 	//private List<${domainClassName}> all${domainClassName} = new ArrayList<${domainClassName}>();
 	private Map<String, ${domainClassName}> allData = new LinkedHashMap<String, ${domainClassName}>();
@@ -46,21 +55,30 @@ public class ${domainClassName}DAO {
 	
 	public ListWrapper<${domainClassName}> get${domainClassName}s(int page, 
 			int pageSize, String sortByAttributeName, String sortDirection){
-			
+		
+		#if(${useMongo} == true)
+		Criteria criteria = new Criteria();
+		Query query = new Query(criteria).skip((page -1) * pageSize).limit(pageSize);
+		Long totalRows = mongoTemplate.count(query, ${domainClassName}.class);
+		List<${domainClassName}> partialPage  = mongoTemplate.find(query, ${domainClassName}.class);
+		int totalPages = roundUp(totalRows.intValue(), pageSize);
+		#else			
 		List<${domainClassName}> allDataList = new ArrayList<${domainClassName}>(allData.values());
 		List<${domainClassName}> partialPage = new ArrayList<${domainClassName}>();
 		int end = (page * pageSize);
 		int start = (end) - pageSize;
-		int totalPages = roundUp(allDataList.size(),  pageSize);
-		
-		if(end > allDataList.size())
+		int totalPages = roundUp(allDataList.size(), pageSize);
+
+		if (end > allDataList.size())
 			end = allDataList.size();
-		if(start < allDataList.size())
+		if (start < allDataList.size())
 			partialPage = allDataList.subList(start, end);
-				
+		Long totalRows = new Long(allDataList.size());
+		#end
+						
 		ListWrapper<${domainClassName}> listWrapper = new ListWrapper<${domainClassName}>();
 		listWrapper.setRows(partialPage);
-		listWrapper.setTotalRecords(allDataList.size());
+		listWrapper.setTotalRecords(totalRows.intValue());
 		listWrapper.setLastPage(totalPages);
 		return listWrapper;
 	}

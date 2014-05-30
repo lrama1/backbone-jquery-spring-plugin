@@ -1,14 +1,25 @@
 package $domainPackageName;
+#if(${useMongo} == true)
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "${className.toLowerCase()}s")
+#end
 public class $className 
 #if(${secured})
 	extends ${basePackageName}.security.SecuredDomain
 #end	
 {	
-	#foreach($key in $attrs.keySet() )
+	#foreach($key in $attrs.keySet() )		
 		#if($attrs.get($key) == 'java.util.Date')
+			#if(${useMongo} == true && ${domainClassIdAttributeName} == ${key})
+			@Id
+			#end
 			private Long $key;
 		#else
+			#if(${useMongo} == true && ${domainClassIdAttributeName} == ${key})
+			@Id
+			#end
 			private $attrs.get($key) $key;
 		#end	
 	#end

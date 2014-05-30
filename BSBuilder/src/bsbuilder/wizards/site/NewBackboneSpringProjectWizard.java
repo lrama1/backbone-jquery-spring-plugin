@@ -43,8 +43,8 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
-import bsbuilder.wizards.site.utils.CommonUtils;
 
+import bsbuilder.wizards.site.utils.CommonUtils;
 import bsbuilder.wizards.site.utils.TemplateMerger;
 
 public class NewBackboneSpringProjectWizard extends Wizard implements
@@ -141,8 +141,21 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		//final String utilPackageName = pageTwo.getBasePackageName() + ".util"; 
 		
 		final String domainClassName = pageThree.getDomainClassName();
-		final String domainClassSourceCode = pageThree.getClassSource(basePackageName, domainPackageName, xssSelected || csrfSelected);
 		final String domainClassIdAttributeName = pageThree.getDomainClassAttributeName();
+		
+		Map<String, Object> mapOfValues = new HashMap<String, Object>();
+		mapOfValues.put("domainPackageName", domainPackageName);
+		mapOfValues.put("domainClassName",  domainClassName);
+		mapOfValues.put("domainClassIdAttributeName", domainClassIdAttributeName);	
+		mapOfValues.put("basePackageName", basePackageName);
+		mapOfValues.put("secured", xssSelected || csrfSelected);		
+		mapOfValues.put("useMongo", pageTwo.useMongoDB());
+		mapOfValues.put("mongoHostName", pageTwo.getMongoHostName());
+		mapOfValues.put("mongoPort", pageTwo.getMongoPort());
+		mapOfValues.put("mongoDBName", pageTwo.getMongoDBName());
+		
+		final String domainClassSourceCode = pageThree.getClassSource(mapOfValues);
+		
 		final String controllerClassName = domainClassName + "Controller";
 		//final String mainControllerSourceCode = pageThree.getMainControllerSource(controllerPackageName, utilPackageName);
 		//final String domainControllerSourceCode = pageThree.getControllerSource(basePackageName, controllerPackageName, domainClassName, domainClassIdAttributeName);
@@ -153,6 +166,9 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		final String securityPackageName = pageTwo.getBasePackageName() + ".security";
 		
 		
+		
+		
+		
 		final SourceCodeGeneratorParameters params = new SourceCodeGeneratorParameters();
 		params.setBasePackageName(basePackageName);
 		params.setControllerPackageName(controllerPackageName);
@@ -161,16 +177,16 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		params.setDomainClassSourceCode(domainClassSourceCode);
 		params.setDomainClassIdAttributeName(domainClassIdAttributeName);
 		params.setControllerClassName(controllerClassName);
-		params.setMainControllerSourceCode(pageThree.buildSourceCode(basePackageName, domainClassName, domainClassIdAttributeName, "common-controller.java-template")); 
-		params.setDomainControllerSourceCode(pageThree.buildSourceCode(basePackageName, domainClassName, domainClassIdAttributeName, "controller.java-template"));
+		params.setMainControllerSourceCode(pageThree.buildSourceCode(mapOfValues, "common-controller.java-template")); 
+		params.setDomainControllerSourceCode(pageThree.buildSourceCode(mapOfValues, "controller.java-template"));
 		params.setControllerTestSourceCode(controllerTestSourceCode);
 		params.setServicePackageName(servicePackageName);
 		//params.setServiceSourceCode(pageThree.getSeviceSourceCode(basePackageName, servicePackageName, domainClassName, domainClassIdAttributeName));
-		params.setServiceSourceCode(pageThree.buildSourceCode(basePackageName, domainClassName, domainClassIdAttributeName, "service.java-template"));
+		params.setServiceSourceCode(pageThree.buildSourceCode(mapOfValues, "service.java-template"));
 		
 		params.setDaoPackageName(daoPackageName);
 		//params.setDaoSourceCode(pageThree.getDaoSourceCode(basePackageName, daoPackageName, domainClassName, domainClassIdAttributeName));
-		params.setDaoSourceCode(pageThree.buildSourceCode(basePackageName, domainClassName, domainClassIdAttributeName, "dao.java-template"));
+		params.setDaoSourceCode(pageThree.buildSourceCode(mapOfValues, "dao.java-template"));
 				
 		params.setCommonPackageName(commonPackageName);
 		params.setListWrapperSourceCode(pageThree.getListWrapperSourceCode(basePackageName, commonPackageName, domainClassName));
@@ -180,18 +196,18 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		params.setSecurityUserDetailsSourceCode(pageThree.getSecurityUserDetailsSourceCode(securityPackageName));
 		if(xssSelected || csrfSelected){
 			params.setGenerateSecurityCode(true);
-			params.setSecurityAspectCode(pageThree.buildSourceCode(basePackageName, domainClassName, "", "security-aspect.java-template"));
-			params.setSecuredDomainCode(pageThree.buildSourceCode(basePackageName, domainClassName, "", "security-domain.java-template"));
+			params.setSecurityAspectCode(pageThree.buildSourceCode(mapOfValues, "security-aspect.java-template"));
+			params.setSecuredDomainCode(pageThree.buildSourceCode(mapOfValues, "security-domain.java-template"));
 		}
-		params.setSecurityEnumCode(pageThree.buildSourceCode(basePackageName, domainClassName, domainClassIdAttributeName, "security-annotation-type.java-template"));
-		params.setSecurityAnnotationCode(pageThree.buildSourceCode(basePackageName, domainClassName, domainClassIdAttributeName, "security-field-annotation.java-template"));
-		params.setSecurityTokenGeneratorCode(pageThree.buildSourceCode(basePackageName, domainClassName, domainClassIdAttributeName, "security-token-generator.java-template"));
+		params.setSecurityEnumCode(pageThree.buildSourceCode(mapOfValues, "security-annotation-type.java-template"));
+		params.setSecurityAnnotationCode(pageThree.buildSourceCode(mapOfValues, "security-field-annotation.java-template"));
+		params.setSecurityTokenGeneratorCode(pageThree.buildSourceCode(mapOfValues, "security-token-generator.java-template"));
 		
 		params.setSampleMessageBundleContent(pageThree.getMessageBundleContent("", "", ""));
 		params.setSampleMessageBundleContentEs(pageThree.getMessageBundleContentEs("", "", ""));
 		params.setUtilPackageName(basePackageName + ".util");
 		//params.setResourceBundleUtilSourceCode(pageThree.getResourceBundleSourceCode(utilPackageName));
-		params.setResourceBundleUtilSourceCode(pageThree.buildSourceCode(basePackageName, domainClassName, domainClassIdAttributeName, "exposed-resource-bundle.java-template"));
+		params.setResourceBundleUtilSourceCode(pageThree.buildSourceCode(mapOfValues, "exposed-resource-bundle.java-template"));
 		
 		params.setSampleESAPIProperties(CommonUtils.linesToString(IOUtils.readLines(getClass().getResourceAsStream("/bsbuilder/resources/esapi/ESAPI.properties")),"\n"));
 		params.setJSPTemplate(pageFive.isJSPTemplate());
@@ -513,7 +529,8 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 					folders.get("src/test/java"), folders.get("src/main/resources"), folders.get("src/test/resources"), javaProject);
 			
 			//add bsbuilder-specific settings
-			addBSBuilderSettings(folders.get(".settings"), project, params.getBasePackageName(),params.isGenerateSecurityCode(), monitor);
+			addBSBuilderSettings(folders.get(".settings"), project, params.getBasePackageName(),params.isGenerateSecurityCode(),
+					params.isUseMongoDB() , monitor);
 			
 		} catch (Throwable ioe) {
 			IStatus status = new Status(IStatus.ERROR, "NewFileWizard", IStatus.OK,
@@ -722,12 +739,13 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 	}
 	
 	private void addBSBuilderSettings(IFolder settingsFolder, IProject project, 
-			String basePackageName, boolean secureEnabled, IProgressMonitor monitor)
+			String basePackageName, boolean secureEnabled, boolean useMongo,IProgressMonitor monitor)
 			throws Exception{		
 		//String props = "basePackage=" + basePackageName;
 		StringWriter properties = new StringWriter();
 		properties.append("basePackage=" + basePackageName);		
 		properties.append("\nsecureCodeEnabled=" + secureEnabled);
+		properties.append("\nuseMongo=" + useMongo);
 		
         InputStream stream = new ByteArrayInputStream(properties.toString().getBytes());
 		CommonUtils.addFileToProject(settingsFolder, new Path("org.bsbuilder.settings"),
