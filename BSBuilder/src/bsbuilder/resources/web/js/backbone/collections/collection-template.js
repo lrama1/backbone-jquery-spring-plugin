@@ -4,11 +4,11 @@ define([
   'underscore',
   'backbone',
   'backgrid',
-  'models/${className}Model'
-], function($, _, Backbone, backgrid ,${className}Model) {
-	var ${className}Collection = Backbone.PageableCollection.extend({
-        model: ${className}Model,
-        url : '/${projectName}/${className.toLowerCase()}s',
+  'models/${domainClassName}Model'
+], function($, _, Backbone, backgrid ,${domainClassName}Model) {
+	var ${domainClassName}Collection = Backbone.PageableCollection.extend({
+        model: ${domainClassName}Model,
+        url : '/${projectName}/${domainClassName.toLowerCase()}s',
         state: {
             pageSize: 10
         },
@@ -17,11 +17,11 @@ define([
   	    	//this.state.totalPages = "2";
   	    	this.state.lastPage = response.lastPage;
   	    	console.log("Last Page: " + this.state.lastPage);
-  	    	//return response.${className.substring(0,1).toLowerCase()}${className.substring(1)}s;
+  	    	//return response.${domainClassName.substring(0,1).toLowerCase()}${domainClassName.substring(1)}s;
   	    	return response.rows;
   	    },
   	    
         mode: "server"        
     });
-	return ${className}Collection;
+	return ${domainClassName}Collection;
 });

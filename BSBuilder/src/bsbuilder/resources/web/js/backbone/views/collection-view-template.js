@@ -3,13 +3,13 @@ define([
   'underscore',
   'backbone',
   'backgrid',  
-  'collections/${className}Collection',
+  'collections/${domainClassName}Collection',
   'globals/global',
   #if($injectMessages)'localizedmessages',#end
-  #if($templateType == "JSP")'text!templates/${className}ListTemplate'#else 'text!templates/${className}ListTemplate.htm'#end /* the request for this template actually goes thru the MainController if its JSP*/
-], function($, _, Backbone, Backgrid, ${className}Collection, Global, #if($injectMessages)Messages ,#end collectionTemplate){
+  #if($templateType == "JSP")'text!templates/${domainClassName}ListTemplate'#else 'text!templates/${domainClassName}ListTemplate.htm'#end /* the request for this template actually goes thru the MainController if its JSP*/
+], function($, _, Backbone, Backgrid, ${domainClassName}Collection, Global, #if($injectMessages)Messages ,#end collectionTemplate){
 	
-	var ${className}CollectionView = Backbone.View.extend({
+	var ${domainClassName}CollectionView = Backbone.View.extend({
 		//standard backbone function called when a view is constructed
 	    initialize: function(){    	
 	        this.render();	        
@@ -20,7 +20,7 @@ define([
 		    	#foreach($key in $attrs.keySet() )
 		    		#if($foreach.count == 1)
 		    			{
-		    			name : "${className.toLowerCase()}Selector",
+		    			name : "${domainClassName.toLowerCase()}Selector",
 		    			cell : "select-row",
 		    			headerCell: "select-all"
 		    			},
@@ -72,21 +72,21 @@ define([
 	        //this.collection.fetch({reset : true});
 	    },
 	    events : {
-	    	"click #edit${className}Button" : "edit${className}",
+	    	"click #edit${domainClassName}Button" : "edit${domainClassName}",
 	    	"click #filterButton" : "filter"
 	    },
-	    edit${className} : function(){
+	    edit${domainClassName} : function(){
 	    	if(this.grid.getSelectedModels().length > 0){
-				//location.hash = "${className.toLowerCase()}/" + this.grid.getSelectedModels()[0].get("${domainClassIdAttributeName}");
+				//location.hash = "${domainClassName.toLowerCase()}/" + this.grid.getSelectedModels()[0].get("${domainClassIdAttributeName}");
 				var idToFetch = this.grid.getSelectedModels()[0].get("${domainClassIdAttributeName}");
-				require(['views/${className}EditView', 'models/${className}Model'], 
-		    		function(${className}EditView, ${className}Model){
-				        var ${className.toLowerCase()}  = new ${className}Model({${domainClassIdAttributeName} : idToFetch});	
-						var result = ${className.toLowerCase()}.fetch({
+				require(['views/${domainClassName}EditView', 'models/${domainClassName}Model'], 
+		    		function(${domainClassName}EditView, ${domainClassName}Model){
+				        var ${domainClassName.toLowerCase()}  = new ${domainClassName}Model({${domainClassIdAttributeName} : idToFetch});	
+						var result = ${domainClassName.toLowerCase()}.fetch({
 							success : function(){
-								//render the view when ${className} is fetched successfully	
+								//render the view when ${domainClassName} is fetched successfully	
 								//Use this if you want to Edit in a Modal Dialog
-								Global.showView(new ${className}EditView({ el: $("#modalEditBody"), model : ${className.toLowerCase()} }));
+								Global.showView(new ${domainClassName}EditView({ el: $("#modalEditBody"), model : ${domainClassName.toLowerCase()} }));
 								$('#myModal').modal('show');
 							},
 							error : function(){
@@ -97,7 +97,7 @@ define([
 		    		});
 				
 			}else{
-				alert("Please select a ${className} to edit.");
+				alert("Please select a ${domainClassName} to edit.");
 			}
 	    },
 		filter : function(){
@@ -115,5 +115,5 @@ define([
 		}	    
 	});
 
-  return ${className}CollectionView;
+  return ${domainClassName}CollectionView;
 });

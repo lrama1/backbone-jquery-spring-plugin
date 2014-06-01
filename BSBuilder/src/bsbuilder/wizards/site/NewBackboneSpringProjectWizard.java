@@ -143,12 +143,21 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		final String domainClassName = pageThree.getDomainClassName();
 		final String domainClassIdAttributeName = pageThree.getDomainClassAttributeName();
 		
-		Map<String, Object> mapOfValues = new HashMap<String, Object>();
+		final Map<String, Object> mapOfValues = new HashMap<String, Object>();
+		mapOfValues.put("projectName", projectHandle.getName());
 		mapOfValues.put("domainPackageName", domainPackageName);
 		mapOfValues.put("domainClassName",  domainClassName);
 		mapOfValues.put("domainClassIdAttributeName", domainClassIdAttributeName);	
 		mapOfValues.put("basePackageName", basePackageName);
 		mapOfValues.put("secured", xssSelected || csrfSelected);		
+		mapOfValues.put("useMongo", pageTwo.useMongoDB());
+		mapOfValues.put("mongoHostName", pageTwo.getMongoHostName());
+		mapOfValues.put("mongoPort", pageTwo.getMongoPort());
+		mapOfValues.put("mongoDBName", pageTwo.getMongoDBName());					
+		mapOfValues.put("templateType", pageFive.isJSPTemplate()?"JSP" : "HTML");
+		mapOfValues.put("injectMessages", pageFive.injectLocalizedMessages());
+		mapOfValues.put("attrs", pageThree.getModelAttributes());
+		mapOfValues.put("fieldTypes", pageThree.getFieldTypes());
 		mapOfValues.put("useMongo", pageTwo.useMongoDB());
 		mapOfValues.put("mongoHostName", pageTwo.getMongoHostName());
 		mapOfValues.put("mongoPort", pageTwo.getMongoPort());
@@ -227,7 +236,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		WorkspaceModifyOperation op = new WorkspaceModifyOperation() {
 			protected void execute(IProgressMonitor monitor)
 					throws CoreException {
-				createProject(desc, projectHandle, params , monitor);
+				createProject(desc, projectHandle, params, mapOfValues , monitor);
 			}
 		};
 
@@ -273,7 +282,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 	 * @throws OperationCanceledException
 	 */
 	void createProject(IProjectDescription description, IProject proj, 
-			SourceCodeGeneratorParameters params,
+			SourceCodeGeneratorParameters params, Map<String, Object> mapOfValues,
 			IProgressMonitor monitor) throws CoreException,
 			OperationCanceledException {
 		try {
@@ -296,8 +305,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 
 			/* Add an pom file */
 			CommonUtils.addFileToProject(container, new Path("pom.xml"),
-					TemplateMerger.merge("/bsbuilder/resources/maven/pom.xml-template", proj.getName(),
-							params.getBasePackageName(), params.getControllerPackageName(), params.getUtilPackageName()), monitor);			
+					TemplateMerger.merge("/bsbuilder/resources/maven/pom.xml-template", mapOfValues), monitor);			
 
 			//call create folders here
 			createFolderStructures(container, monitor);			
@@ -356,42 +364,34 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js"), new Path("text.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/text.js"), monitor);
 						
-			Map<String, Object> mapOfValues = new HashMap<String, Object>();
-			mapOfValues.put("className",  params.getDomainClassName());
-			mapOfValues.put("projectName", proj.getName());
-			mapOfValues.put("domainClassIdAttributeName", params.getDomainClassIdAttributeName());	
-			mapOfValues.put("basePackageName", params.getBasePackageName());
-			mapOfValues.put("domainPackageName", params.getDomainPackageName());
-			mapOfValues.put("templateType", params.isJSPTemplate()?"JSP" : "HTML");
-			mapOfValues.put("injectMessages", params.isInjectLocalizedMessages());
 			
-			mapOfValues.put("attrs", pageThree.getModelAttributes());
-			mapOfValues.put("fieldTypes", pageThree.getFieldTypes());
-			mapOfValues.put("useMongo", params.isUseMongoDB());
-			mapOfValues.put("mongoHostName", params.getMongoHostName());
-			mapOfValues.put("mongoPort", params.getMongoPort());
-			mapOfValues.put("mongoDBName", params.getMongoDBName());
 			
 			//CommonUtils.CommonUtils.addFileToProject(yourJsFolder, new Path("components.js"), 
 			//		TemplateMerger.merge("/bsbuilder/resources/web/js/components.js", mapOfValues), monitor);
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/models"), new Path(params.getDomainClassName()  + "Model.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/models/model-template.js", mapOfValues), monitor);
+			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/collections"), new Path(params.getDomainClassName() + "Collection.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/collections/collection-template.js", mapOfValues), monitor);
+			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/views"), new Path(params.getDomainClassName() + "EditView.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/views/view-template.js", mapOfValues), monitor);
+			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/views"), new Path(params.getDomainClassName() + "CollectionView.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/views/collection-view-template.js", mapOfValues), monitor);
+			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/globals"), new Path("global.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/libs/global.js", mapOfValues), monitor);
 			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js"), new Path("main.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/main/main-template.js", mapOfValues), monitor);
+			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources"), new Path("buildconfig.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/main/buildconfig-template.js", mapOfValues), monitor);
 			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js"), new Path("app.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/main/app-template.js", mapOfValues), monitor);
+			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js"), new Path("router.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/routers/router-template.js", mapOfValues), monitor);
 			

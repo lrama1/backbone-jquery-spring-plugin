@@ -4,9 +4,9 @@ define([
   'backbone'
 ], function($, _, Backbone) {
   
-  var ${className}Model = Backbone.Model.extend({
+  var ${domainClassName}Model = Backbone.Model.extend({
 	  idAttribute : '${domainClassIdAttributeName}',	
-	  urlRoot : '/${projectName}/${className.toLowerCase()}',	  
+	  urlRoot : '/${projectName}/${domainClassName.toLowerCase()}',	  
 	  validate : function(attributes, options){
 		  //sample validation. uncomment if u want to use it
 		  //if(attributes.<ATTRBITE_NAME_HERE> == ''){				
@@ -26,6 +26,6 @@ define([
 	  }
   });
 
-  return ${className}Model;
+  return ${domainClassName}Model;
 
 });

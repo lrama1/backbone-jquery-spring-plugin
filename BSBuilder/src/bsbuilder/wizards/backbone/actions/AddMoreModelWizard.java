@@ -170,7 +170,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 			templatesFolder = projectContainer.getFolder(new Path("src/main/webapp/WEB-INF/resources/templates"));
 		}
 		Map<String, Object> mapOfValues = new HashMap<String, Object>();
-		mapOfValues.put("className", domainClassName);
+		mapOfValues.put("domainClassName", domainClassName);
 		mapOfValues.put("attrs", modelAttributes);
 		mapOfValues.put("templateType", pageFive.isJSPTemplate()?"JSP" : "HTML");
 		mapOfValues.put("fieldTypes", pageThree.getFieldTypes());
@@ -243,7 +243,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		IFolder modelsFolder = projectContainer.getFolder(new Path("src/main/webapp/WEB-INF/resources/js/models"));
 		String domainClassName = pageThree.getDomainClassName();
 		Map<String, Object> mapOfValues = new HashMap<String, Object>();
-		mapOfValues.put("className", domainClassName);
+		mapOfValues.put("domainClassName", domainClassName);
 		mapOfValues.put("projectName", projectName);
 		mapOfValues.put("domainClassIdAttributeName", pageThree.getDomainClassAttributeName());
 		mapOfValues.put("attrs", pageThree.getModelAttributes());
@@ -256,7 +256,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		IFolder collectionsFolder = projectContainer.getFolder(new Path("src/main/webapp/WEB-INF/resources/js/collections"));
 		String domainClassName = pageThree.getDomainClassName();
 		Map<String, Object> mapOfValues = new HashMap<String, Object>();
-		mapOfValues.put("className", domainClassName);
+		mapOfValues.put("domainClassName", domainClassName);
 		mapOfValues.put("projectName", projectName);
 		mapOfValues.put("domainClassIdAttributeName", pageThree.getDomainClassAttributeName());
 		mapOfValues.put("attrs", pageThree.getModelAttributes());		
@@ -269,7 +269,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		IFolder viewsFolder = projectContainer.getFolder(new Path("src/main/webapp/WEB-INF/resources/js/views"));
 		String domainClassName = pageThree.getDomainClassName();
 		Map<String, Object> mapOfValues = new HashMap<String, Object>();
-		mapOfValues.put("className", domainClassName);
+		mapOfValues.put("domainClassName", domainClassName);
 		mapOfValues.put("projectName", projectName);
 		mapOfValues.put("domainClassIdAttributeName", pageThree.getDomainClassAttributeName());
 		mapOfValues.put("attrs", pageThree.getModelAttributes());
@@ -283,7 +283,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		IFolder viewsFolder = projectContainer.getFolder(new Path("src/main/webapp/WEB-INF/resources/js/views"));
 		String domainClassName = pageThree.getDomainClassName();
 		Map<String, Object> mapOfValues = new HashMap<String, Object>();		
-		mapOfValues.put("className", domainClassName);
+		mapOfValues.put("domainClassName", domainClassName);
 		mapOfValues.put("projectName", projectName);
 		mapOfValues.put("domainClassIdAttributeName", pageThree.getDomainClassAttributeName());
 		mapOfValues.put("attrs", pageThree.getModelAttributes());
@@ -299,7 +299,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		String regex = "<!-- MARKER FOR INSERTING -->";
 		String modifiedFile = FileUtils.readFileToString(file);
 		modifiedFile = modifier(modifiedFile, regex,
-				"<li><a href=\"#" + className.toLowerCase() + "s" + "\" data-toggle=\"tab\">" + className + "s" + "</a></li>\n", "");
+				"<li><a href=\"#" + className.toLowerCase() + "s" + "\" >" + className + "s" + "</a></li>\n", "");
 		
 		InputStream modifiedFileContent = new ByteArrayInputStream(modifiedFile.getBytes());
 		indexJSPFile.delete(true, new NullProgressMonitor());
@@ -312,7 +312,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		//int lineToInsertTo = getLineToInsertNewRoutesTo(routerFile);
 		String domainClassName = pageThree.getDomainClassName();
 		Map<String, Object> mapOfValues = new HashMap<String, Object>();
-		mapOfValues.put("className", domainClassName);
+		mapOfValues.put("domainClassName", domainClassName);
 		mapOfValues.put("projectName", projectName);
 		mapOfValues.put("domainClassIdAttributeName", pageThree.getDomainClassAttributeName());
 		mapOfValues.put("attrs", pageThree.getModelAttributes());

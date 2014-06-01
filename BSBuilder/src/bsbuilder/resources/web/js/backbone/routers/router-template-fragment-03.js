@@ -1,15 +1,15 @@
 		//FROM a Fragment
-		//handler for getting a ${className} record
-//	    app_router.on('route:get${className}', function (idToFetch) {
+		//handler for getting a ${domainClassName} record
+//	    app_router.on('route:get${domainClassName}', function (idToFetch) {
 //	        // Note the variable in the route definition being passed in here
-//	    	require(['views/${className}EditView', 'models/${className}Model'], 
-//	    		function(${className}EditView, ${className}Model){
-//			        var ${className.toLowerCase()}  = new ${className}Model({${domainClassIdAttributeName} : idToFetch});	
-//					var result = ${className.toLowerCase()}.fetch({
+//	    	require(['views/${domainClassName}EditView', 'models/${domainClassName}Model'], 
+//	    		function(${domainClassName}EditView, ${domainClassName}Model){
+//			        var ${domainClassName.toLowerCase()}  = new ${domainClassName}Model({${domainClassIdAttributeName} : idToFetch});	
+//					var result = ${domainClassName.toLowerCase()}.fetch({
 //						success : function(){
-//							//render the view when ${className} is fetched successfully	
+//							//render the view when ${domainClassName} is fetched successfully	
 //							//Use this if you want to Edit in the same page
-//							app_router.showView(new ${className}EditView({ el: $("#bodyContainer"), model : ${className.toLowerCase()} }));
+//							app_router.showView(new ${domainClassName}EditView({ el: $("#bodyContainer"), model : ${domainClassName.toLowerCase()} }));
 //						},
 //						error : function(){
 //							alert("problem");
@@ -19,17 +19,17 @@
 //	    		});
 //	    });
 	    
-	    app_router.on('route:get${className}List', function () {
-	    	console.log("getting the list of ${className}s.");
-	    	require(['collections/${className}Collection','views/${className}CollectionView'], 
-	    	    function(${className}Collection, ${className}CollectionView){
-	    			var collectionToFetch = new ${className}Collection();
+	    app_router.on('route:get${domainClassName}List', function () {
+	    	console.log("getting the list of ${domainClassName}s.");
+	    	require(['collections/${domainClassName}Collection','views/${domainClassName}CollectionView'], 
+	    	    function(${domainClassName}Collection, ${domainClassName}CollectionView){
+	    			var collectionToFetch = new ${domainClassName}Collection();
 	    			collectionToFetch.fetch({
 	    				success : function(collectionData){
-	    					Global.showView(new ${className}CollectionView({ el: $("#bodyContainer"), collection : collectionData}));
+	    					Global.showView(new ${domainClassName}CollectionView({ el: $("#bodyContainer"), collection : collectionData}));
 	    				},
 	    				error : function(){
-	    					alert("Failed to obtain data for ${className}Collection()");
+	    					alert("Failed to obtain data for ${domainClassName}Collection()");
 	    				}
 	    			});
 	    	        

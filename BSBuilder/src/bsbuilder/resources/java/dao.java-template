@@ -44,13 +44,14 @@ public class ${domainClassName}DAO {
 		#end
 	}
 	
-
 	public $domainClassName get$domainClassName(String id){
-		 System.out.println("Retrieving ${domainClassName} object with id: " + id);
-		 //$domainClassName  $domainClassName.toLowerCase() = new  $domainClassName();
-		 // ${domainClassName.toLowerCase()}.populateWithSample();
-		 //return $domainClassName.toLowerCase();
-		 return allData.get(id);
+		#if(${useMongo} == true)
+		Criteria criteria = new Criteria("${domainClassIdAttributeName}").is(id);
+		Query query = new Query(criteria);
+		return mongoTemplate.findOne(query, ${domainClassName}.class);
+		#else
+		return allData.get(id);
+		#end
 	}
 	
 	public ListWrapper<${domainClassName}> get${domainClassName}s(int page, 

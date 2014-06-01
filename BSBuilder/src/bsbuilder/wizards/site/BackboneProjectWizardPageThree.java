@@ -412,79 +412,10 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 		return stringWriter.toString();
 	}
 	
-	/*public String getClassSource(String basePackageName, String domainPackageName , boolean createSecured) throws Exception{
-		TableItem[] tableItems = table.getItems();
-				
-		for(TableItem tableItem : tableItems){
-			String dataType = tableItem.getText(1);
-			String qualifiedType = "";
-			if(dataType.equals("String"))
-				qualifiedType = "String";
-			else if(dataType.equals("Date"))
-				qualifiedType = "java.util.Date";
-			else if(dataType.equals("Number"))
-				qualifiedType = "Integer";
-			attrs.put(tableItem.getText(0), qualifiedType);
-			
-			String fieldType = tableItem.getText(3);
-			fieldTypes.put(tableItem.getText(0), fieldType);
-		}
-		
-		Map<String, Object> mapOfValues = new HashMap<String, Object>();
-		mapOfValues.put("basePackageName", basePackageName);
-		mapOfValues.put("domainPackageName", domainPackageName);
-		mapOfValues.put("secured", createSecured);
-		mapOfValues.put("className", textSampleDomainClass.getText());
-		mapOfValues.put("attrs", attrs);
-		InputStream is = 
-				TemplateMerger.merge("/bsbuilder/resources/java/class.java-template", mapOfValues);
-		BufferedReader br 	= new BufferedReader(new InputStreamReader(is));
-		String line = "";
-		StringWriter stringWriter = new StringWriter();
-		try{
-		while((line = br.readLine())!= null){
-			stringWriter.write(line + "\n");
-		}
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		return stringWriter.toString();
-	}*/
-		
-	/*public String buildSourceCode(String basePackageName, String domainClassName, String domainClassIdAttributeName,
-			String templateName)
-	 throws Exception{
-		Map<String, Object> valuesToPlug = new LinkedHashMap<String, Object>();
-		valuesToPlug.put("basePackageName", basePackageName);
-		valuesToPlug.put("domainClassName", domainClassName);
-		valuesToPlug.put("domainClassIdAttributeName", domainClassIdAttributeName);
-		valuesToPlug.put("attrs", this.getModelAttributes());
-		valuesToPlug.put("fieldTypes", this.getFieldTypes());
-		InputStream is = 
-				TemplateMerger.merge("/bsbuilder/resources/java/" + templateName, valuesToPlug);
-
-		
-		BufferedReader br 	= new BufferedReader(new InputStreamReader(is));
-		String line = "";
-		StringWriter stringWriter = new StringWriter();
-		try{
-		while((line = br.readLine())!= null){
-			stringWriter.write(line + "\n");
-		}
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		return stringWriter.toString();
-	}*/
-	
 	public String buildSourceCode(Map<String, Object> values,
 			String templateName)
 	 throws Exception{
 		Map<String, Object> valuesToPlug = new LinkedHashMap<String, Object>();
-		/*
-		valuesToPlug.put("basePackageName", basePackageName);
-		valuesToPlug.put("domainClassName", domainClassName);
-		valuesToPlug.put("domainClassIdAttributeName", domainClassIdAttributeName);*/
 		for (String key : values.keySet()) {
 			valuesToPlug.put(key, values.get(key));
 		}

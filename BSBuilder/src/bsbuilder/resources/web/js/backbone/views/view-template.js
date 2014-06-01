@@ -2,11 +2,11 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  #if($templateType == "JSP")'text!templates/${className}EditTemplate'#else 'text!templates/${className}EditTemplate.htm'#end, /* the request for this template actually goes thru the MainController*/
+  #if($templateType == "JSP")'text!templates/${domainClassName}EditTemplate'#else 'text!templates/${domainClassName}EditTemplate.htm'#end, /* the request for this template actually goes thru the MainController*/
   'bootstrap-datepicker'
 ], function($, _, Backbone, editTemplate, datePicker){
 	
-	var ${className}EditView = Backbone.View.extend({
+	var ${domainClassName}EditView = Backbone.View.extend({
 		defaults : {model : {}},
 		//standard backbone function called when a view is constructed
 	    initialize: function(){    
@@ -55,10 +55,10 @@ define([
 	    },
 	    events: {
 	        "change input": "change",   //binding change of any input field to the change function below
-	        "click #save${className}": "save${className}",  //binding the saveButton of template using id attr as selector  
-	     	"click #saveNew${className}": "saveNew${className}"  //binding the saveNewButton of template using id attr as selector
+	        "click #save${domainClassName}": "save${domainClassName}",  //binding the saveButton of template using id attr as selector  
+	     	"click #saveNew${domainClassName}": "saveNew${domainClassName}"  //binding the saveNewButton of template using id attr as selector
 	    },
-	    save${className} : function(){
+	    save${domainClassName} : function(){
 	    	this.model.save(null,{
 	    		success : function(model, response, options){
 	    			#set( $attributeNameIterator =  $attrs.keySet().iterator())	    			
@@ -79,7 +79,7 @@ define([
 	    		#end
 	    	});
 	    },
-	    saveNew${className} : function(){
+	    saveNew${domainClassName} : function(){
 	    	this.model.set("${domainClassIdAttributeName}", null);
 	    	this.model.save(null,{
 	    		success : function(model, response, options){
@@ -111,5 +111,5 @@ define([
 	    
 	});
 
-  return ${className}EditView;
+  return ${domainClassName}EditView;
 });
