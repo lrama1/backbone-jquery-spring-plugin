@@ -15,6 +15,8 @@
 <link rel="stylesheet" href="/${projectName}/resources/js/libs/backgrid-select-all.css" />
 <link rel="stylesheet" href="/${projectName}/resources/css/site.css" />
 <script data-main="/${projectName}/resources/js/main" src="/${projectName}/resources/js/libs/require.js"></script>
+<!-- COMMENT the preceeding and UNCOMMENT the succeeding lines if you are ready to deploy to a server, just before building -->
+<!--script data-main="/${projectName}/optimized-resources/main" src="/${projectName}/resources/js/libs/require.js"></script-->
 </head>
 <body>
 	<div class="container">

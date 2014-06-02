@@ -32,7 +32,8 @@ public class MainController {
 	@RequestMapping("/resources/js/.templates/**")
 	public String getTemplate(HttpServletRequest request){
 		String  restOfURL= (String)request.getAttribute( HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE );
-		restOfURL = restOfURL.replaceFirst("\\.", "").replaceFirst("\\/js", "");
+		//restOfURL = restOfURL.replaceFirst("\\.", "").replaceFirst("\\/js", "");
+		restOfURL = restOfURL.replaceFirst("\\.", "");
 		String actualURL =  "/WEB-INF" + restOfURL + ".jsp";
 		return actualURL;
 	}
