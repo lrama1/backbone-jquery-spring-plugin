@@ -1,7 +1,8 @@
 package  ${basePackageName}.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.apache.log4j.Logger;
+import org.owasp.esapi.ESAPI;
+import org.owasp.esapi.Logger;
 import java.security.Principal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +26,7 @@ import java.util.ArrayList;
 @Controller
 public class ${domainClassName}Controller {	
 
-	private Logger logger = Logger.getLogger(this.getClass());
+	private Logger logger = ESAPI.getLogger(this.getClass());
 
 	@Autowired
 	${domainClassName}Service ${domainClassName.substring(0,1).toLowerCase()}${domainClassName.substring(1)}Service;
@@ -41,13 +42,13 @@ public class ${domainClassName}Controller {
 	
 	@RequestMapping(value = "/${domainClassName.toLowerCase()}", headers = {"accept=application/json"}, method = RequestMethod.POST)
 	public @ResponseBody ${domainClassName} saveNew${domainClassName}(@RequestBody ${domainClassName} ${domainClassName.substring(0,1).toLowerCase()}${domainClassName.substring(1)}){
-		logger.info(${domainClassName.substring(0,1).toLowerCase()}${domainClassName.substring(1)}.toString());
+		logger.info(Logger.EVENT_SUCCESS, ${domainClassName.substring(0,1).toLowerCase()}${domainClassName.substring(1)}.toString());
 		return ${domainClassName.substring(0,1).toLowerCase()}${domainClassName.substring(1)};
 	}
 	
 	@RequestMapping(value = "/${domainClassName.toLowerCase()}/{id}", headers = {"accept=application/json"}, method = RequestMethod.PUT)
 	public  @ResponseBody ${domainClassName}  update${domainClassName}(@RequestBody ${domainClassName} ${domainClassName.substring(0,1).toLowerCase()}${domainClassName.substring(1)}){
-		logger.info(${domainClassName.substring(0,1).toLowerCase()}${domainClassName.substring(1)}.toString());
+		logger.info(Logger.EVENT_SUCCESS, ${domainClassName.substring(0,1).toLowerCase()}${domainClassName.substring(1)}.toString());
 		return ${domainClassName.substring(0,1).toLowerCase()}${domainClassName.substring(1)};
 	}
 	

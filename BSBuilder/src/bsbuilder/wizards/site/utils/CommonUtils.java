@@ -60,7 +60,11 @@ public class CommonUtils {
 			StringWriter writer = new StringWriter();
 			IOUtils.copy(contentStream, writer);
 			contentStream = new ByteArrayInputStream(prettifyJS(writer.toString()).getBytes());
-		}			
+		}else if(path.toString().endsWith(".java")){
+			StringWriter writer = new StringWriter();
+			IOUtils.copy(contentStream, writer);
+			contentStream = new ByteArrayInputStream(prettifyJava(writer.toString()).getBytes());
+		}
 		
 		if (file.exists()) {
 			file.setContents(contentStream, true, true, monitor);
@@ -75,6 +79,26 @@ public class CommonUtils {
 			stringWriter.append(line + lineSeparator);
 		}
 		return stringWriter.toString();
+	}
+	
+	public static String prettifyJava(String source) {
+		org.eclipse.jdt.core.formatter.CodeFormatter formatter = getDefaultFormatter();
+		// format the source code, at this time always use LF as line separator
+		org.eclipse.jface.text.IDocument document = new org.eclipse.jface.text.Document(
+				source);
+		org.eclipse.text.edits.TextEdit textEdit = formatter
+				.format(org.eclipse.jdt.core.formatter.CodeFormatter.K_COMPILATION_UNIT,
+						source, 0, source.length(), 0, "\n"); //$NON-NLS-1$
+
+		if (textEdit != null) {
+			try {
+				textEdit.apply(document);
+				return document.get();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return source;
 	}
 	
 	public static String prettifyJS(String js){
@@ -92,6 +116,31 @@ public class CommonUtils {
 	        return js;
 	    }
 	    return doc.get();
-	}	
+	}
+	
+	@SuppressWarnings("unchecked")
+	private static org.eclipse.jdt.core.formatter.CodeFormatter getDefaultFormatter() {
+		org.eclipse.jdt.core.formatter.CodeFormatter sourceFormatter = null; 
+		
+		// Take default Eclipse formatting options
+		Map<Object, Object> options = org.eclipse.jdt.core.formatter.DefaultCodeFormatterConstants
+				.getEclipseDefaultSettings();
+
+		// Initialize the compiler settings
+		options.put(org.eclipse.jdt.core.JavaCore.COMPILER_COMPLIANCE,
+				org.eclipse.jdt.core.JavaCore.VERSION_1_5);
+		options
+				.put(
+						org.eclipse.jdt.core.JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM,
+						org.eclipse.jdt.core.JavaCore.VERSION_1_5);
+		options.put(org.eclipse.jdt.core.JavaCore.COMPILER_SOURCE,
+				org.eclipse.jdt.core.JavaCore.VERSION_1_5);
+
+		// Instantiate the default code formatter with the given options
+		sourceFormatter = org.eclipse.jdt.core.ToolFactory
+				.createCodeFormatter(options);
+		
+		return sourceFormatter;
+	}
 
 }

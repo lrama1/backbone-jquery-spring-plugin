@@ -34,6 +34,21 @@ define([
 	    });
 	});
 	
+	#if(${secured})
+	var tokens = [];	
+	$.ajaxSetup({
+	    beforeSend: function(xhr) {
+	      xhr.setRequestHeader("CSRFToken",tokens.shift());    	    	
+	    },
+	    complete: function(xhr) {
+	    	if(xhr.getResponseHeader("CSRFToken") != null){
+	        	console.log(xhr.getResponseHeader("CSRFToken"));
+	        	tokens.push(xhr.getResponseHeader("CSRFToken"));
+	        }
+	    }
+	});
+	#end
+	
 	var initialize = function(){		
 		
      	// Initiate the router

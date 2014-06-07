@@ -5,10 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "${className.toLowerCase()}s")
 #end
-public class $className 
-#if(${secured})
-	extends ${basePackageName}.security.SecuredDomain
-#end	
+public class $className 	
 {	
 	#foreach($key in $attrs.keySet() )		
 		#if($attrs.get($key) == 'java.util.Date')

@@ -149,6 +149,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		mapOfValues.put("domainClassName",  domainClassName);
 		mapOfValues.put("domainClassIdAttributeName", domainClassIdAttributeName);	
 		mapOfValues.put("basePackageName", basePackageName);
+		mapOfValues.put("utilPackageName", basePackageName + ".util");
 		mapOfValues.put("secured", xssSelected || csrfSelected);		
 		mapOfValues.put("useMongo", pageTwo.useMongoDB());
 		mapOfValues.put("mongoHostName", pageTwo.getMongoHostName());
@@ -403,7 +404,8 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 					TemplateMerger.merge("/bsbuilder/resources/maven/web.xml-template", proj.getName(), params.getBasePackageName(), params.getControllerPackageName(), params.getUtilPackageName()), monitor);
 			/* Add Spring servlet dispathcer mapping file */
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF"), new Path("yourdispatcher-servlet.xml"),
-					TemplateMerger.merge("/bsbuilder/resources/maven/yourdispatcher-servlet.xml-template", proj.getName(),params.getBasePackageName(),params.getControllerPackageName(), params.getUtilPackageName()), monitor);
+					TemplateMerger.merge("/bsbuilder/resources/maven/yourdispatcher-servlet.xml-template", mapOfValues), monitor);
+			
 			/* Add Spring context files */
 			//CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/spring"), new Path("applicationContext.xml"),
 			//		TemplateMerger.merge("/bsbuilder/resources/maven/applicationContext.xml-template", proj.getName(),params.getBasePackageName(),params.getControllerPackageName(), params.getUtilPackageName()), monitor);			
@@ -476,7 +478,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 					params.getSecurityUserDetailsServiceSourceCode() , monitor);
 			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getSecurityPackageName(), "SampleUserDetails",
 					params.getSecurityUserDetailsSourceCode() , monitor);
-			if(params.getSecurityAspectCode() != null){
+			/*if(params.getSecurityAspectCode() != null){
 				CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getSecurityPackageName(), "SecurityAspect",
 					params.getSecurityAspectCode() , monitor);
 				CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getSecurityPackageName(), "SecuredDomain",
@@ -487,7 +489,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 						params.getSecurityEnumCode() , monitor);
 				CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getSecurityPackageName() + ".annotation", "SecuredField",
 						params.getSecurityAnnotationCode() , monitor);
-			}			
+			}*/			
 			
 			/* Add ListWrapper */
 			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getCommonPackageName(), "ListWrapper",

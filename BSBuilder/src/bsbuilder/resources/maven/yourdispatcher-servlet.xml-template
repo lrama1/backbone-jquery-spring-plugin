@@ -53,6 +53,9 @@
         <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
               <property name="paramName" value="lang"></property>
         </bean>
+        #if(${secured})
+        <bean class="org.olengski.web.security.interceptor.CSRFInterceptor"></bean>
+        #end
 	</mvc:interceptors>
 	<!-- END OF LOCALIZATION -->
 </beans>

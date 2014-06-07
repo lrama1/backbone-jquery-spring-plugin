@@ -37,6 +37,14 @@
 		<version>2.12.1</version>
 	</dependency>
 	<!-- end of Mongodb deps-->
+	
+	#if(${secured})
+    <dependency>
+	    <groupId>org.olengski</groupId>
+	    <artifactId>webutils</artifactId>
+	    <version>0.0.2-SNAPSHOT</version>
+    </dependency>
+    #end
   
     <dependency>
       <groupId>javax.servlet</groupId>
