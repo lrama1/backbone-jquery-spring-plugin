@@ -19,6 +19,11 @@ import ${basePackageName}.web.domain.$domainClassName;
 import ${basePackageName}.common.ListWrapper;
 import ${basePackageName}.dao.${domainClassName}DAO;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+
 @Repository
 public class ${domainClassName}DAO {
 	#if(${useMongo} == true)
@@ -33,14 +38,29 @@ public class ${domainClassName}DAO {
 
 	@PostConstruct
 	public void init(){
-		#set($start = 0)
-		#set($end = 13)
-		#set($range = [$start..$end])
-		#foreach($i in $range)
-		   	${domainClassName} ${domainClassName.toLowerCase()}${i} = new ${domainClassName}();		
-			${domainClassName.toLowerCase()}${i}.populateWithSample();			
-			allData.put(${domainClassName.toLowerCase()}${i}.$idGetter, ${domainClassName.toLowerCase()}${i});
-			
+		
+		#if(${useMongo} == false)
+		InputStream is = getClass().getResourceAsStream(
+				"/sampledata/${domainClassName}s.txt");
+		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+		String line = "";
+		try {
+			while ((line = reader.readLine()) != null) {
+				String data[] = line.split(",");
+				${domainClassName} ${domainClassName.toLowerCase()} = new ${domainClassName}();
+				//person.setId(data[0]);
+				//person.setFirstName(data[1]);
+				//person.setLastName(data[2]);
+				#set($index = 0)
+				#foreach($key in $attrs.keySet() ) 
+					${domainClassName.toLowerCase()}.set${key.substring(0,1).toUpperCase()}${key.substring(1)}(data[$index]);
+					#set($index = $index + 1)
+				#end
+				allData.put(data[0], ${domainClassName.toLowerCase()});
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		#end
 	}
 	

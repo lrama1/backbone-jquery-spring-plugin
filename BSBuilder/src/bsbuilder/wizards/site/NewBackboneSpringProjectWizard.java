@@ -517,6 +517,11 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			CommonUtils.addFileToProject(container, new Path("readme.txt"),
 					TemplateMerger.merge("/bsbuilder/resources/other/readme.txt-template", proj.getName(),params.getBasePackageName(),params.getControllerPackageName(), params.getUtilPackageName()), monitor);
 	
+			/* Add Test Data in an external text file*/
+			StringWriter sampleDataStringWriter = new StringWriter();
+			IOUtils.copy(TemplateMerger.merge("/bsbuilder/resources/other/sampledata.txt-template", mapOfValues), sampleDataStringWriter);
+			CommonUtils.createPackageAndClass(folders.get("src/main/resources"), "sampledata", mapOfValues.get("domainClassName").toString() + "s.txt",
+					 sampleDataStringWriter.toString(), monitor);
 			
 			
 			//add junit for Controllers
