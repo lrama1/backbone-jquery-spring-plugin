@@ -142,5 +142,9 @@ public class CommonUtils {
 		
 		return sourceFormatter;
 	}
+	
+	public static String cleanSampleData(String sampleData){
+		return sampleData.replaceAll("\\t", "").replaceAll(" ", "");
+	}
 
 }

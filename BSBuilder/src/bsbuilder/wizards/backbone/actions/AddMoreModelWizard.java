@@ -91,12 +91,15 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
             try {
 				String projectName = project.getName();
 				String basePackageName = bsBuilderProperties.getProperty("basePackage");				
+				Map<String, Object> modelAttributes = pageThree.getModelAttributes();
 				
 				//create Domain Class
-				createJavaDomainClass(projectContainer, basePackageName, pageThree.getDomainClassName());				
+				createJavaDomainClass(projectContainer, basePackageName, pageThree.getDomainClassName());	
+				
+				//create SampleData
+				createSampleData(projectContainer, pageThree.getDomainClassName(), modelAttributes);
 								
-				//create Backbone Template files
-				Map<String, Object> modelAttributes = pageThree.getModelAttributes();
+				//create Backbone Template files				
 				createEditAndListTemplateFiles(projectContainer, pageThree.getDomainClassName(), modelAttributes);
 				
 				//createController
@@ -153,6 +156,20 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		mapOfValues.put("useMongo", bsBuilderProperties.getProperty("useMongo"));
 		CommonUtils.createPackageAndClass(javaFolder, domainPackageName, className, pageThree.getClassSource(mapOfValues), 
 				new NullProgressMonitor());
+	}
+	
+	private void createSampleData(IContainer projectContainer, String domainClassName,
+			Map<String, Object> modelAttributes) throws Exception{
+		/* Add Test Data in an external text file*/
+		Map<String, Object> mapOfValues = new HashMap<String, Object>();
+		StringWriter sampleDataStringWriter = new StringWriter();
+		mapOfValues.put("domainClassName", domainClassName);
+		mapOfValues.put("domainClassIdAttributeName", pageThree.getDomainClassAttributeName());
+		mapOfValues.put("attrs", modelAttributes);
+		IFolder sampleDataFolder = projectContainer.getFolder(new Path("src/main/resources"));
+		IOUtils.copy(TemplateMerger.merge("/bsbuilder/resources/other/sampledata.txt-template", mapOfValues), sampleDataStringWriter);
+		CommonUtils.createPackageAndClass(sampleDataFolder, "sampledata", mapOfValues.get("domainClassName").toString() + "s.txt",
+				CommonUtils.cleanSampleData(sampleDataStringWriter.toString()),new NullProgressMonitor());
 	}
 	
 	//NOT NEEDED

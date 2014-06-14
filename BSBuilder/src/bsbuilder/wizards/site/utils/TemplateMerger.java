@@ -11,6 +11,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
+import org.apache.velocity.app.event.EventCartridge;
+
+import bsbuilder.utils.BSBuilderVelocityEvent;
 
 
 public class TemplateMerger {
@@ -24,6 +27,11 @@ public class TemplateMerger {
 		Template template = loadTemplate(templateName);
 		VelocityContext context = new VelocityContext();
 
+		//add custom events handlers
+		EventCartridge ec = new EventCartridge();
+		ec.addEventHandler(new BSBuilderVelocityEvent());
+		ec.attachToContext(context);
+		
 		context.put("projectName", projectName);
 		context.put("basePackageName", basePackageName);
 		context.put("controllerPackageName", controllerPackageName);
@@ -58,6 +66,11 @@ public class TemplateMerger {
 		for (String key : valuesToPlug.keySet()) {
 			context.put(key, valuesToPlug.get(key));
 		}
+		
+		//add custom events handlers
+		EventCartridge ec = new EventCartridge();
+		ec.addEventHandler(new BSBuilderVelocityEvent());
+		ec.attachToContext(context);
 
 		StringWriter sw = new StringWriter();
 		template.merge(context, sw);
@@ -83,6 +96,8 @@ public class TemplateMerger {
 		properties.setProperty("class.resource.loader.class",
 						"org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
 
+		
+		
 		Velocity.init(properties);
 		template = Velocity.getTemplate(templateName);
 

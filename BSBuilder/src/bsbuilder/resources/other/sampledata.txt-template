@@ -13,6 +13,6 @@
    		#end##
    		#set($index = $index + 1)
    	#end##
-$line##
+${line.trim()}##
 
 #end

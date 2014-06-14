@@ -521,7 +521,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			StringWriter sampleDataStringWriter = new StringWriter();
 			IOUtils.copy(TemplateMerger.merge("/bsbuilder/resources/other/sampledata.txt-template", mapOfValues), sampleDataStringWriter);
 			CommonUtils.createPackageAndClass(folders.get("src/main/resources"), "sampledata", mapOfValues.get("domainClassName").toString() + "s.txt",
-					 sampleDataStringWriter.toString(), monitor);
+					 CommonUtils.cleanSampleData(sampleDataStringWriter.toString()), monitor);
 			
 			
 			//add junit for Controllers
