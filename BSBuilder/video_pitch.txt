@@ -1,15 +1,15 @@
-Problem:
+Recurring Web Application Development Problem:
 It takes too long to start up a Buildable Web Project
 which uses these various technologies:
-1.  Bootstrap (UI)
-2.  BackboneJS (UI)
+1.  Bootstrap (UI)     [show Bootstrap logo]
+2.  BackboneJS (UI)		[show BackBoneJS logo]
 3.  Maven (or some sort of build script)
-4.  Java + Spring (backend)
-	- security enabled
-	- annotation enabled
+4.  Java + Spring (backend)   [show Spring logo]
+	- security enabled and SiteMinder compatible
+	- annotation enabled, allowing Components, Controllers, Services, DAOs to be plain classes
 5.  Web Security
-	- CSRF immunity
-	- XSS immunity
+	- CSRF immunity done right with almost zero coding
+	- XSS immunity done right with almost zero coding
 
 So how many man hours do you think it takes to just simply start 
 the project codebase???
