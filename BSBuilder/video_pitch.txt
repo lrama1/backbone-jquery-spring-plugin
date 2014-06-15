@@ -8,11 +8,17 @@ which uses these various technologies:
 	- security enabled
 	- annotation enabled
 5.  Web Security
-	- CSRF immune
-	- XSS immune
+	- CSRF immunity
+	- XSS immunity
 
 So how many man hours do you think it takes to just simply start 
 the project codebase???
 Based on my experience, approximately 60-man hours or more...
 Maybe add another 20-man hours to make sure that code is
 safe from CSRF and XSS attacks..
+
+What if I tell you that all those can be done in 5-minutes instead of 60-80 man hours?
+And as a nice side effect, have a true starting point to make sure
+all your enterprise apps look and feel the same?
+
+Enter the BSBuilder plugin for Eclipse which I wrote as a hobby :)...
