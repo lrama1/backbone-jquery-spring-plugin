@@ -1,0 +1,18 @@
+Problem:
+It takes too long to start up a Buildable Web Project
+which uses these various technologies:
+1.  Bootstrap (UI)
+2.  BackboneJS (UI)
+3.  Maven (or some sort of build script)
+4.  Java + Spring (backend)
+	- security enabled
+	- annotation enabled
+5.  Web Security
+	- CSRF immune
+	- XSS immune
+
+So how many man hours do you think it takes to just simply start 
+the project codebase???
+Based on my experience, approximately 60-man hours or more...
+Maybe add another 20-man hours to make sure that code is
+safe from CSRF and XSS attacks..
