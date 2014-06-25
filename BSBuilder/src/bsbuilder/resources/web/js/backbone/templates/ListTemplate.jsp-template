@@ -2,30 +2,30 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 #end
 
-<div class="row">
-	<div class="panel panel-default">
-  		<div class="panel-heading">Filter</div>
-  		<div class="panel-body">
-  			<div class="col-md-12">
-				#foreach($key in $attrs.keySet() )
-				<div class="form-group row">
-					<label  for="$key">$key</label>
-					<input type="text" class="form-control"  id="$key" name='$key' value="{{=$key}}"/>
-				</div>
-				#end
-				<div class="form-group row centered-container">
-					<input type="button" class="btn btn-primary" id="filterButton" value="filter" />
-				</div>
-			</div>	
-		</div>
+
+<div class="panel panel-default">
+	<div class="panel-heading">Filter</div>
+	<div class="panel-body">
+		<div class="col-md-12">
+			#foreach($key in $attrs.keySet() )
+			<div class="form-group row">
+				<label  for="$key">$key</label>
+				<input type="text" class="form-control"  id="$key" name='$key' value="{{=$key}}"/>
+			</div>
+			#end
+			<div class="form-group row centered-container">
+				<input type="button" class="btn btn-primary" id="filterButton" value="filter" />
+			</div>
+		</div>	
 	</div>
 </div>
 
-<div class="row">
-	<!--div id="listContainer" class="backgrid-container">none</div--> 
-	<div id="listContainer">none</div> 
-	<div><input type="button" class="btn btn-primary" id="edit${domainClassName}Button" value="Edit ${domainClassName}" /></div>
-</div>
+
+
+<!--div id="listContainer" class="backgrid-container">none</div--> 
+<div id="listContainer">none</div> 
+<div><input type="button" class="btn btn-primary" id="edit${domainClassName}Button" value="Edit ${domainClassName}" /></div>
+
 
 <!-- Modal Dialog for Editing -->
 <div class="modal fade" id="myModal">
