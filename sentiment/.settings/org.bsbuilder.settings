@@ -1,0 +1,3 @@
+basePackage=com.sentiment
+secureCodeEnabled=false
+useMongo=false

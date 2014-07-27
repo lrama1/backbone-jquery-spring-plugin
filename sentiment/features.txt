@@ -1,0 +1,16 @@
+
+1.  Phonetically evaluate user comments
+2.  Associate user comments with predefined set of Aspects.
+	Some example aspects:
+	a.  Ease of Use
+	b.  Account Summary
+	c.  Account History
+	d.  Payment History
+	
+3.  When associating comments to aspects, the lucene scores can be
+    obtained then evaluated with a Drools set of Rules to determine 
+    whether we want it attached or not.
+    
+    e.g.
+    If I want to say "only comments which has a score > n can be 
+    counted against the aspect
