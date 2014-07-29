@@ -25,18 +25,27 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
 import org.junit.Test;
+
+import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.Multimap;
 //import the domain
 
 public class SentimentControllerTest {
 
+	
+	
 	@Test
 	public void testUpdate() {
 		
 		String[] words = {"lucene", "lusene","terrible", "terible", "teribol", "r", "are", "misisipi","Mississippi", "nicely"};
 		DoubleMetaphone doubleMetaphone = new DoubleMetaphone();
+		Multimap<String, String> wordsMap = LinkedHashMultimap.create();
 		for(int i =0; i < words.length; i++){
 			System.out.println(words[i] + "==" + doubleMetaphone.doubleMetaphone(words[i]));
+			wordsMap.put(doubleMetaphone.doubleMetaphone(words[i]), words[i]);
 		}
+		
+		System.out.println(wordsMap.get("TRPL").size());
 		
 	}
 	

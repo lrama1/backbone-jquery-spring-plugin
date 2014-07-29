@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 
 
+
+import com.google.common.collect.Multimap;
 //import the domain
 import com.sentiment.web.domain.Sentiment;
 import com.sentiment.common.ListWrapper;
@@ -93,6 +95,8 @@ public class SentimentService {
 	    List<CoreMap> sentences = document.get(SentencesAnnotation.class);
 	    
 	    DoubleMetaphone doubleMetaphone = new DoubleMetaphone();
+	    
+	    
 	    for(CoreMap sentence: sentences) {
 	      // traversing the words in the current sentence
 	      // a CoreLabel is a CoreMap with additional token-specific methods
