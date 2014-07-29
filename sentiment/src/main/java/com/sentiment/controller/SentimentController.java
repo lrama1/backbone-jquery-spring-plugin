@@ -35,7 +35,7 @@ public class SentimentController {
 		Authentication authenticationToken = (Authentication) principal;
 		SampleUserDetails user = (SampleUserDetails) authenticationToken
 				.getPrincipal();
-		return sentimentService.getSentiment(id);
+		return new Sentiment();
 	}
 
 	@RequestMapping(value = "/sentiment", headers = { "accept=application/json" }, method = RequestMethod.POST)

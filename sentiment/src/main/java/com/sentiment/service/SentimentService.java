@@ -4,6 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+
+
+
+
+
 //import the domain
 import com.sentiment.web.domain.Sentiment;
 import com.sentiment.common.ListWrapper;
@@ -30,8 +35,12 @@ import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.trees.TreeCoreAnnotations.TreeAnnotation;
 import edu.stanford.nlp.util.CoreMap;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
 
@@ -46,6 +55,7 @@ public class SentimentService {
 	SentimentDAO sentimentDAO;
 	
 	private static StanfordCoreNLP pipeline; 
+	private static Map<String, String> words = new LinkedHashMap<String, String>();
 	
 	@PostConstruct
 	private void init(){
@@ -53,6 +63,7 @@ public class SentimentService {
 	    Properties props = new Properties();
 	    props.put("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref, sentiment");
 	    pipeline = new StanfordCoreNLP(props);
+	    loadWords();
 	}
 
 	public ListWrapper<Sentiment> getSentiments(int pageNumber, int pageSize,
@@ -67,7 +78,7 @@ public class SentimentService {
 	
 	public Sentiment evaluateSentiment(Sentiment sentiment){
 		logger.info(Logger.EVENT_SUCCESS, sentiment.toString());		
-	    
+
 	    // read some text in the text variable
 	    String text = sentiment.getSentimentText();
 	    
@@ -89,6 +100,9 @@ public class SentimentService {
 	        // this is the text of the token
 	        String word = token.get(TextAnnotation.class);
 	        System.out.println("Token: " + word + "==" + doubleMetaphone.doubleMetaphone(word));
+	        if(!words.containsKey(word)){
+	        	System.out.println("Could not recognize word: " + word);
+	        }
 	        // this is the POS tag of the token
 	        String pos = token.get(PartOfSpeechAnnotation.class);
 	        // this is the NER label of the token
@@ -113,5 +127,21 @@ public class SentimentService {
 	      document.get(CorefChainAnnotation.class);		
 		
 		return sentiment;
+	}
+	
+	private  void loadWords(){
+		DoubleMetaphone doubleMetaphone = new DoubleMetaphone();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(SentimentService.class.getResourceAsStream("/wordsEn.txt")));
+		String line = "";
+		try {
+			logger.info(Logger.EVENT_SUCCESS, "Loading words");
+			while((line = reader.readLine()) != null){
+				words.put(line.trim(), doubleMetaphone.doubleMetaphone(line));
+			}
+			logger.info(Logger.EVENT_SUCCESS, "Done loading words.  Mapsize: " + words.size());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

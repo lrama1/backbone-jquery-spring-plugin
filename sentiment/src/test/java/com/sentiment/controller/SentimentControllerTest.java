@@ -29,10 +29,10 @@ import org.junit.Test;
 
 public class SentimentControllerTest {
 
-	//@Test
+	@Test
 	public void testUpdate() {
 		
-		String[] words = {"lucene", "lusene","terrible", "terible", "teribol", "r", "are", "misisipi","Mississippi"};
+		String[] words = {"lucene", "lusene","terrible", "terible", "teribol", "r", "are", "misisipi","Mississippi", "nicely"};
 		DoubleMetaphone doubleMetaphone = new DoubleMetaphone();
 		for(int i =0; i < words.length; i++){
 			System.out.println(words[i] + "==" + doubleMetaphone.doubleMetaphone(words[i]));
