@@ -29,10 +29,10 @@ import org.junit.Test;
 
 public class SentimentControllerTest {
 
-	@Test
+	//@Test
 	public void testUpdate() {
 		
-		String[] words = {"lucene", "lusene","terrible", "terible", "teribol"};
+		String[] words = {"lucene", "lusene","terrible", "terible", "teribol", "r", "are", "misisipi","Mississippi"};
 		DoubleMetaphone doubleMetaphone = new DoubleMetaphone();
 		for(int i =0; i < words.length; i++){
 			System.out.println(words[i] + "==" + doubleMetaphone.doubleMetaphone(words[i]));
@@ -47,9 +47,9 @@ public class SentimentControllerTest {
 
 		createIndexWriterOfAspects(analyzer, index);
 				
-		findByNormalWords(index, analyzer, "the acount sumary page is confusing");
+		//findByNormalWords(index, analyzer, "the acount sumary page is confusing");
 				
-		findByMetaphone(index, analyzer, "acount sumary page confusing and");
+		findByMetaphone(index, analyzer, "akaw sumary page confusing and");
 		
 		
 	}
@@ -86,15 +86,16 @@ public class SentimentControllerTest {
 		IndexSearcher searcher = new IndexSearcher(reader);
 		TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage, true);
 		
-		//String customerComment = "payment historee is complicated";
-		String[] tokens = customerComment.split("\\s");
-		StringWriter writer = new StringWriter();
-		for(String token : tokens){
-			writer.append(doubleMetaphone.doubleMetaphone(token) + " ");
+		Query query = parser.parse(customerComment);
+		Set<Term> terms = new LinkedHashSet<Term>();
+		query.extractTerms(terms);
+		StringWriter stringWriter = new StringWriter();
+		for(Term term : terms){
+			System.out.println(term.text());
+			stringWriter.append(doubleMetaphone.doubleMetaphone(term.text()) + " ");
 		}
-		
-		System.out.println("Searching for: " + writer.toString());
-		searcher.search(parser.parse(writer.toString()), collector);
+		System.out.println("Searching for: " + stringWriter.toString());
+		searcher.search(parser.parse(stringWriter.toString()), collector);
 		ScoreDoc[] hits = collector.topDocs().scoreDocs;		
 		System.out.println("Found " + hits.length + " hits.");
 		for(int i=0;i<hits.length;++i) {
