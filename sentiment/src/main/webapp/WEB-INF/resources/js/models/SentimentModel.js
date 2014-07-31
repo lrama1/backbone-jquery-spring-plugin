@@ -1,6 +1,9 @@
 define([ 'jquery', 'underscore', 'backbone' ], function($, _, Backbone) {
 
 	var SentimentModel = Backbone.Model.extend({
+		defaults: {
+            results : []
+        },
 		idAttribute : 'id',
 		urlRoot : '/sentiment/sentiment',
 		validate : function(attributes, options) {

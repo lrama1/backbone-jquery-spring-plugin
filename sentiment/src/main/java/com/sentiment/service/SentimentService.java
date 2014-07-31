@@ -10,9 +10,13 @@ import org.springframework.stereotype.Service;
 
 
 
+
+
+import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 //import the domain
 import com.sentiment.web.domain.Sentiment;
+import com.sentiment.web.domain.SentimentResult;
 import com.sentiment.common.ListWrapper;
 import com.sentiment.dao.SentimentDAO;
 
@@ -57,10 +61,14 @@ public class SentimentService {
 	SentimentDAO sentimentDAO;
 	
 	private static StanfordCoreNLP pipeline; 
-	private static Map<String, String> words = new LinkedHashMap<String, String>();
+	//private static Map<String, String> words = new LinkedHashMap<String, String>();
+	private static Multimap<String, String> words = LinkedHashMultimap.create();
+	
+	private static DoubleMetaphone doubleMetaphone = new DoubleMetaphone();
 	
 	@PostConstruct
 	private void init(){
+		doubleMetaphone.setMaxCodeLen(6);
 		// creates a StanfordCoreNLP object, with POS tagging, lemmatization, NER, parsing, and coreference resolution 
 	    Properties props = new Properties();
 	    props.put("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref, sentiment");
@@ -82,7 +90,7 @@ public class SentimentService {
 		logger.info(Logger.EVENT_SUCCESS, sentiment.toString());		
 
 	    // read some text in the text variable
-	    String text = sentiment.getSentimentText();
+	    String text = sentiment.getSentimentText().toLowerCase();
 	    
 	    // create an empty Annotation just with the given text
 	    Annotation document = new Annotation(text);
@@ -94,7 +102,7 @@ public class SentimentService {
 	    // a CoreMap is essentially a Map that uses class objects as keys and has values with custom types
 	    List<CoreMap> sentences = document.get(SentencesAnnotation.class);
 	    
-	    DoubleMetaphone doubleMetaphone = new DoubleMetaphone();
+	    
 	    
 	    
 	    for(CoreMap sentence: sentences) {
@@ -104,8 +112,12 @@ public class SentimentService {
 	        // this is the text of the token
 	        String word = token.get(TextAnnotation.class);
 	        System.out.println("Token: " + word + "==" + doubleMetaphone.doubleMetaphone(word));
-	        if(!words.containsKey(word)){
+	        if(!words.containsValue(word)){
 	        	System.out.println("Could not recognize word: " + word);
+	        	String metaphone = doubleMetaphone.doubleMetaphone(word);
+	        	for(String candidate: words.get(metaphone)){
+	        		System.out.println("Did u mean: " + candidate);
+	        	}
 	        }
 	        // this is the POS tag of the token
 	        String pos = token.get(PartOfSpeechAnnotation.class);
@@ -121,6 +133,8 @@ public class SentimentService {
 	      
 	      String sentimentResult = sentence.get(SentimentCoreAnnotations.ClassName.class);
 	      System.out.println(sentimentResult + "\t" + sentence);
+	      sentiment.getResults().add(new SentimentResult(sentimentResult, sentence.toString()));
+	      
 	    }
 
 	    // This is the coreference link graph
@@ -134,13 +148,12 @@ public class SentimentService {
 	}
 	
 	private  void loadWords(){
-		DoubleMetaphone doubleMetaphone = new DoubleMetaphone();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(SentimentService.class.getResourceAsStream("/wordsEn.txt")));
 		String line = "";
 		try {
 			logger.info(Logger.EVENT_SUCCESS, "Loading words");
 			while((line = reader.readLine()) != null){
-				words.put(line.trim(), doubleMetaphone.doubleMetaphone(line));
+				words.put(doubleMetaphone.doubleMetaphone(line),line.trim());
 			}
 			logger.info(Logger.EVENT_SUCCESS, "Done loading words.  Mapsize: " + words.size());
 		} catch (IOException e) {

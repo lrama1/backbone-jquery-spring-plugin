@@ -13,7 +13,7 @@ define([ 'jquery', 'underscore', 'backbone',
 
 			$.when().done(function() {
 				var data = view.model.toJSON();
-
+				console.log(data);
 				view.render(view.$el, data);
 			});
 
@@ -25,6 +25,7 @@ define([ 'jquery', 'underscore', 'backbone',
 			//			$.get("resources/templates/EditTemplate.htm", function(templateText){			
 			//				 myEl.html( _.template(templateText, modelToRender.toJSON()) );
 			//			});
+			console.log(data);
 			myEl.html(_.template(editTemplate, data));
 		},
 		events : {
@@ -33,22 +34,16 @@ define([ 'jquery', 'underscore', 'backbone',
 			"click #saveNewSentiment" : "saveNewSentiment" //binding the saveNewButton of template using id attr as selector
 		},
 		saveSentiment : function() {
-			this.model.save(null, {
-				success : function(model, response, options) {
-					$("#operationMessage").html(
-							model.get("sentimentText") + " was saved.");
-				},
-				error : function() {
-					alert("error");
-				}
-			});
+
 		},
 		saveNewSentiment : function() {
+			var view = this;
 			this.model.set("id", null);
 			this.model.save(null, {
 				success : function(model, response, options) {
-					$("#operationMessage").html(
-							model.get("sentimentText") + " was saved.");
+					console.log(model.toJSON());
+					$("ul").empty();
+					view.render(view.$el, model.toJSON());
 				},
 				error : function() {
 					alert("error");

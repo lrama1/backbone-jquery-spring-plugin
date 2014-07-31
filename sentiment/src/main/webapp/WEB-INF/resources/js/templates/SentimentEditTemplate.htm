@@ -1,21 +1,25 @@
-
-<div class="row">
-	<div class="col-md-12" id="operationMessage"></div>
-</div>
-<div class="row">
-			
-			<div class="form-group">
-			<label  for="sentimentText">sentimentText</label>
-						<textarea rows="4" cols="60" class="form-control"  id="sentimentText" name='sentimentText'>{{=sentimentText}}</textarea>
-					</div>
-			<div class="form-group">
-			<label  for="sentimentResult">sentimentResult</label>
-						<textarea rows="4" cols="60" class="form-control"  id="sentimentResult" name='sentimentResult'>{{=sentimentResult}}</textarea>
-					</div>
+<div class="col-md-12">
+	<div class="row">
+		<div class="col-md-12" id="operationMessage"></div>
 	</div>
-<div class="row">
-	<div class="col-md-12">
-		<input type="button" class="btn btn-primary" id="saveSentiment" value="Save" />
-		<input type="button" class="btn btn-primary" id="saveNewSentiment" value="Save New" />
+	<div class="row">
+		<div class="form-group">
+			<label for="sentimentText">sentimentText</label>
+			<textarea rows="4" cols="60" class="form-control" id="sentimentText" name='sentimentText'>{{=sentimentText}}</textarea>
+		</div>	
+	</div>
+	<div class="row">
+		<div class="well">
+		<ul id="resultRows">	
+			{{_.each(results, function(result) {  }}
+				<li>{{=result.evaluation}} - {{=result.text}}</li>
+			{{}); }}
+		</ul>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<input type="button" class="btn btn-primary" id="saveNewSentiment" value="Evaluate" />
+		</div>
 	</div>
 </div>
