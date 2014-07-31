@@ -7,6 +7,7 @@ import java.util.Map;
 
 public class Sentiment {
 	private String id;
+	private String sampleAspects;
 	private String sentimentText;
 	private String sentimentResult;
 	private List<SentimentResult> results = new ArrayList<SentimentResult>();
@@ -42,6 +43,14 @@ public class Sentiment {
 
 	public void setResults(List<SentimentResult> results) {
 		this.results = results;
+	}	
+	
+	public String getSampleAspects() {
+		return sampleAspects;
+	}
+
+	public void setSampleAspects(String sampleAspects) {
+		this.sampleAspects = sampleAspects;
 	}
 
 	public void populateWithSample() {

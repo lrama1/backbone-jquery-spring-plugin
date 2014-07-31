@@ -40,7 +40,7 @@ public class SentimentController {
 
 	@RequestMapping(value = "/sentiment", headers = { "accept=application/json" }, method = RequestMethod.POST)
 	public @ResponseBody
-	Sentiment saveNewSentiment(@RequestBody Sentiment sentiment) {
+	Sentiment saveNewSentiment(@RequestBody Sentiment sentiment) throws Exception {
 		return sentimentService.evaluateSentiment(sentiment);
 	}
 

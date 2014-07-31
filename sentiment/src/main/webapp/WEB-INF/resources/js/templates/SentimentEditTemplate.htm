@@ -4,17 +4,24 @@
 	</div>
 	<div class="row">
 		<div class="form-group">
-			<label for="sentimentText">sentimentText</label>
+			<label for="sentimentText">Enter your sample aspects here</label>
+			<textarea rows="4" cols="60" class="form-control" id="sampleAspects" name='sampleAspects'>{{=sampleAspects}}</textarea>
+		</div>
+		<div class="form-group">
+			<label for="sentimentText">Enter your sample comment here</label>
 			<textarea rows="4" cols="60" class="form-control" id="sentimentText" name='sentimentText'>{{=sentimentText}}</textarea>
 		</div>	
 	</div>
 	<div class="row">
-		<div class="well">
-		<ul id="resultRows">	
-			{{_.each(results, function(result) {  }}
-				<li>{{=result.evaluation}} - {{=result.text}}</li>
-			{{}); }}
-		</ul>
+		<div class=" col-md-5 well">
+			<ul id="resultRows">	
+				{{_.each(results, function(result) {  }}
+					<li>{{=result.evaluation}} - {{=result.text}}</li>
+				{{}); }}
+			</ul>
+		</div>
+		<div class=" col-md-5 well">
+			
 		</div>
 	</div>
 	<div class="row">

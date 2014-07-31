@@ -13,7 +13,8 @@ define([ 'jquery', 'underscore', 'backbone', 'backgrid', 'backgrid-paginator', '
 	var AppRouter = Backbone.Router.extend({
 		routes : {
 			"sentiment/:id" : "getSentiment",
-			"sentiments" : "getSentimentList"
+			"sentiments" : "getSentimentList",
+			'*path':  'defaultRoute'
 		}
 	});
 
@@ -33,6 +34,29 @@ define([ 'jquery', 'underscore', 'backbone', 'backgrid', 'backgrid-paginator', '
 		// Initiate the router
 		var app_router = new AppRouter;
 
+		app_router.on('route:defaultRoute', function(idToFetch) {
+			require([ 'views/SentimentEditView', 'models/SentimentModel' ],
+					function(SentimentEditView, SentimentModel) {
+						var sentiment = new SentimentModel({
+							id : '1'
+						});
+						var result = sentiment.fetch({
+							success : function() {
+								// render the view when Sentiment is fetched
+								// successfully
+								// Use this if you want to Edit in the same page
+								Global.showView(new SentimentEditView({
+									el : $("#bodyContainer"),
+									model : sentiment
+								}));
+							},
+							error : function() {
+								alert("problem");
+							},
+							silent : true
+						});
+					});
+		});
 		// FROM a Fragment
 		// handler for getting a Sentiment record
 		app_router.on('route:getSentiment', function(idToFetch) {
