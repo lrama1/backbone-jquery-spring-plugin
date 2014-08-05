@@ -362,7 +362,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		String routeDefinitionStringToInsert = "\n," + "\"" + domainClassName.toLowerCase() + "/:id\" : " +
 				"\"get" + domainClassName + "\",\n" +
 				"\"" + domainClassName.toLowerCase() + "s\" : " + "\"get" + domainClassName + "List\"\n";
-		String routeDefinitionRegex = "routes\\s*:\\s*\\{[\\*\\d\\w\\s\\\"\\/:,]*\\}";
+		String routeDefinitionRegex = "routes\\s*:\\s*\\{[\\*\\d\\w\\s\\\"\\'\\/:,]*\\}";
 		modifiedFile = modifier(modifiedFile, routeDefinitionRegex,
 				routeDefinitionStringToInsert, "}");
 		
