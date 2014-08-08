@@ -9,6 +9,45 @@ define([
   #if($templateType == "JSP")'text!templates/${domainClassName}ListTemplate'#else 'text!templates/${domainClassName}ListTemplate.htm'#end /* the request for this template actually goes thru the MainController if its JSP*/
 ], function($, _, Backbone, Backgrid, ${domainClassName}Collection, Global, #if($injectMessages)Messages ,#end collectionTemplate){
 	
+	var EditDeleteCell = Backgrid.Cell.extend({
+	    template: _.template('<a href="#" id="editRow"><span class="glyphicon glyphicon-pencil"></span></a>' +
+	    		'<a href="#" id="deleteRow"><span class="glyphicon glyphicon-remove"></span></a>'),
+	    events: {
+	      "click #deleteRow": "deleteRow",
+	      "click #editRow": "editRow"
+	    },
+	    editRow : function(){
+	    	var idToFetch = this.model.get("id");
+			require(['views/${domainClassName}EditView', 'models/${domainClassName}Model'], 
+	    		function(${domainClassName}EditView, ${domainClassName}Model){
+			        var ${domainClassName.toLowerCase()}  = new ${domainClassName}Model({${domainClassIdAttributeName} : idToFetch});	
+					var result = ${domainClassName.toLowerCase()}.fetch({
+						success : function(){
+							//render the view when ${domainClassName} is fetched successfully	
+							//Use this if you want to Edit in a Modal Dialog
+							Global.showView(new ${domainClassName}EditView({ el: $("#modalEditBody"), model : ${domainClassName.toLowerCase()} }));
+							$('#myModal').modal('show');
+						},
+						error : function(){
+							alert("problem");
+						},
+						silent : true
+					});
+	    		});
+	    },
+	    deleteRow: function (e) {
+	      console.log("model id: " + this.model.get("id"));
+	      e.preventDefault();
+	      this.model.collection.remove(this.model);
+	    },
+	    render: function () {
+	      #[[this.$el.html(this.template());
+	      this.delegateEvents();
+	      return this;
+	      ]]#
+	    }
+	});
+	
 	var ${domainClassName}CollectionView = Backbone.View.extend({
 		//standard backbone function called when a view is constructed
 	    initialize: function(){    	
@@ -20,10 +59,14 @@ define([
 		    	#foreach($key in $attrs.keySet() )
 		    		#if($foreach.count == 1)
 		    			{
-		    			name : "${domainClassName.toLowerCase()}Selector",
-		    			cell : "select-row",
-		    			headerCell: "select-all"
+		    				name : "${domainClassName.toLowerCase()}Selector",
+		    				cell : "select-row",
+		    				headerCell: "select-all"
 		    			},
+			    		{
+		    				name : "operation",
+		    				cell : EditDeleteCell
+			    		},
 			    		{
 			    			name : "${key}",
 			    			#if($injectMessages)label : Messages["${key.toUpperCase()}"],#end
@@ -73,7 +116,28 @@ define([
 	    },
 	    events : {
 	    	"click #edit${domainClassName}Button" : "edit${domainClassName}",
-	    	"click #filterButton" : "filter"
+	    	"click #filterButton" : "filter",
+			"click #addNew${domainClassName}" : "addNew${domainClassName}"
+	    },
+	    addNew${domainClassName} : function(){
+	    	var idToFetch = 'default';
+			require([ 'views/${domainClassName}EditView',
+						'models/${domainClassName}Model' ], function(
+								${domainClassName}EditView, ${domainClassName}Model) {
+				var ${domainClassName.toLowerCase()}  = new ${domainClassName}Model({${domainClassIdAttributeName} : idToFetch});
+				var result = ${domainClassName.toLowerCase()}.fetch({
+					success : function() {
+						//render the view when SentimentAspect is fetched successfully	
+						//Use this if you want to Edit in a Modal Dialog
+						Global.showView(new ${domainClassName}EditView({ el: $("#modalEditBody"), model : ${domainClassName.toLowerCase()} }));
+						$('#myModal').modal('show');
+					},
+					error : function() {
+						alert("problem");
+					},
+					silent : true
+				});
+			});
 	    },
 	    edit${domainClassName} : function(){
 	    	if(this.grid.getSelectedModels().length > 0){

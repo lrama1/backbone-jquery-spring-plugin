@@ -28,28 +28,37 @@ public class ${domainClassName}Controller {
 
 	private Logger logger = ESAPI.getLogger(this.getClass());
 
+	#set($serviceObjectName = ${domainClassName.substring(0,1).toLowerCase()} + ${domainClassName.substring(1)} + "Service")
+	#set($domainObjectName = ${domainClassName.substring(0,1).toLowerCase()} + ${domainClassName.substring(1)})
+	
 	@Autowired
-	${domainClassName}Service ${domainClassName.substring(0,1).toLowerCase()}${domainClassName.substring(1)}Service;
+	${domainClassName}Service $serviceObjectName;
 	
 		
 	@RequestMapping(value = "/$domainClassName.toLowerCase()/{id}", method = RequestMethod.GET)
 	public @ResponseBody $domainClassName get$domainClassName(@PathVariable("id") String id, Principal principal){
 		Authentication authenticationToken = (Authentication)principal;
-		SampleUserDetails user = (SampleUserDetails)authenticationToken.getPrincipal();
-		return ${domainClassName.substring(0,1).toLowerCase()}${domainClassName.substring(1)}Service.get${domainClassName}(id);
+		SampleUserDetails user = (SampleUserDetails)authenticationToken.getPrincipal();		
+		${domainClassName} ${domainObjectName} =
+				${domainObjectName}Service.get${domainClassName}(id);
+		if(${domainObjectName} == null)
+			return new ${domainClassName}();
+		else
+			return ${domainObjectName};
 	}
 	
 	
 	@RequestMapping(value = "/${domainClassName.toLowerCase()}", headers = {"accept=application/json"}, method = RequestMethod.POST)
-	public @ResponseBody ${domainClassName} saveNew${domainClassName}(@RequestBody ${domainClassName} ${domainClassName.substring(0,1).toLowerCase()}${domainClassName.substring(1)}){
-		logger.info(Logger.EVENT_SUCCESS, ${domainClassName.substring(0,1).toLowerCase()}${domainClassName.substring(1)}.toString());
+	public @ResponseBody ${domainClassName} saveNew${domainClassName}(@RequestBody ${domainClassName} ${domainObjectName}){
+		logger.info(Logger.EVENT_SUCCESS, ${domainObjectName}.toString());
+		${serviceObjectName}.saveNew${domainClassName}(${domainObjectName});
 		return ${domainClassName.substring(0,1).toLowerCase()}${domainClassName.substring(1)};
 	}
 	
 	@RequestMapping(value = "/${domainClassName.toLowerCase()}/{id}", headers = {"accept=application/json"}, method = RequestMethod.PUT)
-	public  @ResponseBody ${domainClassName}  update${domainClassName}(@RequestBody ${domainClassName} ${domainClassName.substring(0,1).toLowerCase()}${domainClassName.substring(1)}){
-		logger.info(Logger.EVENT_SUCCESS, ${domainClassName.substring(0,1).toLowerCase()}${domainClassName.substring(1)}.toString());
-		return ${domainClassName.substring(0,1).toLowerCase()}${domainClassName.substring(1)};
+	public  @ResponseBody ${domainClassName}  update${domainClassName}(@RequestBody ${domainClassName} ${domainObjectName}){
+		logger.info(Logger.EVENT_SUCCESS, ${domainObjectName}.toString());
+		return ${domainObjectName};
 	}
 	
 	@RequestMapping("/${domainClassName.toLowerCase()}s")
@@ -59,7 +68,7 @@ public class ${domainClassName}Controller {
 			@RequestParam("per_page") int pageSize,
 			@RequestParam(value = "sort_by", required = false) String sortByAttributeName,
 			@RequestParam(value = "order", required = false) String sortDirection) {
-		return ${domainClassName.substring(0,1).toLowerCase()}${domainClassName.substring(1)}Service.get${domainClassName}s(pageNumber, pageSize, sortByAttributeName, sortDirection);
+		return ${domainObjectName}Service.get${domainClassName}s(pageNumber, pageSize, sortByAttributeName, sortDirection);
 		
 	}	
 	

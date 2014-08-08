@@ -360,6 +360,18 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("bootstrap.min.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/bootstrap.min.js"), monitor);
 			
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/fonts"), new Path("glyphicons-halflings-regular.eot"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/fonts/glyphicons-halflings-regular.eot"), monitor);
+			
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/fonts"), new Path("glyphicons-halflings-regular.svg"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/fonts/glyphicons-halflings-regular.svg"), monitor);
+			
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/fonts"), new Path("glyphicons-halflings-regular.ttf"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/fonts/glyphicons-halflings-regular.ttf"), monitor);
+			
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/fonts"), new Path("glyphicons-halflings-regular.woff"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/fonts/glyphicons-halflings-regular.woff"), monitor);
+			
 			
 			//ANOMALY, why does text.js have to be outside the libs folder
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js"), new Path("text.js"), 
@@ -627,6 +639,11 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		IFolder jsFolder = resourcesFolder.getFolder(new Path("js"));
 		jsFolder.create(false, true, new NullProgressMonitor());
 		folders.put("src/main/webapp/WEB-INF/resources/js", jsFolder);
+		
+		//src/main/webapp/WEB-INF/resources/js/fonts
+		IFolder fontsFolder = jsFolder.getFolder(new Path("fonts"));
+		fontsFolder.create(false, true, new NullProgressMonitor());
+		folders.put("src/main/webapp/WEB-INF/resources/js/fonts", fontsFolder);
 		
 		//src/main/webapp/WEB-INF/resources/js/libs
 		IFolder jsLibsFolder = jsFolder.getFolder(new Path("libs"));

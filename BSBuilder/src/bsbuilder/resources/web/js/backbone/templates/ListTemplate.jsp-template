@@ -21,9 +21,13 @@
 </div>
 
 
+<div class="panel panel-default">
+	<div class="panel-heading">${domainClassName}s<a id="addNew${domainClassName}" href="#">[Add New]</a></div>
+	<div class="panel-body">
+	<div id="listContainer">none</div> 
+	</div>
+</div>
 
-<!--div id="listContainer" class="backgrid-container">none</div--> 
-<div id="listContainer">none</div> 
 <div><input type="button" class="btn btn-primary" id="edit${domainClassName}Button" value="Edit ${domainClassName}" /></div>
 
 
