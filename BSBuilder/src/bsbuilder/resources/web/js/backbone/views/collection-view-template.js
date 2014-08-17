@@ -17,7 +17,7 @@ define([
 	      "click #editRow": "editRow"
 	    },
 	    editRow : function(){
-	    	var idToFetch = this.model.get("id");
+	    	var idToFetch = this.model.get("${domainClassIdAttributeName}");
 			require(['views/${domainClassName}EditView', 'models/${domainClassName}Model'], 
 	    		function(${domainClassName}EditView, ${domainClassName}Model){
 			        var ${domainClassName.toLowerCase()}  = new ${domainClassName}Model({${domainClassIdAttributeName} : idToFetch});	
@@ -36,7 +36,7 @@ define([
 	    		});
 	    },
 	    deleteRow: function (e) {
-	      console.log("model id: " + this.model.get("id"));
+	      console.log("model id: " + this.model.get("${domainClassIdAttributeName}"));
 	      e.preventDefault();
 	      this.model.collection.remove(this.model);
 	    },

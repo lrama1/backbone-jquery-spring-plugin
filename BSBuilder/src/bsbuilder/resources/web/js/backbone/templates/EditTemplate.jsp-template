@@ -26,6 +26,8 @@
 <div class="row">
 	<div class="col-md-12">
 		<input type="button" class="btn btn-primary" id="save${domainClassName}" value="Save" />
+		<!--
 		<input type="button" class="btn btn-primary" id="saveNew${domainClassName}" value="Save New" />
+		-->
 	</div>
 </div>
