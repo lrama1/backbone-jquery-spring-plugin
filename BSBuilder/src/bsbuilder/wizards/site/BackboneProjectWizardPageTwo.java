@@ -22,6 +22,7 @@ public class BackboneProjectWizardPageTwo extends WizardPage {
 	private Text textMongoPort;
 	private Text textMongoDBName;
 	private Button btnUseMongodb;
+	private Button btnPrepForOracle;
 
 	protected BackboneProjectWizardPageTwo(String pageName) {
 		super(pageName);
@@ -130,6 +131,13 @@ public class BackboneProjectWizardPageTwo extends WizardPage {
 		textMongoDBName.setText("localdb");
 		textMongoDBName.setEnabled(false);
 		textMongoDBName.setBounds(131, 115, 149, 27);
+		new Label(container, SWT.NONE);
+		
+		btnPrepForOracle = new Button(container, SWT.CHECK);
+		GridData gd_btnPrepForOracle = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_btnPrepForOracle.heightHint = 33;
+		btnPrepForOracle.setLayoutData(gd_btnPrepForOracle);
+		btnPrepForOracle.setText("Prep For Oracle");
 		
 		//Validate on display
 		validatePackage(textBasePackage.getText());
@@ -179,6 +187,10 @@ public class BackboneProjectWizardPageTwo extends WizardPage {
 	
 	public String getMongoDBName(){
 		return textMongoDBName.getText();
+	}
+	
+	public boolean prepForOracle(){
+		return btnPrepForOracle.getSelection();
 	}
 
 }

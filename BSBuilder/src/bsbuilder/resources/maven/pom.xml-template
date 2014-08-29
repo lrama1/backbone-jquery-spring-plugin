@@ -25,6 +25,8 @@
   </pluginRepositories>
 
   <dependencies>
+  
+  	#if(${useMongo})
     <!-- Added these for mongodb-->
   	<dependency>
 		<groupId>org.springframework.data</groupId>
@@ -37,6 +39,30 @@
 		<version>2.12.1</version>
 	</dependency>
 	<!-- end of Mongodb deps-->
+	#end
+	
+	#if(${prepForOracle})
+	<dependency>
+	    <groupId>com.oracle</groupId>
+	    <artifactId>ojdbc6</artifactId>
+	    <version>11.2.0.3</version>
+    </dependency>
+    <dependency>
+	    <groupId>org.mybatis</groupId>
+	    <artifactId>mybatis</artifactId>
+	    <version>3.2.2</version>
+    </dependency>
+    <dependency>
+	    <groupId>org.mybatis</groupId>
+	    <artifactId>mybatis-spring</artifactId>
+	    <version>1.1.0</version>
+    </dependency>
+    <dependency>
+		<groupId>org.springframework.data</groupId>
+		<artifactId>spring-data-jdbc-core</artifactId>
+		<version>1.0.0.RELEASE</version>
+	</dependency>
+	#end
 	
 	#if(${secured})
     <dependency>

@@ -163,6 +163,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		mapOfValues.put("mongoHostName", pageTwo.getMongoHostName());
 		mapOfValues.put("mongoPort", pageTwo.getMongoPort());
 		mapOfValues.put("mongoDBName", pageTwo.getMongoDBName());
+		mapOfValues.put("prepForOracle", pageTwo.prepForOracle());
 		
 		final String domainClassSourceCode = pageThree.getClassSource(mapOfValues);
 		
@@ -224,11 +225,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		params.setInjectLocalizedMessages(pageFive.injectLocalizedMessages());
 		System.out.println("JSP?*******************************" + pageFive.isJSPTemplate());
 		System.out.println("HTML?*******************************" + pageFive.isHTMLTemplate());
-		
-		params.setUseMongoDB(pageTwo.useMongoDB());
-		params.setMongoHostName(pageTwo.getMongoHostName());
-		params.setMongoPort(pageTwo.getMongoPort());
-		params.setMongoDBName(pageTwo.getMongoDBName());
+
 		
 		/*
 		 * Just like the NewFileWizard, but this time with an operation object
@@ -413,7 +410,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			
 			/* Add web-xml file */
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF"), new Path("web.xml"),
-					TemplateMerger.merge("/bsbuilder/resources/maven/web.xml-template", proj.getName(), params.getBasePackageName(), params.getControllerPackageName(), params.getUtilPackageName()), monitor);
+					TemplateMerger.merge("/bsbuilder/resources/maven/web.xml-template", mapOfValues), monitor);
 			/* Add Spring servlet dispathcer mapping file */
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF"), new Path("yourdispatcher-servlet.xml"),
 					TemplateMerger.merge("/bsbuilder/resources/maven/yourdispatcher-servlet.xml-template", mapOfValues), monitor);
@@ -424,6 +421,10 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/spring"), new Path("applicationContext.xml"),
 					TemplateMerger.merge("/bsbuilder/resources/maven/applicationContext.xml-template", mapOfValues), monitor);			
 			
+			if((Boolean)mapOfValues.get("prepForOracle")){
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/spring"), new Path("datasource.xml"),
+						TemplateMerger.merge("/bsbuilder/resources/maven/datasource.xml-template", mapOfValues), monitor);
+			}
 			
 			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/spring"), new Path("spring-security.xml"),
@@ -549,7 +550,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			
 			//add bsbuilder-specific settings
 			addBSBuilderSettings(folders.get(".settings"), project, params.getBasePackageName(),params.isGenerateSecurityCode(),
-					params.isUseMongoDB() , monitor);
+					(Boolean)mapOfValues.get("useMongo") , monitor);
 			
 		} catch (Throwable ioe) {
 			IStatus status = new Status(IStatus.ERROR, "NewFileWizard", IStatus.OK,
@@ -833,11 +834,6 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		private boolean isJSPTemplate = true;
 		private boolean injectLocalizedMessages;
 		
-		private boolean useMongoDB;
-		private String mongoHostName;
-		private String mongoPort;
-		private String mongoDBName;
-		
 		public String getBasePackageName() {
 			return basePackageName;
 		}
@@ -1037,32 +1033,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		}
 		public void setNameValuePairSourceCode(String nameValuePairSourceCode) {
 			this.nameValuePairSourceCode = nameValuePairSourceCode;
-		}
-		public boolean isUseMongoDB() {
-			return useMongoDB;
-		}
-		public void setUseMongoDB(boolean useMongoDB) {
-			this.useMongoDB = useMongoDB;
-		}
-		public String getMongoHostName() {
-			return mongoHostName;
-		}
-		public void setMongoHostName(String mongoHostName) {
-			this.mongoHostName = mongoHostName;
-		}
-		public String getMongoPort() {
-			return mongoPort;
-		}
-		public void setMongoPort(String mongoPort) {
-			this.mongoPort = mongoPort;
-		}
-		public String getMongoDBName() {
-			return mongoDBName;
-		}
-		public void setMongoDBName(String mongoDBName) {
-			this.mongoDBName = mongoDBName;
-		}	
-		
+		}			
 	}
 
 }
