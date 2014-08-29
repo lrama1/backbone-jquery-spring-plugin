@@ -23,6 +23,7 @@ public class BackboneProjectWizardPageTwo extends WizardPage {
 	private Text textMongoDBName;
 	private Button btnUseMongodb;
 	private Button btnPrepForOracle;
+	private Button btnPrepForMysql;
 
 	protected BackboneProjectWizardPageTwo(String pageName) {
 		super(pageName);
@@ -133,6 +134,10 @@ public class BackboneProjectWizardPageTwo extends WizardPage {
 		textMongoDBName.setBounds(131, 115, 149, 27);
 		new Label(container, SWT.NONE);
 		
+		btnPrepForMysql = new Button(container, SWT.CHECK);
+		btnPrepForMysql.setText("Prep For MySQL");
+		new Label(container, SWT.NONE);
+		
 		btnPrepForOracle = new Button(container, SWT.CHECK);
 		GridData gd_btnPrepForOracle = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_btnPrepForOracle.heightHint = 33;
@@ -191,6 +196,10 @@ public class BackboneProjectWizardPageTwo extends WizardPage {
 	
 	public boolean prepForOracle(){
 		return btnPrepForOracle.getSelection();
+	}
+	
+	public boolean prepForMySql(){
+		return btnPrepForMysql.getSelection();
 	}
 
 }

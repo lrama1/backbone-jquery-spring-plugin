@@ -34,13 +34,13 @@
 	</bean>	
 	#end
  
-    #if(${prepForOracle} == true)
+    #if(${prepForOracle} || ${prepForMySQL})
  	<bean id="sqlSessionFactoryLocal" class="org.mybatis.spring.SqlSessionFactoryBean">
   		<property name="dataSource" ref="dataSourceLocal" />
 	</bean>
 	
 	<!--bean id="sampleMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-	  <property name="mapperInterface" value="com.xsample.dao.mapper.SampleMapper" />
+	  <property name="mapperInterface" value="${basePackageName}.dao.SampleMapper" />
 	  <property name="sqlSessionFactory" ref="sqlSessionFactoryLocal" />
 	</bean-->
 	#end

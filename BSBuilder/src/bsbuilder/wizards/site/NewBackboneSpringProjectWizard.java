@@ -164,6 +164,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		mapOfValues.put("mongoPort", pageTwo.getMongoPort());
 		mapOfValues.put("mongoDBName", pageTwo.getMongoDBName());
 		mapOfValues.put("prepForOracle", pageTwo.prepForOracle());
+		mapOfValues.put("prepForMySQL", pageTwo.prepForMySql());
 		
 		final String domainClassSourceCode = pageThree.getClassSource(mapOfValues);
 		
@@ -175,8 +176,6 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		final String daoPackageName = pageTwo.getBasePackageName() + ".dao";
 		final String commonPackageName = pageTwo.getBasePackageName() + ".common";
 		final String securityPackageName = pageTwo.getBasePackageName() + ".security";
-		
-		
 		
 		
 		
@@ -421,7 +420,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/spring"), new Path("applicationContext.xml"),
 					TemplateMerger.merge("/bsbuilder/resources/maven/applicationContext.xml-template", mapOfValues), monitor);			
 			
-			if((Boolean)mapOfValues.get("prepForOracle")){
+			if((Boolean)mapOfValues.get("prepForOracle") || (Boolean)mapOfValues.get("prepForMySQL")){
 				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/spring"), new Path("datasource.xml"),
 						TemplateMerger.merge("/bsbuilder/resources/maven/datasource.xml-template", mapOfValues), monitor);
 			}

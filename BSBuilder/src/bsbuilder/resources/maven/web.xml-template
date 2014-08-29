@@ -25,7 +25,7 @@
   <context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>			
-			#if(${prepForOracle} == true)
+			#if(${prepForOracle} || ${prepForMySQL})
 			/WEB-INF/spring/datasource.xml,
 			#end
 			/WEB-INF/spring/applicationContext.xml,

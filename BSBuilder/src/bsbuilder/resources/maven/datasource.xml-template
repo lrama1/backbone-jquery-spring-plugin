@@ -6,17 +6,19 @@
 	<bean id="dataSourceLocal"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
  
+ 		#if(${prepForMySQL})
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<property name="url" value="jdbc:mysql://localhost:3306/localdb" />
 		<property name="username" value="user" />
 		<property name="password" value="pass" />
+		#end
 		
-		<!--
+		#if(${prepForOracle})
 		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
 		<property name="url" value="jdbc:oracle:thin:@localhost:<port>:<sid>" />
 		<property name="username" value="user" />
 		<property name="password" value="pass" />
-		-->
+		#end
 	</bean>
  
 </beans>
