@@ -7,6 +7,7 @@ import static org.reflections.ReflectionUtils.withName;
 
 import java.io.StringWriter;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
@@ -26,13 +27,15 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.owasp.esapi.ESAPI;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 
 @Aspect
 @Component
 public class DoubleSubmissionAspect {
 	
-	Map<Integer, Date> mapOfSubmittedData = new HashMap<Integer, Date>();
+	//Map<Integer, Date> mapOfSubmittedData = new HashMap<Integer, Date>();
 	
 	Logger logger = Logger.getLogger(this.getClass());	
 	//60000 is 1 minute
@@ -63,24 +66,46 @@ public class DoubleSubmissionAspect {
 		if(maxAge  == 0){
 			maxAge = DEFAULT_MAX_AGE;
 		}
-		if(mapOfSubmittedData.size() > maxAge){
+				    
+		if(getCurrentSessionSubmissions().size() > maxAge){
 			discardOldHashes();
 		}
-		Date existingHashAdded = mapOfSubmittedData.get(hashCode); 
+		Date existingHashAdded = getCurrentSessionSubmissions().get(hashCode); 
 		if( existingHashAdded != null){
 			Long age = System.currentTimeMillis() - existingHashAdded.getTime();
 			if(age < maxAge){
 				throw new RuntimeException("Double submission prevented. A similar submission was received before the threshold expired.");
 			}else{
-				mapOfSubmittedData.put(hashCode, new Date());
+				getCurrentSessionSubmissions().put(hashCode, new Date());
 			}
 		}else{
-			mapOfSubmittedData.put(hashCode, new Date());
+			getCurrentSessionSubmissions().put(hashCode, new Date());
 		}
 		System.out.println("Final String: " + writer.toString());
 	}
 	
-	public String concatFields(StringWriter writer, Object objectToEncode) throws Exception{
+	protected Map<Integer, Date> getCurrentSessionSubmissions(){
+		ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+	    Map<Integer, Date> mapOfSubmittedData = (Map)servletRequestAttributes.getRequest().getSession().getAttribute("USER_SUBMISSIONS");
+	    if(mapOfSubmittedData == null){
+	    	mapOfSubmittedData = new HashMap<Integer, Date>();
+	    }
+	    servletRequestAttributes.getRequest().getSession().setAttribute("USER_SUBMISSIONS", mapOfSubmittedData);
+	    return mapOfSubmittedData;
+	}
+	
+	/**
+	 * A method which recursively inspects an Object and
+	 * concatenates all values of all primitive attributes into a resulting String
+	 * @param writer
+	 * @param objectToEncode
+	 * @return
+	 * @throws InvocationTargetException 
+	 * @throws IllegalAccessException 
+	 * @throws IllegalArgumentException 
+	 * @throws Exception
+	 */
+	protected String concatFields(StringWriter writer, Object objectToEncode) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 		logger.info("Atttempting to process " + objectToEncode.getClass().getName());
 		if(objectToEncode != null && (isOfTypeWeCareAbout(objectToEncode))){
 			logger.info("Adding: " + objectToEncode.getClass().getName());
@@ -134,13 +159,13 @@ public class DoubleSubmissionAspect {
 	
 	private synchronized void discardOldHashes(){
 		long currentTime = System.currentTimeMillis();
-		logger.info("Cleaning up hashes: " + mapOfSubmittedData.size());
+		logger.info("Cleaning up hashes: " + getCurrentSessionSubmissions().size());
 		List<Integer> keysOfHashesToEvict = new ArrayList<Integer>();
 		if(maxHashListSize == 0){
 			maxHashListSize = DEFUALT_MAX_HASH_LIST_SIZE;
 		}
-		for(Integer key : mapOfSubmittedData.keySet()){
-			long age = currentTime - mapOfSubmittedData.get(key).getTime();
+		for(Integer key : getCurrentSessionSubmissions().keySet()){
+			long age = currentTime - getCurrentSessionSubmissions().get(key).getTime();
 			if(age >= maxHashListSize){
 				logger.info("evicting " + age);								
 				keysOfHashesToEvict.add(key);
@@ -148,9 +173,9 @@ public class DoubleSubmissionAspect {
 		}
 		
 		for(Integer key : keysOfHashesToEvict){
-			mapOfSubmittedData.remove(key);
+			getCurrentSessionSubmissions().remove(key);
 		}		
-		logger.info("After cleaning up tokens: " + mapOfSubmittedData.size());
+		logger.info("After cleaning up tokens: " + getCurrentSessionSubmissions().size());
 	}
 		
 	public long getMaxAge() {
