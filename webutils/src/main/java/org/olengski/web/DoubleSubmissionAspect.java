@@ -37,9 +37,8 @@ public class DoubleSubmissionAspect {
 	
 	//Map<Integer, Date> mapOfSubmittedData = new HashMap<Integer, Date>();
 	
-	Logger logger = Logger.getLogger(this.getClass());	
-	//60000 is 1 minute
-	private long DEFAULT_MAX_AGE = 60000;
+	Logger logger = Logger.getLogger(this.getClass());		
+	private long DEFAULT_MAX_AGE = 60000;  //60000 is 1 minute
 	private long DEFUALT_MAX_HASH_LIST_SIZE = 15;	
 	private long maxAge = 0;
 	private long maxHashListSize = 0;

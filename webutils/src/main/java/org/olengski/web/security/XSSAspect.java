@@ -93,11 +93,14 @@ public class XSSAspect {
 	private String encodeField(Field field, String valueToEncode, EncodeType encodeType){	
 		valueToEncode = ESAPI.encoder().canonicalize(valueToEncode);
 		logger.info("ENCODE TYPE: " + encodeType.toString());
-		if (encodeType.equals(EncodeType.HTML.toString())){		
+		if (encodeType.equals(EncodeType.HTML)){		
+			logger.info("Encoding for HTML");
 			return ESAPI.encoder().encodeForHTML(valueToEncode);
 		}else if (encodeType.equals(EncodeType.HTML_ATTRIBUTE)){	
+			logger.info("Encoding for HTML_ATTR");
 			return ESAPI.encoder().encodeForHTMLAttribute(valueToEncode);
 		}else if (encodeType.equals(EncodeType.JAVASCRIPT)){		
+			logger.info("Encoding for JS");
 			return ESAPI.encoder().encodeForJavaScript(valueToEncode);
 		}  
 		return valueToEncode;
