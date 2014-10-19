@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -90,7 +91,8 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
             IContainer projectContainer = (IContainer) project;
             try {
 				String projectName = project.getName();
-				String basePackageName = bsBuilderProperties.getProperty("basePackage");				
+				String basePackageName = bsBuilderProperties.getProperty("basePackage");
+				String useMongo = bsBuilderProperties.getProperty("useMongo");
 				Map<String, Object> modelAttributes = pageThree.getModelAttributes();
 				
 				//create Domain Class
@@ -98,7 +100,12 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 				
 				//create SampleData
 				createSampleData(projectContainer, pageThree.getDomainClassName(), modelAttributes);
-								
+				
+				//create SampleDate for Mongo
+				if(StringUtils.equals(useMongo, "true")){
+					createSampleDataForMongo(projectContainer, pageThree.getDomainClassName(), modelAttributes);
+				}
+				
 				//create Backbone Template files				
 				createEditAndListTemplateFiles(projectContainer, pageThree.getDomainClassName(), modelAttributes);
 				
@@ -170,6 +177,19 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		IOUtils.copy(TemplateMerger.merge("/bsbuilder/resources/other/sampledata.txt-template", mapOfValues), sampleDataStringWriter);
 		CommonUtils.createPackageAndClass(sampleDataFolder, "sampledata", mapOfValues.get("domainClassName").toString() + "s.txt",
 				CommonUtils.cleanSampleData(sampleDataStringWriter.toString()),new NullProgressMonitor());
+	}
+	
+	private void createSampleDataForMongo(IContainer projectContainer, String domainClassName,
+			Map<String, Object> modelAttributes) throws Exception{
+		Map<String, Object> mapOfValues = new HashMap<String, Object>();
+		mapOfValues.put("domainClassName", domainClassName);
+		mapOfValues.put("domainClassIdAttributeName", pageThree.getDomainClassAttributeName());
+		mapOfValues.put("attrs", modelAttributes);
+		StringWriter sampleMongoDataStringWriter = new StringWriter();
+		IFolder sampleMongoDataFolder = projectContainer.getFolder(new Path("src/main/resources/scripts"));
+		IOUtils.copy(TemplateMerger.merge("/bsbuilder/resources/other/mongo-script.txt-template", mapOfValues), sampleMongoDataStringWriter);
+		CommonUtils.createPackageAndClass(sampleMongoDataFolder, "sampledata", mapOfValues.get("domainClassName").toString() + "s.txt",
+			 CommonUtils.cleanSampleData(sampleMongoDataStringWriter.toString()), new NullProgressMonitor());
 	}
 	
 	//NOT NEEDED

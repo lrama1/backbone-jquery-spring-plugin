@@ -1,13 +1,16 @@
 package bsbuilder.wizards.site.utils;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -143,8 +146,16 @@ public class CommonUtils {
 		return sourceFormatter;
 	}
 	
-	public static String cleanSampleData(String sampleData){
-		return sampleData.replaceAll("\\t", "").replaceAll(" ", "");
+	public static String cleanSampleData(String sampleData) throws IOException{
+		//return StringUtils.trim(sampleData);
+		//return sampleData.replaceAll("\\t", "").replaceAll(" ", "");
+		BufferedReader reader = new BufferedReader(new StringReader(sampleData));
+		StringWriter stringWriter = new StringWriter();
+		String line = "";
+		while((line = reader.readLine()) != null){
+			stringWriter.append(StringUtils.trim(line) + "\n");
+		}
+		return stringWriter.toString();
 	}
 
 }

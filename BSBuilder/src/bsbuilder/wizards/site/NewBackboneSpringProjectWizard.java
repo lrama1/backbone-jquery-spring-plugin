@@ -160,6 +160,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		mapOfValues.put("attrs", pageThree.getModelAttributes());
 		mapOfValues.put("fieldTypes", pageThree.getFieldTypes());
 		mapOfValues.put("useMongo", pageTwo.useMongoDB());
+		mapOfValues.put("mongoDBName", "localdb");
 		mapOfValues.put("mongoHostName", pageTwo.getMongoHostName());
 		mapOfValues.put("mongoPort", pageTwo.getMongoPort());
 		mapOfValues.put("mongoDBName", pageTwo.getMongoDBName());
@@ -535,6 +536,13 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			CommonUtils.createPackageAndClass(folders.get("src/main/resources"), "sampledata", mapOfValues.get("domainClassName").toString() + "s.txt",
 					 CommonUtils.cleanSampleData(sampleDataStringWriter.toString()), monitor);
 			
+			/* Add Test Mongo Data in an external text file*/
+			if((Boolean)mapOfValues.get("useMongo")){
+				StringWriter sampleMongoDataStringWriter = new StringWriter();
+				IOUtils.copy(TemplateMerger.merge("/bsbuilder/resources/other/mongo-script.txt-template", mapOfValues), sampleMongoDataStringWriter);
+				CommonUtils.createPackageAndClass(folders.get("src/main/resources/scripts"), "sampledata", mapOfValues.get("domainClassName").toString() + "s.txt",
+					 CommonUtils.cleanSampleData(sampleMongoDataStringWriter.toString()), monitor);
+			}
 			
 			//add junit for Controllers
 			CommonUtils.createPackageAndClass(folders.get("src/test/java"), params.getControllerPackageName(),
@@ -592,6 +600,11 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		IFolder srcFolder42 = srcFolder21.getFolder(new Path("resources"));
 		srcFolder42.create(false, true, new NullProgressMonitor());
 		folders.put("src/main/resources", srcFolder42);
+		
+		//src/main/resources
+		IFolder srcFolder421 = srcFolder42.getFolder(new Path("scripts"));
+		srcFolder421.create(false, true, new NullProgressMonitor());
+		folders.put("src/main/resources/scripts", srcFolder421);
 		
 		//src/test/java
 		IFolder srcFolder22 = srcFolder.getFolder(new Path("test"));
