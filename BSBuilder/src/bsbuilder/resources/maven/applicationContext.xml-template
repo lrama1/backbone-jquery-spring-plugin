@@ -44,5 +44,9 @@
 	  <property name="sqlSessionFactory" ref="sqlSessionFactoryLocal" />
 	</bean-->
 	#end
+	
+	#if(${secured})
+	<bean class="org.olengski.web.security.XSSAspect" />
+	#end
 
 </beans>

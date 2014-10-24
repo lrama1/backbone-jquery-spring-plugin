@@ -62,7 +62,25 @@ public class MainController {
 		}		
 		
 		stringWriter.append("};");
-		stringWriter.append("return localizedMessages;");
+		//stringWriter.append("return localizedMessages;");
+		stringWriter.append(
+		"var messages = function(key, valuesToPlugin){ " +
+		"	if(valuesToPlugin !== undefined){ " +
+		"		var messageTemplate = localizedMessages[key]; " +
+		"		if(messageTemplate === undefined){ " + 
+		"			return 'LABEL_NOT_FOUND'; " + 
+		"		} " + 
+		"		for(var i = 0; i < valuesToPlugin.length; i++){ " +
+		"			messageTemplate = messageTemplate.replace('{' + i + '}', valuesToPlugin[i]); " +
+		"		} " +
+		"		return messageTemplate; " +
+		"	}else{ " +
+		"		return localizedMessages[key]; " +
+		"	} " +
+		"}; " +
+		"return messages; " 
+		);
+		
 		stringWriter.append("});");
 		logger.info(stringWriter.toString());
 		

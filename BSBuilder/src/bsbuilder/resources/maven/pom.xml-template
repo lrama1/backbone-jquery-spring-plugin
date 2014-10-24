@@ -79,7 +79,7 @@
     <dependency>
 	    <groupId>org.olengski</groupId>
 	    <artifactId>webutils</artifactId>
-	    <version>0.0.2-SNAPSHOT</version>
+	    <version>0.0.3-SNAPSHOT</version>
     </dependency>
     #end
   

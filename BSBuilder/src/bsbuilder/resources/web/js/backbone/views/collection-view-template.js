@@ -7,7 +7,7 @@ define([
   'globals/global',
   #if($injectMessages)'localizedmessages',#end
   #if($templateType == "JSP")'text!templates/${domainClassName}ListTemplate'#else 'text!templates/${domainClassName}ListTemplate.htm'#end /* the request for this template actually goes thru the MainController if its JSP*/
-], function($, _, Backbone, Backgrid, ${domainClassName}Collection, Global, #if($injectMessages)Messages ,#end collectionTemplate){
+], function($, _, Backbone, Backgrid, ${domainClassName}Collection, Global, #if($injectMessages)messages ,#end collectionTemplate){
 	
 	var EditDeleteCell = Backgrid.Cell.extend({
 	    template: _.template('<a href="#" id="editRow"><span class="glyphicon glyphicon-pencil"></span></a>' +
@@ -69,13 +69,13 @@ define([
 			    		},
 			    		{
 			    			name : "${key}",
-			    			#if($injectMessages)label : Messages["${key.toUpperCase()}"],#end
+			    			#if($injectMessages)label : messages("${key.toUpperCase()}"),#end
 			    			cell : "string"
 			    		}
 					#else
 						,{
 			    			name : "${key}",
-			    			#if($injectMessages)label : Messages["${key.toUpperCase()}"],#end
+			    			#if($injectMessages)label : messages("${key.toUpperCase()}"),#end
 			    			cell : "string"
 			    		}
 					#end
