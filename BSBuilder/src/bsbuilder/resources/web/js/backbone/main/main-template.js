@@ -12,6 +12,7 @@ require.config({
     'bootstrap.min': 'libs/bootstrap.min',
     'bootstrap-datepicker': 'libs/bootstrap-datepicker',
     'backgrid-select-all' : 'libs/backgrid-select-all',
+    'backbone.global' : 'libs/backbone.global',
     templates:  'templates'	
   },
   shim: {

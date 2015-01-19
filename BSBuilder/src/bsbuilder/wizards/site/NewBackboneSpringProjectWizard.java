@@ -369,6 +369,9 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/fonts"), new Path("glyphicons-halflings-regular.woff"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/fonts/glyphicons-halflings-regular.woff"), monitor);
 			
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backbone.global.js"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backbone.global.js"), monitor);
+			
 			
 			//ANOMALY, why does text.js have to be outside the libs folder
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js"), new Path("text.js"), 

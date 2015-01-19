@@ -5,16 +5,21 @@ define([
   'backgrid',  
   'collections/${domainClassName}Collection',
   'globals/global',
+  'backbone.global',
   #if($injectMessages)'localizedmessages',#end
   #if($templateType == "JSP")'text!templates/${domainClassName}ListTemplate'#else 'text!templates/${domainClassName}ListTemplate.htm'#end /* the request for this template actually goes thru the MainController if its JSP*/
-], function($, _, Backbone, Backgrid, ${domainClassName}Collection, Global, #if($injectMessages)messages ,#end collectionTemplate){
+], function($, _, Backbone, Backgrid, ${domainClassName}Collection, Global, BackboneGlobal, #if($injectMessages)messages ,#end collectionTemplate){
 	
 	var EditDeleteCell = Backgrid.Cell.extend({
 	    template: _.template('<a href="#" id="editRow"><span class="glyphicon glyphicon-pencil"></span></a>' +
 	    		'<a href="#" id="deleteRow"><span class="glyphicon glyphicon-remove"></span></a>'),
 	    events: {
 	      "click #deleteRow": "deleteRow",
-	      "click #editRow": "editRow"
+	      "click #editRow": "editRow",
+	      "global testEvent" : "testEvent"
+	    },
+	    testEvent : function(){
+	    	alert("yea yea yea");
 	    },
 	    editRow : function(){
 	    	var idToFetch = this.model.get("${domainClassIdAttributeName}");
