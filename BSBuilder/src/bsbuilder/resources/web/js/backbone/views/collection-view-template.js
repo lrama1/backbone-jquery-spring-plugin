@@ -19,7 +19,7 @@ define([
 	      "global testEvent" : "testEvent"
 	    },
 	    testEvent : function(){
-	    	alert("yea yea yea");
+	    	alert("Event Fired Listener[${domainClassName}CollectionView]");
 	    },
 	    editRow : function(){
 	    	var idToFetch = this.model.get("${domainClassIdAttributeName}");

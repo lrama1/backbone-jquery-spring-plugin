@@ -65,6 +65,7 @@ define([
 	    			#set( $firstAttr = $attributeNameIterator.next().toString())
 	    			#set( $secondAttr = $attributeNameIterator.next().toString())
 					$("#operationMessage").html(model.get("${secondAttr}") + " was saved.");
+	    			Backbone.trigger("testEvent");
 				},
 				error : function(){
 					alert("error");
@@ -87,6 +88,7 @@ define([
 	    			#set( $firstAttr = $attributeNameIterator.next().toString())
 	    			#set( $secondAttr = $attributeNameIterator.next().toString())
 					$("#operationMessage").html(model.get("${secondAttr}") + " was saved.");
+	    			Backbone.trigger("testEvent");
 				},
 				error : function(){
 					alert("error");
