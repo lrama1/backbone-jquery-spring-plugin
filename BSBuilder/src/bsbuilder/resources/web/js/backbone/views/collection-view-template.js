@@ -122,7 +122,11 @@ define([
 	    events : {
 	    	"click #edit${domainClassName}Button" : "edit${domainClassName}",
 	    	"click #filterButton" : "filter",
+	    	"click #addFilterFor${domainClassName}Link" : "addFilterFor${domainClassName}",
 			"click #addNew${domainClassName}" : "addNew${domainClassName}"
+	    },
+	    addFilterFor${domainClassName} : function(){
+	    	$('#myFilterModal').modal('show');
 	    },
 	    addNew${domainClassName} : function(){
 	    	var idToFetch = 'default';
