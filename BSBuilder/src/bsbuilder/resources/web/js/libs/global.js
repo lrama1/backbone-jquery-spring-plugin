@@ -3,7 +3,7 @@ define([
 ], function($) {
   
 	if (typeof console  != "object")
-		console = {log : function(){message}};
+		console = {log : function(message){}};
 	if (typeof allViews  != "object")
 		allViews = {};
 	
