@@ -13,9 +13,14 @@ require.config({
     'bootstrap-datepicker': 'libs/bootstrap-datepicker',
     'backgrid-select-all' : 'libs/backgrid-select-all',
     'backbone.global' : 'libs/backbone.global',
+    'respondjs' : 'libs/respond.min',
+    'html5shiv' : 'libs/html5shiv.min',
     templates:  'templates'	
   },
   shim: {
+	'bootstrap.min' : {
+		deps: ["respondjs", "html5shiv"]
+	},  
 	underscore: {
 	   exports: '_'
 	},

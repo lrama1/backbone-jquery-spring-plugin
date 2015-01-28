@@ -9,7 +9,7 @@
 	<a id="addFilterFor${domainClassName}Link" href="#" title="Filter"><span class="glyphicon glyphicon-filter"></span></a>
 	</div>
 	<div class="panel-body">
-	<div id="listContainer">none</div> 
+	<div id="listContainer" class="bsb-listcontainer">none</div> 
 	</div>
 </div>
 
