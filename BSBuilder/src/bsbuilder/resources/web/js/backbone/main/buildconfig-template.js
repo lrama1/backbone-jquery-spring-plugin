@@ -1,38 +1,43 @@
 ({
 	paths : {
-		jquery : 'libs/jquery',
-		underscore : 'libs/underscore',
-		backbone : 'libs/backbone',
-		backgrid : 'libs/backgrid',
-		localizedmessages : 'libs/localizedmessages',
-		'backbone-pageable' : 'libs/backbone-pageable',
-		'backgrid-paginator' : 'libs/backgrid-paginator',
-		'bootstrap.min' : 'libs/bootstrap.min',
-		'bootstrap-datepicker' : 'libs/bootstrap-datepicker',
-		'backgrid-select-all' : 'libs/backgrid-select-all',
-		'backbone.global' : 'libs/backbone.global',
-		'templates' : 'templates'
+		jquery:     'libs/jquery',
+	    underscore: 'libs/underscore',
+	    backbone:   'libs/backbone',
+	    backgrid :         'libs/backgrid',
+	    localizedmessages : 'libs/localizedmessages',
+	    'backbone-pageable': 'libs/backbone-pageable',
+	    'backgrid-paginator': 'libs/backgrid-paginator',
+	    'bootstrap.min': 'libs/bootstrap.min',
+	    'bootstrap-datepicker': 'libs/bootstrap-datepicker',
+	    'backgrid-select-all' : 'libs/backgrid-select-all',
+	    'backbone.global' : 'libs/backbone.global',
+	    'respondjs' : 'libs/respond.min',
+	    'html5shiv' : 'libs/html5shiv.min',
+	    templates:  'templates'
 	},
 	shim : {
-		underscore : {
-			exports : '_'
+		'bootstrap.min' : {
+			deps: ["respondjs", "html5shiv"]
+		},  
+		underscore: {
+		   exports: '_'
 		},
-		backbone : {
-			deps : [ "underscore", "jquery" ],
-			exports : "Backbone"
-		},
-		backgrid : {
-			exports : "Backgrid",
-			deps : [ 'underscore', 'backbone', 'backbone-pageable' ],
-			init : function(_, Backbone, PageableCollection) {
-				this.Backbone.PageableCollection = PageableCollection;
-			}
+	    backbone: {
+	      deps: ["underscore", "jquery"],
+	      exports: "Backbone"
+	    },	    
+		backgrid: {
+		    exports: "Backgrid",
+		    deps: ['underscore', 'backbone', 'backbone-pageable'],
+		    init: function(_, Backbone, PageableCollection) {
+		        this.Backbone.PageableCollection = PageableCollection;
+		    }
 		},
 		'backgrid-paginator' : {
-			deps : [ 'underscore', 'backbone', 'backgrid' ]
+		  	deps: ['underscore', 'backbone', 'backgrid']
 		},
 		'backgrid-select-all' : {
-			deps : [ 'underscore', 'backbone', 'backgrid' ]
+		  	deps: ['underscore', 'backbone', 'backgrid']
 		}
 	},
 

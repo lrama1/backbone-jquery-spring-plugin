@@ -451,9 +451,9 @@
 	        <skip>
 	            false
 	        </skip>
-	        <!--userDefinedTarget>
+	        <userDefinedTarget>
 	        	${artifactId}-${version}/WEB-INF
-	        </userDefinedTarget-->
+	        </userDefinedTarget>
 	    </configuration>
 	  </plugin>
       <plugin>

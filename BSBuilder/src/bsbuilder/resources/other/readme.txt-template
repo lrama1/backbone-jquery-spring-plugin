@@ -24,5 +24,13 @@ Adding Validations:
     logic in the 'validate' attribute
     
     
+Deploying Optimized Javascripts
+    To deploy the app in optmized JS format, just
+    do:
+    0.  Change the index JSP.  Comment out the line which points to the
+         non-optimized main.js and Uncomment the line below it (which points to the optimized one).
+    1.  Maven Build (clean compile).  By default the build will optimize all JS files    
+    
+    
 XSS Testers
 \"/><script>alert('test');</script>
