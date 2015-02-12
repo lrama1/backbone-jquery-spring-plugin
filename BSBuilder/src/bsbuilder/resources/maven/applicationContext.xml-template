@@ -7,6 +7,7 @@
 	xmlns:ehcache="http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring"
 	xmlns:aop="http://www.springframework.org/schema/aop"
 	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
 				http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
 	 			http://www.springframework.org/schema/context
@@ -16,7 +17,8 @@
        			http://www.springframework.org/schema/aop 
 				http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
 				http://www.springframework.org/schema/data/mongo
-          		http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd">
+          		http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd
+          		http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
     
     <aop:aspectj-autoproxy />     			
     <ehcache:annotation-driven cache-manager="cacheManager"/>
@@ -24,7 +26,13 @@
     	<property name="configLocation"  value="/WEB-INF/spring/ehcache.xml"/>
     </bean>   			
 	
-	<context:component-scan base-package="${basePackageName}.service, ${basePackageName}.dao, ${basePackageName}.security"/>
+	<context:component-scan base-package="${basePackageName}.service, #if(${addWebService})${basePackageName}.webservice,#end
+		 ${basePackageName}.dao, ${basePackageName}.security"/>
+	
+	#if(${addWebService})
+	#set( $domainObjectName = $domainClassName.substring(0,1).toLowerCase() + $domainClassName.substring(1) )	
+	<jaxws:endpoint id="${domainObjectName}WS" implementor="#${domainObjectName}WebServiceImpl" address="/${domainClassName}WebService" /> 
+	#end
 	
 	#if(${useMongo} == true)
 	<mongo:mongo host="${mongoHostName}" port="${mongoPort}" />

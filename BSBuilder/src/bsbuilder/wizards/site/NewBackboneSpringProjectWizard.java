@@ -59,6 +59,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 	private BackboneProjectWizardPageThree pageThree;
 	private BackboneProjectWizardPageFour pageFour;
 	private BackboneProjectWizardPageFive pageFive;
+	private BackboneProjectWizardPageSix pageSix;
 
 	private IConfigurationElement config;
 
@@ -93,6 +94,9 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		
 		pageFive = new BackboneProjectWizardPageFive("BackboneOptions");
 		addPage(pageFive);
+		
+		pageSix = new BackboneProjectWizardPageSix("otherFeatures");
+		addPage(pageSix);
 		
 	}
 
@@ -166,6 +170,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		mapOfValues.put("mongoDBName", pageTwo.getMongoDBName());
 		mapOfValues.put("prepForOracle", pageTwo.prepForOracle());
 		mapOfValues.put("prepForMySQL", pageTwo.prepForMySql());
+		mapOfValues.put("addWebService", pageSix.addWebServiceFeature());
 		
 		final String domainClassSourceCode = pageThree.getClassSource(mapOfValues);
 		
@@ -174,6 +179,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		//final String domainControllerSourceCode = pageThree.getControllerSource(basePackageName, controllerPackageName, domainClassName, domainClassIdAttributeName);
 		final String controllerTestSourceCode = pageThree.getControllerTestSource(basePackageName, controllerPackageName, domainClassName);
 		final String servicePackageName = pageTwo.getBasePackageName() + ".service";
+		final String webServicePackageName = pageTwo.getBasePackageName() + ".webservice";
 		final String daoPackageName = pageTwo.getBasePackageName() + ".dao";
 		final String commonPackageName = pageTwo.getBasePackageName() + ".common";
 		final String securityPackageName = pageTwo.getBasePackageName() + ".security";
@@ -223,6 +229,11 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		params.setSampleESAPIProperties(CommonUtils.linesToString(IOUtils.readLines(getClass().getResourceAsStream("/bsbuilder/resources/esapi/ESAPI.properties")),"\n"));
 		params.setJSPTemplate(pageFive.isJSPTemplate());
 		params.setInjectLocalizedMessages(pageFive.injectLocalizedMessages());
+		
+		params.setGenerateWebService(pageSix.addWebServiceFeature());
+		params.setWebServicePackageName(webServicePackageName);
+		params.setWebServiceInterfaceSourceCode(pageThree.buildSourceCode(mapOfValues, "webserviceinterface.java-template"));
+		params.setWebServiceImplSourceCode(pageThree.buildSourceCode(mapOfValues, "webserviceimpl.java-template"));
 		System.out.println("JSP?*******************************" + pageFive.isJSPTemplate());
 		System.out.println("HTML?*******************************" + pageFive.isHTMLTemplate());
 
@@ -333,15 +344,15 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/underscore-min.js"), monitor);
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backgrid.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid.js"), monitor);
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backgrid.css"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/css/libs"), new Path("backgrid.css"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid.css"), monitor);
 			
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backgrid-paginator.css"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/css/libs"), new Path("backgrid-paginator.css"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid-paginator.css"), monitor);
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backgrid-paginator.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid-paginator.js"), monitor);			
 			
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backgrid-select-all.css"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/css/libs"), new Path("backgrid-select-all.css"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid-select-all.css"), monitor);
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backgrid-select-all.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid-select-all.js"), monitor);			
@@ -351,25 +362,25 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			//
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("bootstrap-datepicker.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/bootstrap-datepicker.js"), monitor);
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("datepicker.css"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/css/libs"), new Path("datepicker.css"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/datepicker.css"), monitor);
 			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("bootstrap.min.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/bootstrap.min.js"), monitor);
-			
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/fonts"), new Path("glyphicons-halflings-regular.eot"), 
+					
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/css/fonts"), new Path("glyphicons-halflings-regular.eot"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/fonts/glyphicons-halflings-regular.eot"), monitor);
 			
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/fonts"), new Path("glyphicons-halflings-regular.svg"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/css/fonts"), new Path("glyphicons-halflings-regular.svg"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/fonts/glyphicons-halflings-regular.svg"), monitor);
 			
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/fonts"), new Path("glyphicons-halflings-regular.ttf"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/css/fonts"), new Path("glyphicons-halflings-regular.ttf"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/fonts/glyphicons-halflings-regular.ttf"), monitor);
 			
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/fonts"), new Path("glyphicons-halflings-regular.woff"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/css/fonts"), new Path("glyphicons-halflings-regular.woff"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/fonts/glyphicons-halflings-regular.woff"), monitor);
 			
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/fonts"), new Path("glyphicons-halflings-regular.woff2"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/css/fonts"), new Path("glyphicons-halflings-regular.woff2"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/fonts/glyphicons-halflings-regular.woff2"), monitor);
 			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backbone.global.js"), 
@@ -458,9 +469,9 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/css"), new Path("site.css"),
 					TemplateMerger.merge("/bsbuilder/resources/css/site.css-template", mapOfValues), monitor);
 			
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("bootstrap.min.css"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/css/libs"), new Path("bootstrap.min.css"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/css/bootstrap.min.css"), monitor);
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("bootstrap-theme.min.css"), 
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/css/libs"), new Path("bootstrap-theme.min.css"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/css/bootstrap-theme.min.css"), monitor);
 	
 	
@@ -492,7 +503,16 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			
 			/* Add Service */
 			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getServicePackageName(), params.getDomainClassName() + "Service",
-					params.getServiceSourceCode() , monitor);			
+					params.getServiceSourceCode() , monitor);
+			
+			if(params.isGenerateWebService()){
+				CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getWebServicePackageName(), 
+						params.getDomainClassName() + "WebService",
+						params.getWebServiceInterfaceSourceCode() , monitor);	
+				CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getWebServicePackageName(), 
+						params.getDomainClassName() + "WebServiceImpl",
+						params.getWebServiceImplSourceCode() , monitor);
+			}			
 			
 			/* Add DAO */
 			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getDaoPackageName(), params.getDomainClassName() + "DAO",
@@ -503,18 +523,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 					params.getSecurityUserDetailsServiceSourceCode() , monitor);
 			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getSecurityPackageName(), "SampleUserDetails",
 					params.getSecurityUserDetailsSourceCode() , monitor);
-			/*if(params.getSecurityAspectCode() != null){
-				CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getSecurityPackageName(), "SecurityAspect",
-					params.getSecurityAspectCode() , monitor);
-				CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getSecurityPackageName(), "SecuredDomain",
-						params.getSecuredDomainCode() , monitor);
-				CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getSecurityPackageName(), "SecurityTokenGenerator",
-						params.getSecurityTokenGeneratorCode() , monitor);
-				CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getSecurityPackageName() + ".annotation", "EncodeType",
-						params.getSecurityEnumCode() , monitor);
-				CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getSecurityPackageName() + ".annotation", "SecuredField",
-						params.getSecurityAnnotationCode() , monitor);
-			}*/			
+		
 			
 			/* Add ListWrapper */
 			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getCommonPackageName(), "ListWrapper",
@@ -659,6 +668,16 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		IFolder cssFolder = resourcesFolder.getFolder(new Path("css"));
 		cssFolder.create(false, true, new NullProgressMonitor());
 		folders.put("src/main/webapp/WEB-INF/resources/css", cssFolder);
+		
+		//src/main/webapp/WEB-INF/resources/css/libs
+		IFolder thirdPartyCssFolder = cssFolder.getFolder(new Path("libs"));
+		thirdPartyCssFolder.create(false, true, new NullProgressMonitor());
+		folders.put("src/main/webapp/WEB-INF/resources/css/libs", thirdPartyCssFolder);
+		
+		//src/main/webapp/WEB-INF/resources/css/fonts
+		IFolder thirdPartyFontsFolder = cssFolder.getFolder(new Path("fonts"));
+		thirdPartyFontsFolder.create(false, true, new NullProgressMonitor());
+		folders.put("src/main/webapp/WEB-INF/resources/css/fonts", thirdPartyFontsFolder);
 		
 		//src/main/webapp/WEB-INF/resources/js
 		IFolder jsFolder = resourcesFolder.getFolder(new Path("js"));
@@ -836,6 +855,12 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		private String domainClassIdAttributeName;
 		private String servicePackageName;
 		private String serviceSourceCode;
+		
+		private boolean generateWebService;
+		private String webServicePackageName;
+		private String webServiceInterfaceSourceCode;
+		private String webServiceImplSourceCode;
+		
 		private String daoPackageName;
 		private String daoSourceCode;
 		private String commonPackageName;
@@ -857,6 +882,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		private String sampleESAPIProperties;
 		private boolean isJSPTemplate = true;
 		private boolean injectLocalizedMessages;
+		
 		
 		public String getBasePackageName() {
 			return basePackageName;
@@ -1057,7 +1083,36 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		}
 		public void setNameValuePairSourceCode(String nameValuePairSourceCode) {
 			this.nameValuePairSourceCode = nameValuePairSourceCode;
-		}			
+		}
+		
+		
+		public boolean isGenerateWebService() {
+			return generateWebService;
+		}
+		public void setGenerateWebService(boolean generateWebService) {
+			this.generateWebService = generateWebService;
+		}
+		public String getWebServicePackageName() {
+			return webServicePackageName;
+		}
+		public void setWebServicePackageName(String webServicePackageName) {
+			this.webServicePackageName = webServicePackageName;
+		}
+		public String getWebServiceInterfaceSourceCode() {
+			return webServiceInterfaceSourceCode;
+		}
+		public void setWebServiceInterfaceSourceCode(
+				String webServiceInterfaceSourceCode) {
+			this.webServiceInterfaceSourceCode = webServiceInterfaceSourceCode;
+		}
+		public String getWebServiceImplSourceCode() {
+			return webServiceImplSourceCode;
+		}
+		public void setWebServiceImplSourceCode(String webServiceImplSourceCode) {
+			this.webServiceImplSourceCode = webServiceImplSourceCode;
+		}
+		
+		
 	}
 
 }
