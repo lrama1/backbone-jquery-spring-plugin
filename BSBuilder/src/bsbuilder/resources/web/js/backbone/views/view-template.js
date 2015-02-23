@@ -67,8 +67,8 @@ define([
 					$("#operationMessage").html(model.get("${secondAttr}") + " was saved.");
 	    			Backbone.trigger("testEvent");
 				},
-				error : function(){
-					alert("error");
+				error : function(model, response, options){
+					alert("Error: " + response.statusText);
 				}
 	    		#set( $dateFieldCount = 0 )
 	    		#foreach($key in $attrs.keySet() )
@@ -90,8 +90,8 @@ define([
 					$("#operationMessage").html(model.get("${secondAttr}") + " was saved.");
 	    			Backbone.trigger("testEvent");
 				},
-				error : function(){
-					alert("error");
+				error : function(model, response, options){
+					alert("Error: " + response.statusText);
 				}
 	    		#set( $dateFieldCount = 0 )
 	    		#foreach($key in $attrs.keySet() )

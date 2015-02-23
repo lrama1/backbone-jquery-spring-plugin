@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.owasp.esapi.ESAPI;
 import org.owasp.esapi.Logger;
 import java.security.Principal;
+import javax.annotation.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,7 @@ import ${basePackageName}.security.SampleUserDetails;
 import ${basePackageName}.common.ListWrapper;
 import ${basePackageName}.common.NameValuePair;
 import org.springframework.security.core.Authentication;
+import org.springframework.context.MessageSource;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -34,6 +36,8 @@ public class ${domainClassName}Controller {
 	@Autowired
 	${domainClassName}Service $serviceObjectName;
 	
+	@Resource(name = "messageSource")
+    private MessageSource messageSource;	
 		
 	@RequestMapping(value = "/$domainClassName.toLowerCase()/{id}", method = RequestMethod.GET)
 	public @ResponseBody $domainClassName get$domainClassName(@PathVariable("id") String id, Principal principal){

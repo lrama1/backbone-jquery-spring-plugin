@@ -106,7 +106,8 @@ public class TemplateMerger {
 	
 	private static void checkAndCopyTemplatesToExternal(String fileNameToCheck)
 		throws Exception{
-		String templateFileName = USER_HOME + "/bsbuildertemplates" + fileNameToCheck;
+		String baseDirectory = USER_HOME + "/bsbuildertemplates";
+		String templateFileName = baseDirectory + fileNameToCheck;
 		File templateFile = new File(templateFileName);
 		if(!templateFile.exists()){
 			String directoryPathToCreate = templateFileName.substring(0, templateFileName.lastIndexOf("/"));
