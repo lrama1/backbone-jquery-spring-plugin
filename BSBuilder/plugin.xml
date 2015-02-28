@@ -53,12 +53,19 @@
                id="Oleng2.newAction">
          </action>
          <action
+               label="Add New Presenter.."
+               class="bsbuilder.wizards.backbone.actions.AddNewPresenterAction"
+               menubarPath="Oleng2.menu1/group2"
+               enablesFor="1"
+               id="Oleng2.newPresenter">
+         </action>
+         <!--action
                label="Add Third Party JS Lib"
                class="bsbuilder.wizards.backbone.actions.AddNewJSLibAction"
                menubarPath="Oleng2.menu1/group2"
                enablesFor="1"
                id="Oleng2.newJSLib">
-         </action>
+         </action-->
       </objectContribution>
    </extension>
 

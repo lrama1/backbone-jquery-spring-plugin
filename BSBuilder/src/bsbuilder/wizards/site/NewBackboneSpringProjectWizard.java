@@ -408,10 +408,13 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/collections/collection-template.js", mapOfValues), monitor);
 			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/views"), new Path(params.getDomainClassName() + "EditView.js"), 
-					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/views/view-template.js", mapOfValues), monitor);
+					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/views/view-template.js", mapOfValues), monitor);			
 			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/views"), new Path(params.getDomainClassName() + "CollectionView.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/views/collection-view-template.js", mapOfValues), monitor);
+			
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/presenters"), new Path(params.getDomainClassName() + "Presenter.js"), 
+					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/views/presenter-template.js", mapOfValues), monitor);
 			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/globals"), new Path("global.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/libs/global.js", mapOfValues), monitor);
@@ -482,17 +485,22 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			 * */			
 			Path listTemplatePath;
 			Path editTemplatePath;
+			Path presenterTemplatePath;
 			if(params.isJSPTemplate()){
 				listTemplatePath = new Path(params.getDomainClassName() + "ListTemplate.jsp");
 				editTemplatePath = new Path(params.getDomainClassName() + "EditTemplate.jsp");
+				presenterTemplatePath = new Path(params.getDomainClassName() + "PresenterTemplate.jsp");
 			}else{
 				listTemplatePath = new Path(params.getDomainClassName() + "ListTemplate.htm");
 				editTemplatePath = new Path(params.getDomainClassName() + "EditTemplate.htm");
+				presenterTemplatePath = new Path(params.getDomainClassName() + "PresenterTemplate.htm");
 			}	
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/templates"), editTemplatePath, 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/EditTemplate.jsp-template",  mapOfValues), monitor);
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/templates"), listTemplatePath, 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/ListTemplate.jsp-template", mapOfValues), monitor);
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/templates"), presenterTemplatePath, 
+					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/PresenterTemplate.jsp-template", mapOfValues), monitor);
 		
 			
 			/* Add Controllers*/
@@ -713,6 +721,11 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		IFolder viewsFolder = jsFolder.getFolder(new Path("views"));
 		viewsFolder.create(false, true, new NullProgressMonitor());
 		folders.put("src/main/webapp/WEB-INF/resources/js/views", viewsFolder);
+		
+		//src/main/webapp/WEB-INF/resources/js/presenters
+		IFolder presentersFolder = jsFolder.getFolder(new Path("presenters"));
+		presentersFolder.create(false, true, new NullProgressMonitor());
+		folders.put("src/main/webapp/WEB-INF/resources/js/presenters", presentersFolder);
 		
 		//src/main/webapp/WEB-INF/resources/js/templates
 		IFolder templatesFolder = jsFolder.getFolder(new Path("templates"));

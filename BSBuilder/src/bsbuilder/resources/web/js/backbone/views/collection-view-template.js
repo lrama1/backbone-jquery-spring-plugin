@@ -15,12 +15,8 @@ define([
 	    		'<a href="#" id="deleteRow"><span class="glyphicon glyphicon-remove"></span></a>'),
 	    events: {
 	      "click #deleteRow": "deleteRow",
-	      "click #editRow": "editRow",
-	      "global testEvent" : "testEvent"
-	    },
-	    testEvent : function(){
-	    	alert("Event Fired Listener[${domainClassName}CollectionView]");
-	    },
+	      "click #editRow": "editRow"
+	    },	    
 	    editRow : function(){
 	    	var idToFetch = this.model.get("${domainClassIdAttributeName}");
 			require(['views/${domainClassName}EditView', 'models/${domainClassName}Model'], 
@@ -111,19 +107,27 @@ define([
 				#end	
 			#end
 			
+			#set($domainObjectName = ${domainClassName.substring(0,1).toLowerCase()} + ${domainClassName.substring(1)})
 	        #[[
-	        this.$el.html(_.template(collectionTemplate, ]]#  {$attrVar}  #[[));   
-	        $("#listContainer").html(grid.render().$el);
-	        $("#listContainer").append(paginator.render().$el);
-	        ]]#
-	        
+	        this.$el.html(_.template(collectionTemplate, ]]#  {$attrVar}  ));   
+	        $("#${domainObjectName}ListContainer").html(grid.render().$el);
+	        $("#${domainObjectName}ListContainer").append(paginator.render().$el);
 	        //this.collection.fetch({reset : true});
 	    },
 	    events : {
 	    	"click #edit${domainClassName}Button" : "edit${domainClassName}",
 	    	"click #filterButton" : "filter",
 	    	"click #addFilterFor${domainClassName}Link" : "addFilterFor${domainClassName}",
-			"click #addNew${domainClassName}" : "addNew${domainClassName}"
+			"click #addNew${domainClassName}" : "addNew${domainClassName}",
+     	    "global testEvent" : "testEvent",
+     	    "global ${domainClassName}:fetch" : "fetchMyCollection"
+				
+	    },
+	    fetchMyCollection : function(){
+	    	this.collection.fetch();
+	    },
+	    testEvent : function(){
+	    	alert("Event Fired Listener[${domainClassName}CollectionView]");
 	    },
 	    addFilterFor${domainClassName} : function(){
 	    	$('#myFilterModal').modal('show');

@@ -130,6 +130,9 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 				//create backbone collection view
 				createCollectionView(projectContainer, projectName);
 				
+				//create Presenter
+				createPresenter(projectContainer, projectName);
+				
 				//
 				addNewRoutesToRouter(projectContainer, projectName);
 				
@@ -213,12 +216,15 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		mapOfValues.put("fieldTypes", pageThree.getFieldTypes());
 		Path editPath;
 		Path listPath;
+		Path presenterTemplatePath;
 		if(pageFive.isJSPTemplate()){
 			editPath = new Path(domainClassName + "EditTemplate.jsp");
 			listPath = new Path(domainClassName + "ListTemplate.jsp");
+			presenterTemplatePath = new Path(domainClassName + "PresenterTemplate.jsp");
 		}else{
 			editPath = new Path(domainClassName + "EditTemplate.htm");
 			listPath = new Path(domainClassName + "ListTemplate.htm");
+			presenterTemplatePath = new Path(domainClassName + "PresenterTemplate.htm");
 		}	
 		
 		CommonUtils.addFileToProject(templatesFolder, editPath, 
@@ -228,6 +234,11 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		CommonUtils.addFileToProject(templatesFolder, listPath, 
 				TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/ListTemplate.jsp-template",
 						 mapOfValues), new NullProgressMonitor());		
+		
+		CommonUtils.addFileToProject(templatesFolder, presenterTemplatePath, 
+				TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/PresenterTemplate.jsp-template",
+						 mapOfValues), new NullProgressMonitor());		
+	
 
 	}
 	
@@ -329,6 +340,21 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 				TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/views/collection-view-template.js", mapOfValues), new NullProgressMonitor());
 	}
 	
+	private void createPresenter(IContainer projectContainer, String projectName) throws Exception{
+		IFolder presenterFolder = projectContainer.getFolder(new Path("src/main/webapp/WEB-INF/resources/js/presenters"));
+		String domainClassName = pageThree.getDomainClassName();
+		Map<String, Object> mapOfValues = new HashMap<String, Object>();		
+		mapOfValues.put("domainClassName", domainClassName);
+		mapOfValues.put("projectName", projectName);
+		mapOfValues.put("domainClassIdAttributeName", pageThree.getDomainClassAttributeName());
+		mapOfValues.put("attrs", pageThree.getModelAttributes());
+		mapOfValues.put("templateType", pageFive.isJSPTemplate()?"JSP" : "HTML");
+		
+		CommonUtils.addFileToProject(presenterFolder, new Path(domainClassName + "Presenter.js"), 
+				TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/views/presenter-template.js", mapOfValues), new NullProgressMonitor());
+		
+	}
+	
 	private void addNewTabsToHomePage(IContainer projectContainer, String className) throws Exception{
 		IFolder indexFolder = projectContainer.getFolder(new Path("src/main/webapp/WEB-INF"));
 		IFile indexJSPFile = indexFolder.getFile("index.jsp");
@@ -381,7 +407,8 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		String modifiedFile = FileUtils.readFileToString(file);
 		String routeDefinitionStringToInsert = "\n," + "\"" + domainClassName.toLowerCase() + "/:id\" : " +
 				"\"get" + domainClassName + "\",\n" +
-				"\"" + domainClassName.toLowerCase() + "s\" : " + "\"get" + domainClassName + "List\"\n";
+				"\"" + domainClassName.toLowerCase() + "s\" : " + "\"get" + domainClassName + "List\",\n" +
+				"\"" + domainClassName.toLowerCase() + "Presenter\" : " + "\"show" + domainClassName + "Presenter\"\n";
 		String routeDefinitionRegex = "routes\\s*:\\s*\\{[\\*\\d\\w\\s\\\"\\'\\/:,]*\\}";
 		modifiedFile = modifier(modifiedFile, routeDefinitionRegex,
 				routeDefinitionStringToInsert, "}");

@@ -2,14 +2,14 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 #end
 
-
+#set($domainObjectName = ${domainClassName.substring(0,1).toLowerCase()} + ${domainClassName.substring(1)})
 <div class="panel panel-default">
 	<div class="panel-heading">${domainClassName}s
 	<a id="addNew${domainClassName}" href="#" title="Add"><span class="glyphicon glyphicon-plus"></span></a>
 	<a id="addFilterFor${domainClassName}Link" href="#" title="Filter"><span class="glyphicon glyphicon-filter"></span></a>
 	</div>
 	<div class="panel-body">
-	<div id="listContainer" class="bsb-listcontainer">none</div> 
+	<div id="${domainObjectName}ListContainer" class="bsb-listcontainer">none</div> 
 	</div>
 </div>
 
