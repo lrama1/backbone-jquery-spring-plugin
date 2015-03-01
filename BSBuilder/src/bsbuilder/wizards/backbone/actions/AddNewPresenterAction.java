@@ -47,7 +47,7 @@ public class AddNewPresenterAction implements IObjectActionDelegate {
 	        if (firstElement instanceof IAdaptable)
 	        {
 	            
-	            AddMoreModelWizard wizard = new AddMoreModelWizard();
+	            AddNewPresenterWizard wizard = new AddNewPresenterWizard();
 	            wizard.init(window.getWorkbench(),
 	                      (IStructuredSelection)selection);
 	              // Instantiates the wizard container with the wizard and opens it
