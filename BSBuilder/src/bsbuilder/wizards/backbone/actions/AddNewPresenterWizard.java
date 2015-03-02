@@ -1,7 +1,10 @@
 package bsbuilder.wizards.backbone.actions;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileReader;
+import java.io.InputStream;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,8 +12,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -97,10 +105,11 @@ public class AddNewPresenterWizard extends Wizard implements INewWizard {
 				String projectName = project.getName();
 				String basePackageName = bsBuilderProperties.getProperty("basePackage");				
 				createCompositePresenter(projectContainer, projectName);
-				
+				addNewRoutesToRouter(projectContainer, projectName, this.addPresenterPage.getPresenterName());
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				StatusManager.getManager().handle(new Status(IStatus.ERROR, "BSB", e.getMessage()), StatusManager.BLOCK); 
 			}
         }
 	        
@@ -116,6 +125,16 @@ public class AddNewPresenterWizard extends Wizard implements INewWizard {
 		
 		CommonUtils.addFileToProject(presenterFolder, new Path(presenterName + ".js"), 
 				TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/views/composite-presenter-template.js", mapOfValues), new NullProgressMonitor());
+	
+		IFolder templatesFolder = projectContainer.getFolder(new Path("src/main/webapp/WEB-INF/resources/js/templates"));
+		if(!templatesFolder.exists()){
+			//try another location
+			templatesFolder = projectContainer.getFolder(new Path("src/main/webapp/WEB-INF/resources/templates"));
+		}
+		Path presenterTemplatePath = new Path(presenterName + "Template.htm");
+		CommonUtils.addFileToProject(templatesFolder, presenterTemplatePath, 
+				TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/CompositePresenterTemplate.jsp-template",
+						 mapOfValues), new NullProgressMonitor());	
 	}
 	
 	private Map<String, String> arrayToList(String[] selectedViews){
@@ -127,6 +146,58 @@ public class AddNewPresenterWizard extends Wizard implements INewWizard {
 		return views;
 	}
 	
+	private void addNewRoutesToRouter(IContainer projectContainer, String projectName, String presenterName) throws Exception{
+		IFolder jsFolder = projectContainer.getFolder(new Path("src/main/webapp/WEB-INF/resources/js"));
+		IFile routerFile = jsFolder.getFile("router.js");
+		
+		File file = routerFile.getRawLocation().toFile();
+		Map<String, Object> mapOfValues = new HashMap<String, Object>();
+		mapOfValues.put("compositePresenterName", presenterName);
+		
+		String modifiedFile = FileUtils.readFileToString(file);
+		String routeDefinitionStringToInsert = 
+				"\n,\"" + presenterName + "\" : " + "\"show" + presenterName + "\"\n";
+		String routeDefinitionRegex = "routes\\s*:\\s*\\{[\\*\\d\\w\\s\\\"\\'\\/:,]*\\}";
+		modifiedFile = modifier(modifiedFile, routeDefinitionRegex,
+				routeDefinitionStringToInsert, "}");
+		
+		InputStream inputStream = 
+				TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/routers/router-template-fragment-04.js", mapOfValues);
+		
+		StringWriter mergeOutput = new StringWriter();
+		IOUtils.copy(inputStream, mergeOutput);
+		
+		//String routeActionStringToInsert = "";
+		String routeActionRegex = "[\\s\\d\\w\\'\\/]*[\\n]\\s*Backbone.history.start\\(\\);";
+		modifiedFile = modifier(modifiedFile, routeActionRegex,
+				"\n" + mergeOutput.toString(), "");
+		
+		InputStream modifiedFileContent = new ByteArrayInputStream(modifiedFile.getBytes());
+		routerFile.delete(true, new NullProgressMonitor());
+		routerFile.create(modifiedFileContent, IResource.FORCE, new NullProgressMonitor());
+	}
 	
+	public String modifier(String fileContents, String expression, String stringToInsert, String stringToBefore){
+		String newFileContents = "";
+				
+			//String contents = FileUtils.readFileToString(new File(fileName));
+			
+			StringBuffer buffer = null;
+			Pattern pattern = Pattern.compile(expression);
+			Matcher matcher = pattern.matcher(fileContents);
+			if(matcher.find()){
+				String origString = matcher.group();
+				buffer = new StringBuffer(origString);
+				if(!stringToBefore.equals(""))
+					buffer.insert(origString.lastIndexOf(stringToBefore), stringToInsert);
+				else
+					buffer.insert(0, stringToInsert);
+			}
+			//newFileContents = fileContents.replaceAll(expression, buffer.toString().replace("$", "\\$"));
+			newFileContents = fileContents.replaceFirst(expression, buffer.toString().replace("$", "\\$"));
+		
+		return newFileContents;
+	}
+
 
 }

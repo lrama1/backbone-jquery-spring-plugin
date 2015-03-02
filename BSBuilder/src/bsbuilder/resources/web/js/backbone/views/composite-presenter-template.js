@@ -15,9 +15,12 @@ define([
 	    initialize: function(){    	
 	        this.render();	        
 	    },
-	    render: function(){
+	    render: function(){	    	
+	    	this.$el.html(presenterTemplate);	 
 	    	//Global.showView(new SomeView({el: $("#someSection") }));
-	    	this.$el.html(presenterTemplate);
+	    	#foreach(${key} in ${childViews.keySet()} )
+	    	  //Global.showView(new ${childViews.get(${key})}({el: $("#${childViews.get(${key})}-presenterSection") }));
+	    	#end
 	    }    
 	});
 

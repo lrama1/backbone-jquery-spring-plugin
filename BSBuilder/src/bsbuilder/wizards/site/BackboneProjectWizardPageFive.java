@@ -44,8 +44,9 @@ public class BackboneProjectWizardPageFive extends WizardPage {
 		grpTemplateOptions.setText("Template Options");
 		
 		btnRadioButton = new Button(grpTemplateOptions, SWT.RADIO);
-		btnRadioButton.setBounds(10, 74, 188, 24);
-		btnRadioButton.setText("Generate JSP Templates");
+		btnRadioButton.setEnabled(false);
+		btnRadioButton.setBounds(10, 74, 321, 24);
+		btnRadioButton.setText("Generate JSP Templates [DEPRECATED]");
 		
 		btnRadioButton_1 = new Button(grpTemplateOptions, SWT.RADIO);
 		btnRadioButton_1.setSelection(true);
