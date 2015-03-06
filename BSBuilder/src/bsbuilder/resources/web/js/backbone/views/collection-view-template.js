@@ -123,7 +123,7 @@ define([
 	    	"click #addFilterFor${domainClassName}Link" : "addFilterFor${domainClassName}",
 			"click #addNew${domainClassName}" : "addNew${domainClassName}",
      	    "global testEvent" : "testEvent",
-     	    "global ${domainClassName}:fetch" : "fetchMyCollection"
+     	    "global ${domainClassName}s:fetch" : "fetchMyCollection"
 				
 	    },
 	    fetchMyCollection : function(){
