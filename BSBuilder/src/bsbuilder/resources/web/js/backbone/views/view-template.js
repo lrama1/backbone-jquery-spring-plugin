@@ -1,10 +1,10 @@
 define([ 
   'jquery',
   'underscore',
-  'backbone',
+  'backbone', 'models/${domainClassName}Model',
   #if($templateType == "JSP")'text!templates/${domainClassName}EditTemplate'#else 'text!templates/${domainClassName}EditTemplate.htm'#end, /* the request for this template actually goes thru the MainController*/
   'bootstrap-datepicker','backbone.global',
-], function($, _, Backbone, editTemplate, datePicker, BackboneGlobal){
+], function($, _, Backbone, ${domainClassName}Model, editTemplate, datePicker, BackboneGlobal){
 	
 	var ${domainClassName}EditView = Backbone.View.extend({
 		defaults : {model : {}},
@@ -37,6 +37,10 @@ define([
 	        	#end	
 	        #end
 	        
+	        if(!this.model){
+				this.model = new ${domainClassName}Model();
+			}
+	        		
 	        $.when(${promiseExpr}).done(function($promiseResultExpr) {
 	        	var data = view.model.toJSON();
 	        	${promiseAssignExpr}

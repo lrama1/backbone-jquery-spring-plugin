@@ -9,8 +9,11 @@
 	<http auto-config="true" use-expressions="true">
 		<intercept-url pattern="/home*" access="isAuthenticated()"/>
 		<custom-filter position="PRE_AUTH_FILTER" ref="siteminderFilter" />
+		<custom-filter after="SECURITY_CONTEXT_FILTER" ref="clearSessionOnSMHeaderChange" />
 	</http>
 
+	<beans:bean id="clearSessionOnSMHeaderChange" class="${basePackageName}.security.ClearSessionOnSMHeaderChange"/>
+		
 	<beans:bean id="siteminderFilter" class="org.springframework.security.web.authentication.preauth.RequestHeaderAuthenticationFilter">
 		<beans:property name="principalRequestHeader" value="SM_USER" />
 		<beans:property name="authenticationManager" ref="authenticationManager" />

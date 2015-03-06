@@ -219,6 +219,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		params.setSecurityEnumCode(pageThree.buildSourceCode(mapOfValues, "security-annotation-type.java-template"));
 		params.setSecurityAnnotationCode(pageThree.buildSourceCode(mapOfValues, "security-field-annotation.java-template"));
 		params.setSecurityTokenGeneratorCode(pageThree.buildSourceCode(mapOfValues, "security-token-generator.java-template"));
+		params.setSmHeaderChangeSourceCode(pageThree.buildSourceCode(mapOfValues, "clear-session-on-sm-header-change.java-template"));
 		
 		params.setSampleMessageBundleContent(pageThree.getMessageBundleContent("", "", ""));
 		params.setSampleMessageBundleContentEs(pageThree.getMessageBundleContentEs("", "", ""));
@@ -531,6 +532,8 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 					params.getSecurityUserDetailsServiceSourceCode() , monitor);
 			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getSecurityPackageName(), "SampleUserDetails",
 					params.getSecurityUserDetailsSourceCode() , monitor);
+			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getSecurityPackageName(), "ClearSessionOnSMHeaderChange",
+					params.getSmHeaderChangeSourceCode() , monitor);
 		
 			
 			/* Add ListWrapper */
@@ -882,6 +885,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		private String securityPackageName;
 		private String securityUserDetailsServiceSourceCode;
 		private String securityUserDetailsSourceCode;
+		private String smHeaderChangeSourceCode;
 		private boolean generateSecurityCode;
 		private String securityAspectCode;
 		private String securityEnumCode;
@@ -1123,6 +1127,12 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		}
 		public void setWebServiceImplSourceCode(String webServiceImplSourceCode) {
 			this.webServiceImplSourceCode = webServiceImplSourceCode;
+		}
+		public String getSmHeaderChangeSourceCode() {
+			return smHeaderChangeSourceCode;
+		}
+		public void setSmHeaderChangeSourceCode(String smHeaderChangeSourceCode) {
+			this.smHeaderChangeSourceCode = smHeaderChangeSourceCode;
 		}
 		
 		

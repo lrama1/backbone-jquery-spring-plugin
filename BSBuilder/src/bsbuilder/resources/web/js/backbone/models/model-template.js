@@ -12,7 +12,16 @@ define([
 		  //if(attributes.<ATTRBITE_NAME_HERE> == ''){				
 		  //	return '<ATTR_NAME> cant be blank.';
 		  //}		
-	  }	,
+	  },
+	  defaults : {
+		  #foreach($key in $attrs.keySet() )
+			  #if($foreach.count == 1)			  
+				  "$key" : ""
+			  #else
+				  ,"$key" : ""
+			  #end
+		  #end	  
+	  },
 	  parse : function(response){		  
 		  #foreach($key in $attrs.keySet() )
 		  	#if($attrs.get($key) == 'java.util.Date')
