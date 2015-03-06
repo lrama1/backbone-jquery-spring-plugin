@@ -11,7 +11,6 @@ import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -20,12 +19,14 @@ import org.olengski.web.security.annotation.EncodeType;
 import org.olengski.web.security.annotation.UnsecuredField;
 import org.olengski.web.security.annotation.XSSProtect;
 import org.owasp.esapi.ESAPI;
+import org.owasp.esapi.Logger;
 import org.springframework.stereotype.Component;
 
 @Aspect
 @Component
 public class XSSAspect {
-	Logger logger = Logger.getLogger(this.getClass());
+	
+	private Logger logger = ESAPI.getLogger(this.getClass());
 	
 	@Around("execution(public * *(..)) && execution(@org.olengski.web.security.annotation.XSSProtect * *(..))")
     public Object decorateForSecurity(ProceedingJoinPoint joinPoint) throws Throwable {
@@ -72,13 +73,13 @@ public class XSSAspect {
 								if(field.getAnnotation(UnsecuredField.class) == null){
 									encoded = encodeField(field, valueToEncode.toString(), encodeType);
 								}
-								logger.info("Securing " + objectToEncode.getClass().getSimpleName()+ "." + field.getName() + "==============" + valueToEncode + " ==> " + encoded);								
+								logger.info(Logger.EVENT_SUCCESS, "Securing " + objectToEncode.getClass().getSimpleName()+ "." + field.getName() + "==============" + valueToEncode + " ==> " + encoded);								
 								method.invoke(objectToEncode, encoded);
 							}
 						}
 					}
 					
-				}else{
+				}else if(!field.getType().isPrimitive()  && !isOmittedType(field.getType())){
 					Set<Method> getterMethods =  getMethods(objectToEncode.getClass(), withName(getGetterMethodName(field)), withModifier(Modifier.PUBLIC));
 					if(getterMethods.size() > 0){
 						//logger.info("Processing complex object: " + field.getName());
@@ -90,20 +91,30 @@ public class XSSAspect {
 		}
 	}
 	
+	private boolean isOmittedType(Class clazz){
+		if(clazz.getPackage() != null && clazz.getPackage().getName().startsWith("java.lang")){
+			logger.info(Logger.EVENT_SUCCESS, "Omitting " + clazz.getName());
+			return true;
+		}
+		return false;
+	}
+	
 	private String encodeField(Field field, String valueToEncode, EncodeType encodeType){	
 		valueToEncode = ESAPI.encoder().canonicalize(valueToEncode);
-		logger.info("ENCODE TYPE: " + encodeType.toString());
+		logger.info(Logger.EVENT_SUCCESS, "ENCODE TYPE: " + encodeType.toString());
 		if (encodeType.equals(EncodeType.HTML)){		
-			logger.info("Encoding for HTML");
+			logger.info(Logger.EVENT_SUCCESS, "Encoding for HTML");
 			return ESAPI.encoder().encodeForHTML(valueToEncode);
 		}else if (encodeType.equals(EncodeType.HTML_ATTRIBUTE)){	
-			logger.info("Encoding for HTML_ATTR");
+			logger.info(Logger.EVENT_SUCCESS, "Encoding for HTML_ATTR");
 			return ESAPI.encoder().encodeForHTMLAttribute(valueToEncode);
 		}else if (encodeType.equals(EncodeType.JAVASCRIPT)){		
-			logger.info("Encoding for JS");
+			logger.info(Logger.EVENT_SUCCESS, "Encoding for JS");
 			return ESAPI.encoder().encodeForJavaScript(valueToEncode);
-		}  
-		return valueToEncode;
+		}else{
+			logger.info(Logger.EVENT_SUCCESS, "Encoding for HTML By default");
+			return ESAPI.encoder().encodeForHTML(valueToEncode);
+		}		
 	}
 	
 	
