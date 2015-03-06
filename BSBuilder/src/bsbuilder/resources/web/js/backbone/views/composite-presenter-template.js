@@ -19,7 +19,7 @@ define([
 	    	this.$el.html(presenterTemplate);	 
 	    	//Global.showView(new SomeView({el: $("#someSection") }));
 	    	#foreach(${key} in ${childViews.keySet()} )
-	    	  //Global.showView(new ${childViews.get(${key})}({el: $("#${childViews.get(${key})}-presenterSection") }));
+	    	  Global.showView(new ${childViews.get(${key})}({el: $("#${childViews.get(${key})}-presenterSection") }));
 	    	#end
 	    }    
 	});

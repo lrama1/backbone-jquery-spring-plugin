@@ -52,6 +52,9 @@ define([
 	var ${domainClassName}CollectionView = Backbone.View.extend({
 		//standard backbone function called when a view is constructed
 	    initialize: function(){    	
+	    	if(!this.collection){
+				this.collection = new ${domainClassName}Collection();
+			}
 	        this.render();	        
 	    },
 	    render: function(){
