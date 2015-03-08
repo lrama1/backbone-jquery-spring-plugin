@@ -131,7 +131,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 				createCollectionView(projectContainer, projectName);
 				
 				//create Presenter
-				createPresenter(projectContainer, projectName);
+				//createPresenter(projectContainer, projectName);
 				
 				//
 				addNewRoutesToRouter(projectContainer, projectName);
@@ -216,15 +216,15 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		mapOfValues.put("fieldTypes", pageThree.getFieldTypes());
 		Path editPath;
 		Path listPath;
-		Path presenterTemplatePath;
+		//Path presenterTemplatePath;
 		if(pageFive.isJSPTemplate()){
 			editPath = new Path(domainClassName + "EditTemplate.jsp");
 			listPath = new Path(domainClassName + "ListTemplate.jsp");
-			presenterTemplatePath = new Path(domainClassName + "PresenterTemplate.jsp");
+			//presenterTemplatePath = new Path(domainClassName + "PresenterTemplate.jsp");
 		}else{
 			editPath = new Path(domainClassName + "EditTemplate.htm");
 			listPath = new Path(domainClassName + "ListTemplate.htm");
-			presenterTemplatePath = new Path(domainClassName + "PresenterTemplate.htm");
+			//presenterTemplatePath = new Path(domainClassName + "PresenterTemplate.htm");
 		}	
 		
 		CommonUtils.addFileToProject(templatesFolder, editPath, 
@@ -235,9 +235,9 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 				TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/ListTemplate.jsp-template",
 						 mapOfValues), new NullProgressMonitor());		
 		
-		CommonUtils.addFileToProject(templatesFolder, presenterTemplatePath, 
-				TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/PresenterTemplate.jsp-template",
-						 mapOfValues), new NullProgressMonitor());		
+		//CommonUtils.addFileToProject(templatesFolder, presenterTemplatePath, 
+		//		TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/PresenterTemplate.jsp-template",
+		//				 mapOfValues), new NullProgressMonitor());		
 	
 
 	}

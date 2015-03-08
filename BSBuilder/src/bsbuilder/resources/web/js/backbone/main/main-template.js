@@ -15,6 +15,7 @@ require.config({
     'backbone.global' : 'libs/backbone.global',
     'respondjs' : 'libs/respond.min',
     'html5shiv' : 'libs/html5shiv.min',
+    'bootstrap-wizard' : 'libs/jquery.bootstrap.wizard',
     templates:  'templates'	
   },
   shim: {
@@ -28,6 +29,9 @@ require.config({
       deps: ["underscore", "jquery"],
       exports: "Backbone"
     },	    
+    'bootstrap-wizard' :{
+		deps : [ "underscore", "jquery", "backbone" ],
+	},
 	backgrid: {
 	    exports: "Backgrid",
 	    deps: ['underscore', 'backbone', 'backbone-pageable'],

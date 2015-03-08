@@ -12,3 +12,16 @@
 		});	
 	    #end	
 	    
+	    #if($wizardPresenterName)
+	    	app_router.on('route:show${wizardPresenterName}', function() {
+					console.log("showing ${wizardPresenterName}.");
+					require([ 		'presenters/${wizardPresenterName}' ], function(
+							${wizardPresenterName}) {
+						Global.showView(new ${wizardPresenterName}({
+							el : $("#bodyContainer")
+						}));
+		
+					});
+			});	
+		#end
+	    

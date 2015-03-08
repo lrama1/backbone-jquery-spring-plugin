@@ -366,6 +366,9 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/css/libs"), new Path("datepicker.css"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/datepicker.css"), monitor);
 			
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("jquery.bootstrap.wizard.js"), 
+					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/jquery.bootstrap.wizard.js"), monitor);
+			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("bootstrap.min.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/bootstrap.min.js"), monitor);
 					
@@ -414,8 +417,8 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/views"), new Path(params.getDomainClassName() + "CollectionView.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/views/collection-view-template.js", mapOfValues), monitor);
 			
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/presenters"), new Path(params.getDomainClassName() + "Presenter.js"), 
-					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/views/presenter-template.js", mapOfValues), monitor);
+			//CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/presenters"), new Path(params.getDomainClassName() + "Presenter.js"), 
+			//		TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/views/presenter-template.js", mapOfValues), monitor);
 			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/globals"), new Path("global.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/libs/global.js", mapOfValues), monitor);
@@ -486,22 +489,22 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			 * */			
 			Path listTemplatePath;
 			Path editTemplatePath;
-			Path presenterTemplatePath;
+			//Path presenterTemplatePath;
 			if(params.isJSPTemplate()){
 				listTemplatePath = new Path(params.getDomainClassName() + "ListTemplate.jsp");
 				editTemplatePath = new Path(params.getDomainClassName() + "EditTemplate.jsp");
-				presenterTemplatePath = new Path(params.getDomainClassName() + "PresenterTemplate.jsp");
+				//presenterTemplatePath = new Path(params.getDomainClassName() + "PresenterTemplate.jsp");
 			}else{
 				listTemplatePath = new Path(params.getDomainClassName() + "ListTemplate.htm");
 				editTemplatePath = new Path(params.getDomainClassName() + "EditTemplate.htm");
-				presenterTemplatePath = new Path(params.getDomainClassName() + "PresenterTemplate.htm");
+				//presenterTemplatePath = new Path(params.getDomainClassName() + "PresenterTemplate.htm");
 			}	
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/templates"), editTemplatePath, 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/EditTemplate.jsp-template",  mapOfValues), monitor);
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/templates"), listTemplatePath, 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/ListTemplate.jsp-template", mapOfValues), monitor);
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/templates"), presenterTemplatePath, 
-					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/PresenterTemplate.jsp-template", mapOfValues), monitor);
+			//CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/templates"), presenterTemplatePath, 
+			//		TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/PresenterTemplate.jsp-template", mapOfValues), monitor);
 		
 			
 			/* Add Controllers*/

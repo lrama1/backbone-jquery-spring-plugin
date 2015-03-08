@@ -7,7 +7,7 @@
 </div>
 <div class="row">
 	#foreach($key in $attrs.keySet() )
-		<div class="form-group">
+		<div class="form-group col-md-12">
 			<label  for="$key">$key</label>
 			#if ($fieldTypes.get($key) == "TextField")
 			<input type="text" class="form-control"  id="$key" name='$key' value="{{=$key}}"/>
