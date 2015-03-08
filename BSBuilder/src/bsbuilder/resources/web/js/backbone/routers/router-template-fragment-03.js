@@ -18,16 +18,16 @@
 //					});
 //	    		});
 //	    });
-		app_router.on('route:show${domainClassName}Presenter', function() {
-			console.log("showing ${domainClassName}Presenter.");
-			require([ 		'presenters/${domainClassName}Presenter' ], function(
-					${domainClassName}Presenter) {
-				Global.showView(new ${domainClassName}Presenter({
-					el : $("#bodyContainer")
-				}));
-
-			});
-		});
+//		app_router.on('route:show${domainClassName}Presenter', function() {
+//			console.log("showing ${domainClassName}Presenter.");
+//			require([ 		'presenters/${domainClassName}Presenter' ], function(
+//					${domainClassName}Presenter) {
+//				Global.showView(new ${domainClassName}Presenter({
+//					el : $("#bodyContainer")
+//				}));
+//
+//			});
+//		});
 
 
 	    app_router.on('route:get${domainClassName}List', function () {
