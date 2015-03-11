@@ -24,22 +24,29 @@ public class TemplateMerger {
 
 	public static InputStream merge(String templateName, String projectName,
 			String basePackageName, String controllerPackageName, String utilPackageName)  throws Exception{
-		Template template = loadTemplate(templateName);
-		VelocityContext context = new VelocityContext();
-
-		//add custom events handlers
-		EventCartridge ec = new EventCartridge();
-		ec.addEventHandler(new BSBuilderVelocityEvent());
-		ec.attachToContext(context);
-		
-		context.put("projectName", projectName);
-		context.put("basePackageName", basePackageName);
-		context.put("controllerPackageName", controllerPackageName);
-		context.put("utilPackageName", utilPackageName);
-
-		StringWriter sw = new StringWriter();
-		template.merge(context, sw);
-		return new ByteArrayInputStream(sw.toString().getBytes());
+		Thread thread = Thread.currentThread();
+		ClassLoader loader = thread.getContextClassLoader();
+		thread.setContextClassLoader(TemplateMerger.class.getClassLoader());
+		try {
+			Template template = loadTemplate(templateName);
+			VelocityContext context = new VelocityContext();
+	
+			//add custom events handlers
+			EventCartridge ec = new EventCartridge();
+			ec.addEventHandler(new BSBuilderVelocityEvent());
+			ec.attachToContext(context);
+			
+			context.put("projectName", projectName);
+			context.put("basePackageName", basePackageName);
+			context.put("controllerPackageName", controllerPackageName);
+			context.put("utilPackageName", utilPackageName);
+	
+			StringWriter sw = new StringWriter();
+			template.merge(context, sw);
+			return new ByteArrayInputStream(sw.toString().getBytes());
+		}finally{
+			thread.setContextClassLoader(loader);
+		}
 	}
 
 //	public static InputStream merge(String templateName,
@@ -60,6 +67,10 @@ public class TemplateMerger {
 
 	public static InputStream merge(String templateName,
 			Map<String, Object> valuesToPlug)  throws Exception{
+		Thread thread = Thread.currentThread();
+		ClassLoader loader = thread.getContextClassLoader();
+		thread.setContextClassLoader(TemplateMerger.class.getClassLoader());
+		try {
 		Template template = loadTemplate(templateName);
 
 		VelocityContext context = new VelocityContext();
@@ -75,9 +86,16 @@ public class TemplateMerger {
 		StringWriter sw = new StringWriter();
 		template.merge(context, sw);
 		return new ByteArrayInputStream(sw.toString().getBytes());
+		}finally{
+			thread.setContextClassLoader(loader);
+		}
 	}
 
 	private static Template loadTemplate(String templateName) throws Exception {
+		Thread thread = Thread.currentThread();
+		ClassLoader loader = thread.getContextClassLoader();
+		thread.setContextClassLoader(TemplateMerger.class.getClassLoader());
+		try {
 		Template template = null;
 
 		checkAndCopyTemplatesToExternal(templateName);
@@ -102,6 +120,9 @@ public class TemplateMerger {
 		template = Velocity.getTemplate(templateName);
 
 		return template;
+		}finally{
+			thread.setContextClassLoader(loader);
+		}
 	}
 	
 	private static void checkAndCopyTemplatesToExternal(String fileNameToCheck)
