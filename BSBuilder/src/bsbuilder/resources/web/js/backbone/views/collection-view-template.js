@@ -127,6 +127,7 @@ define([
 				
 	    },
 	    fetchMyCollection : function(){
+	    	this.collection.state.currentPage = 1;
 	    	this.collection.fetch();
 	    },
 	    testEvent : function(){

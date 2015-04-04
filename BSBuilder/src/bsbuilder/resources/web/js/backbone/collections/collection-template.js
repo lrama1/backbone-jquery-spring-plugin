@@ -13,7 +13,12 @@ define([
             pageSize: 10
         },
         parse : function(response){
-  	    	this.state.totalRecords = response.totalRecords;
+  	    	//this.state.totalRecords = response.totalRecords;
+  	    	if(response.totalRecords == 0){
+  	    		this.state.totalRecords = null;
+  	    	}else{
+  	    		this.state.totalRecords = response.totalRecords;
+  	    	}
   	    	//this.state.totalPages = "2";
   	    	this.state.lastPage = response.lastPage;
   	    	console.log("Last Page: " + this.state.lastPage);
