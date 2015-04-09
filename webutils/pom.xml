@@ -3,15 +3,29 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.olengski</groupId>
 	<artifactId>webutils</artifactId>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>1.0.1-RELEASE</version>
 	<name>WebUtil</name>
 	<description>Web Utilities for various web-related operations</description>
+	<url>http://www.olengski.org</url>
 	<licenses>
 		<license>
 			<name>The MIT License (MIT)</name>
 			<url>http://opensource.org/licenses/MIT</url>
 		</license>
 	</licenses>
+	<developers>
+		<developer>
+			<name>Lawrence Rama</name>
+			<email>lrama1@gmail.com</email>
+			<organization>N/A</organization>
+			<organizationUrl>http://www.olengski.org</organizationUrl>
+		</developer>
+	</developers>
+	<scm>
+		<connection>https://github.com/lrama1/backbone-jquery-spring-plugin.git/webutils</connection>
+		<developerConnection>https://github.com/lrama1/backbone-jquery-spring-plugin.git/webutils</developerConnection>
+		<url>https://github.com/lrama1/backbone-jquery-spring-plugin/tree/master/webutils</url>
+	</scm>
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
 		<artifactId>oss-parent</artifactId>
@@ -80,4 +94,50 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	<build>
+		<plugins>
+
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.6</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>
