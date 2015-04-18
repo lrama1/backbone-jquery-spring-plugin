@@ -171,6 +171,8 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		mapOfValues.put("prepForOracle", pageTwo.prepForOracle());
 		mapOfValues.put("prepForMySQL", pageTwo.prepForMySql());
 		mapOfValues.put("addWebService", pageSix.addWebServiceFeature());
+		mapOfValues.put("springVersion", pageTwo.getSpringVersion());
+		
 		
 		final String domainClassSourceCode = pageThree.getClassSource(mapOfValues);
 		

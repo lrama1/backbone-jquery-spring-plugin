@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.widgets.Combo;
 
 public class BackboneProjectWizardPageTwo extends WizardPage {
 	private Text textBasePackage;
@@ -24,6 +25,8 @@ public class BackboneProjectWizardPageTwo extends WizardPage {
 	private Button btnUseMongodb;
 	private Button btnPrepForOracle;
 	private Button btnPrepForMysql;
+	private Combo cmbSpringVersion;
+	private Label lblSpringVersion;
 
 	protected BackboneProjectWizardPageTwo(String pageName) {
 		super(pageName);
@@ -143,6 +146,18 @@ public class BackboneProjectWizardPageTwo extends WizardPage {
 		gd_btnPrepForOracle.heightHint = 33;
 		btnPrepForOracle.setLayoutData(gd_btnPrepForOracle);
 		btnPrepForOracle.setText("Prep For Oracle");
+		new Label(container, SWT.NONE);
+		new Label(container, SWT.NONE);
+		
+		lblSpringVersion = new Label(container, SWT.NONE);
+		lblSpringVersion.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblSpringVersion.setText("Spring Version?");
+		
+		cmbSpringVersion = new Combo(container, SWT.READ_ONLY);
+		cmbSpringVersion.add("3.x.x");
+		cmbSpringVersion.add("4.x.x");
+		cmbSpringVersion.select(0);
+		cmbSpringVersion.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		//Validate on display
 		validatePackage(textBasePackage.getText());
@@ -200,6 +215,10 @@ public class BackboneProjectWizardPageTwo extends WizardPage {
 	
 	public boolean prepForMySql(){
 		return btnPrepForMysql.getSelection();
+	}
+	
+	public String getSpringVersion(){
+		return cmbSpringVersion.getText();
 	}
 
 }

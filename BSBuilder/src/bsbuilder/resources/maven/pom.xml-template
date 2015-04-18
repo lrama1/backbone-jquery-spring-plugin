@@ -23,7 +23,15 @@
   		<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
   	</pluginRepository>
   </pluginRepositories>
-
+  
+  <properties>
+  	#if(${springVersion} == '3.x.x')
+  		<spring.version>3.2.0.RELEASE</spring.version>
+  	#else
+  		<spring.version>4.1.6.RELEASE</spring.version>
+  	#end
+  </properties>
+  
   <dependencies>
   
   	#if(${useMongo})
@@ -79,7 +87,7 @@
     <dependency>
 	    <groupId>org.olengski</groupId>
 	    <artifactId>webutils</artifactId>
-	    <version>0.0.3-SNAPSHOT</version>
+	    <version>1.4-RELEASE</version>
     </dependency>
     #end
   
@@ -91,12 +99,26 @@
     </dependency>
     
     <!-- Added For Spring -->
+    
+    #if(${springVersion} == '3.x.x')
     <!-- Jackson JSON Mapper -->
 	<dependency>
 		<groupId>org.codehaus.jackson</groupId>
 		<artifactId>jackson-mapper-asl</artifactId>
 		<version>1.9.13</version>
 	</dependency>
+	#else
+	<dependency>
+	    <groupId>com.fasterxml.jackson.core</groupId>
+	    <artifactId>jackson-core</artifactId>
+	    <version>2.4.3</version>
+    </dependency>
+    <dependency>
+	    <groupId>com.fasterxml.jackson.core</groupId>
+	    <artifactId>jackson-databind</artifactId>
+	    <version>2.4.3</version>
+    </dependency>
+	#end
     
     <dependency>
       <groupId>org.apache.openejb</groupId>
@@ -119,52 +141,52 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-aop</artifactId>
-      <version>3.2.0.RELEASE</version>
+      <version>${spring.version}</version>
     </dependency>
     <!--dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-asm</artifactId>
-      <version>3.2.0.RELEASE</version>
+      <version>${spring.version}</version>
     </dependency-->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-aspects</artifactId>
-      <version>3.2.0.RELEASE</version>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-beans</artifactId>
-      <version>3.2.0.RELEASE</version>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
-      <version>3.2.0.RELEASE</version>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context-support</artifactId>
-      <version>3.2.0.RELEASE</version>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-core</artifactId>
-      <version>3.2.0.RELEASE</version>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-expression</artifactId>
-      <version>3.2.0.RELEASE</version>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-instrument</artifactId>
-      <version>3.2.0.RELEASE</version>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-instrument-tomcat</artifactId>
-      <version>3.2.0.RELEASE</version>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>aopalliance</groupId>
@@ -204,17 +226,17 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-jdbc</artifactId>
-      <version>3.2.0.RELEASE</version>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-orm</artifactId>
-      <version>3.2.0.RELEASE</version>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-tx</artifactId>
-      <version>3.2.0.RELEASE</version>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>c3p0</groupId>
@@ -229,32 +251,27 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-jms</artifactId>
-      <version>3.2.0.RELEASE</version>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-oxm</artifactId>
-      <version>3.2.0.RELEASE</version>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-web</artifactId>
-      <version>3.2.0.RELEASE</version>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc</artifactId>
-      <version>3.2.0.RELEASE</version>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc-portlet</artifactId>
-      <version>3.2.0.RELEASE</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-struts</artifactId>
-      <version>3.2.0.RELEASE</version>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>commons-beanutils</groupId>
@@ -279,7 +296,7 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
-      <version>3.2.0.RELEASE</version>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>taglibs</groupId>
@@ -444,7 +461,7 @@
       <plugin>
 	    <groupId>org.olengski</groupId>
 	    <artifactId>requirejs-optimize-plugin</artifactId>
-	    <version>0.0.1-SNAPSHOT</version>
+	    <version>1.4-RELEASE</version>
 	    <executions>
 	      <execution>
 	        <goals>
