@@ -28,7 +28,7 @@ import java.util.ArrayList;
 @Controller
 public class ${domainClassName}Controller {	
 
-	private Logger logger = ESAPI.getLogger(this.getClass());
+	private static final Logger logger = ESAPI.getLogger(${domainClassName}Controller.class);
 
 	#set($serviceObjectName = ${domainClassName.substring(0,1).toLowerCase()} + ${domainClassName.substring(1)} + "Service")
 	#set($domainObjectName = ${domainClassName.substring(0,1).toLowerCase()} + ${domainClassName.substring(1)})
