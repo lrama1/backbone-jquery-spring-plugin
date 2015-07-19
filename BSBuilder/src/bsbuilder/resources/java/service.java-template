@@ -32,4 +32,8 @@ public class ${domainClassName}Service {
 	public void saveNew$domainClassName($domainClassName $domainObjectName){
 		${daoObjectName}.saveNew${domainClassName}(${domainObjectName});
 	}	
+	
+	public void save$domainClassName($domainClassName $domainObjectName){
+		${daoObjectName}.save${domainClassName}(${domainObjectName});
+	}
 }

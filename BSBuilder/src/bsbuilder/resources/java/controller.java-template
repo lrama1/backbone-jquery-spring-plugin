@@ -62,6 +62,7 @@ public class ${domainClassName}Controller {
 	@RequestMapping(value = "/${domainClassName.toLowerCase()}/{id}", headers = {"accept=application/json"}, method = RequestMethod.PUT)
 	public  @ResponseBody ${domainClassName}  update${domainClassName}(@RequestBody ${domainClassName} ${domainObjectName}){
 		logger.info(Logger.EVENT_SUCCESS, ${domainObjectName}.toString());
+		${serviceObjectName}.save${domainClassName}(${domainObjectName});
 		return ${domainObjectName};
 	}
 	

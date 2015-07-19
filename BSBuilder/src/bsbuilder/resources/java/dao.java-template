@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 #end
 //import the domain
@@ -77,6 +78,25 @@ public class ${domainClassName}DAO {
 	public void saveNew$domainClassName($domainClassName $domainClassName.substring(0,1).toLowerCase()$domainClassName.substring(1)){
 		#if(${useMongo} == true)		
 		mongoTemplate.save($domainClassName.substring(0,1).toLowerCase()$domainClassName.substring(1));
+		#end
+	}
+	
+	public void save$domainClassName($domainClassName $domainClassName.substring(0,1).toLowerCase()$domainClassName.substring(1)){
+		#if(${useMongo} == true)	
+		#set($domainVar = $domainClassName.substring(0,1).toLowerCase() + $domainClassName.substring(1))	
+		#set($idGetter = 'get' + ${domainClassIdAttributeName.substring(0,1).toUpperCase()} + ${domainClassIdAttributeName.substring(1)})
+		mongoTemplate.save($domainClassName.substring(0,1).toLowerCase()$domainClassName.substring(1));
+		
+		Criteria criteria = new Criteria("${domainClassIdAttributeName}").is(${domainVar}.$idGetter());
+		Query query = new Query(criteria);
+		
+		Update update = new Update();
+		#foreach($key in $attrs.keySet() ) 
+			update.set("${key}", ${domainVar}.get${key.substring(0,1).toUpperCase()}${key.substring(1)}());
+		#end
+		
+		mongoTemplate.updateFirst(query, update, ${domainClassName}.class);
+		
 		#end
 	}
 	
