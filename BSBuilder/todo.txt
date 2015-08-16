@@ -6,4 +6,10 @@
 2.  generate sample data as a set of flat files instead of being generated out of the
     domain classes.  DONE.
     
-3.  add Darryl's Backbone.global
+3.  add Darryl's Backbone.global.  DONE.
+
+4.  Sample usage of @PreAuthorize("@myBean.method(#someParam)")
+
+5.  Sample Hibernate Validator
+
+6.  Make Bootstrap modal draggable
