@@ -19,6 +19,7 @@ import ${basePackageName}.service.${domainClassName}Service;
 import ${basePackageName}.security.SampleUserDetails;
 import ${basePackageName}.common.ListWrapper;
 import ${basePackageName}.common.NameValuePair;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.context.MessageSource;
 
@@ -39,6 +40,7 @@ public class ${domainClassName}Controller {
 	@Resource(name = "messageSource")
     private MessageSource messageSource;	
 		
+	@PreAuthorize("@sampleUserDetailsService.isAuthorizedToAccessData(#id)")	
 	@RequestMapping(value = "/$domainClassName.toLowerCase()/{id}", method = RequestMethod.GET)
 	public @ResponseBody $domainClassName get$domainClassName(@PathVariable("id") String id, Principal principal){
 		Authentication authenticationToken = (Authentication)principal;
@@ -51,7 +53,7 @@ public class ${domainClassName}Controller {
 			return ${domainObjectName};
 	}
 	
-	
+	@PreAuthorize("@sampleUserDetailsService.isAuthorizedToAccessData(#${domainObjectName})")
 	@RequestMapping(value = "/${domainClassName.toLowerCase()}", headers = {"accept=application/json"}, method = RequestMethod.POST)
 	public @ResponseBody ${domainClassName} saveNew${domainClassName}(@RequestBody ${domainClassName} ${domainObjectName}){
 		logger.info(Logger.EVENT_SUCCESS, ${domainObjectName}.toString());
@@ -59,6 +61,7 @@ public class ${domainClassName}Controller {
 		return ${domainClassName.substring(0,1).toLowerCase()}${domainClassName.substring(1)};
 	}
 	
+	@PreAuthorize("@sampleUserDetailsService.isAuthorizedToAccessData(#${domainObjectName})")
 	@RequestMapping(value = "/${domainClassName.toLowerCase()}/{id}", headers = {"accept=application/json"}, method = RequestMethod.PUT)
 	public  @ResponseBody ${domainClassName}  update${domainClassName}(@RequestBody ${domainClassName} ${domainObjectName}){
 		logger.info(Logger.EVENT_SUCCESS, ${domainObjectName}.toString());

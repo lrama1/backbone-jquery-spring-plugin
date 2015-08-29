@@ -38,5 +38,10 @@ public class SampleUserDetailsService implements UserDetailsService {
 		SampleUserDetails userDetails = new SampleUserDetails(userId, "testing", "SaMpLeToKeN", authorities);
 		return userDetails;
 	}
+	
+	public boolean isAuthorizedToAccessData(Object object){
+		//TODO - Implement your own logic here
+		return true;
+	}
 
 }
