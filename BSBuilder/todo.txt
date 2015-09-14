@@ -8,7 +8,7 @@
     
 3.  add Darryl's Backbone.global.  DONE.
 
-4.  Sample usage of @PreAuthorize("@myBean.method(#someParam)")
+4.  Sample usage of @PreAuthorize("@myBean.method(#someParam)")  Done
 
 5.  Sample Hibernate Validator
 
