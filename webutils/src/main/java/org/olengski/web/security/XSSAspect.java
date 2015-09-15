@@ -10,6 +10,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -38,7 +39,7 @@ public class XSSAspect {
 		
 		//for XSS
 		Object objectToReturn = joinPoint.proceed(arguments);
-		encodeFields(objectToReturn, encodeType);			
+		encodeFields(objectToReturn);			
 		
 		return objectToReturn;
 	}
@@ -48,13 +49,13 @@ public class XSSAspect {
 	 * @param objectToEncode
 	 * @throws Exception
 	 */
-	private void encodeFields(Object objectToEncode, EncodeType encodeType) throws Exception{
+	public void encodeFields(Object objectToEncode) throws Exception{
 		//logger.info("Atttempting to process " + objectToEncode.getClass().getSimpleName());
 		if(objectToEncode != null && objectToEncode instanceof List){
 			//logger.info("Encountered a list/collection........................");			
 			List<Object> listToProcess = (List<Object>)objectToEncode;
 			for(Object object : listToProcess){
-				encodeFields(object, encodeType);
+				encodeFields(object);
 			}
 		}
 		else if(objectToEncode != null){			
@@ -69,12 +70,13 @@ public class XSSAspect {
 						if(setterMethods.size() > 0){
 							Method method = setterMethods.iterator().next();
 							if(valueToEncode != null){
-								String encoded = "";
+								String sanitized = "";
 								if(field.getAnnotation(UnsecuredField.class) == null){
-									encoded = encodeField(field, valueToEncode.toString(), encodeType);
+									//encoded = encodeField(field, valueToEncode.toString(), encodeType);
+									sanitized = stripXSS(valueToEncode.toString());
 								}
-								logger.info(Logger.EVENT_SUCCESS, "Securing " + objectToEncode.getClass().getSimpleName()+ "." + field.getName() + "==============" + valueToEncode + " ==> " + encoded);								
-								method.invoke(objectToEncode, encoded);
+								logger.info(Logger.EVENT_SUCCESS, "Securing " + objectToEncode.getClass().getSimpleName()+ "." + field.getName() + "==============" + valueToEncode + " ==> " + sanitized);								
+								method.invoke(objectToEncode, sanitized);
 							}
 						}
 					}
@@ -84,7 +86,7 @@ public class XSSAspect {
 					if(getterMethods.size() > 0){
 						//logger.info("Processing complex object: " + field.getName());
 						Method method = getterMethods.iterator().next();
-						encodeFields(method.invoke(objectToEncode), encodeType);	
+						encodeFields(method.invoke(objectToEncode));	
 					}					
 				}
 			}
@@ -99,7 +101,7 @@ public class XSSAspect {
 		return false;
 	}
 	
-	private String encodeField(Field field, String valueToEncode, EncodeType encodeType){	
+	/*private String encodeField(String valueToEncode, EncodeType encodeType){	
 		valueToEncode = ESAPI.encoder().canonicalize(valueToEncode);
 		logger.info(Logger.EVENT_SUCCESS, "ENCODE TYPE: " + encodeType.toString());
 		if (encodeType.equals(EncodeType.HTML)){		
@@ -115,7 +117,58 @@ public class XSSAspect {
 			logger.info(Logger.EVENT_SUCCESS, "Encoding for HTML By default");
 			return ESAPI.encoder().encodeForHTML(valueToEncode);
 		}		
-	}
+	}*/
+	
+	private String stripXSS(String value) {
+        if (value != null) {
+            // NOTE: It's highly recommended to use the ESAPI library and uncomment the following line to
+            // avoid encoded attacks.
+            value = ESAPI.encoder().canonicalize(value, false);
+
+            // Avoid null characters
+            value = value.replaceAll("", "");
+
+            // Avoid anything between script tags
+            Pattern scriptPattern = Pattern.compile("<script>(.*?)</script>", Pattern.CASE_INSENSITIVE);
+            value = scriptPattern.matcher(value).replaceAll("");
+
+            // Avoid anything in a src='...' type of expression
+            scriptPattern = Pattern.compile("src[\r\n]*=[\r\n]*\\\'(.*?)\\\'", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+            value = scriptPattern.matcher(value).replaceAll("");
+
+            scriptPattern = Pattern.compile("src[\r\n]*=[\r\n]*\\\"(.*?)\\\"", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+            value = scriptPattern.matcher(value).replaceAll("");
+
+            // Remove any lonesome </script> tag
+            scriptPattern = Pattern.compile("</script>", Pattern.CASE_INSENSITIVE);
+            value = scriptPattern.matcher(value).replaceAll("");
+
+            // Remove any lonesome <script ...> tag
+            scriptPattern = Pattern.compile("<script(.*?)>", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+            value = scriptPattern.matcher(value).replaceAll("");
+
+            // Avoid eval(...) expressions
+            scriptPattern = Pattern.compile("eval\\((.*?)\\)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+            value = scriptPattern.matcher(value).replaceAll("");
+
+            // Avoid expression(...) expressions
+            scriptPattern = Pattern.compile("expression\\((.*?)\\)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+            value = scriptPattern.matcher(value).replaceAll("");
+
+            // Avoid javascript:... expressions
+            scriptPattern = Pattern.compile("javascript:", Pattern.CASE_INSENSITIVE);
+            value = scriptPattern.matcher(value).replaceAll("");
+
+            // Avoid vbscript:... expressions
+            scriptPattern = Pattern.compile("vbscript:", Pattern.CASE_INSENSITIVE);
+            value = scriptPattern.matcher(value).replaceAll("");
+
+            // Avoid onload= expressions
+            scriptPattern = Pattern.compile("onload(.*?)=", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+            value = scriptPattern.matcher(value).replaceAll("");
+        }
+        return value;
+    }
 	
 	
 	private String getGetterMethodName(Field field){
@@ -125,5 +178,6 @@ public class XSSAspect {
 	private String getSetterMethodName(Field field){
 		return "set" + field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1);
 	}
-
+	
+	
 }
