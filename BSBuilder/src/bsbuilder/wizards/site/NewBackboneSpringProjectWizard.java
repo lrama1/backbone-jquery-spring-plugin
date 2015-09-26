@@ -428,6 +428,30 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js"), new Path("main.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/main/main-template.js", mapOfValues), monitor);
 			
+			//===============================================ANGULAR===========================
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js"), new Path("angular_app.js"), 
+					TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_app-template.js", mapOfValues), monitor);
+			
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/angular_controllers"), new Path(params.getDomainClassName() +"ListController.js"), 
+					TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_list_controller-template.js", mapOfValues), monitor);
+			
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/angular_templates"), new Path(params.getDomainClassName() + "List.html"), 
+					TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_list_html-template.html", mapOfValues), monitor);
+			
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/angular_controllers"), new Path(params.getDomainClassName() +"EditController.js"), 
+					TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_edit_controller-template.js", mapOfValues), monitor);
+			
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/angular_templates"), new Path(params.getDomainClassName() + "Edit.html"), 
+					TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_edit_html-template.html", mapOfValues), monitor);
+			
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF"), new Path("index2.jsp"), 
+					TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_index.jsp-template", mapOfValues), monitor);
+			
+			CommonUtils.addFileToProject(container, new Path(".tern-project"), 
+					TemplateMerger.merge("/bsbuilder/resources/web/js/angular/tern-project", mapOfValues), monitor);
+			
+			//====================================================================================================
+			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources"), new Path("buildconfig.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/main/buildconfig-template.js", mapOfValues), monitor);
 			
@@ -699,6 +723,26 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		IFolder jsFolder = resourcesFolder.getFolder(new Path("js"));
 		jsFolder.create(false, true, new NullProgressMonitor());
 		folders.put("src/main/webapp/WEB-INF/resources/js", jsFolder);
+		
+		//src/main/webapp/WEB-INF/resources/js/angular_controllers
+		IFolder angularControllerFolder = jsFolder.getFolder(new Path("angular_controllers"));
+		angularControllerFolder.create(false, true, new NullProgressMonitor());
+		folders.put("src/main/webapp/WEB-INF/resources/js/angular_controllers", angularControllerFolder);
+		
+		//src/main/webapp/WEB-INF/resources/js/angular_factories
+		IFolder angularFactoriesFolder = jsFolder.getFolder(new Path("angular_factories"));
+		angularFactoriesFolder.create(false, true, new NullProgressMonitor());
+		folders.put("src/main/webapp/WEB-INF/resources/js/angular_factories", angularFactoriesFolder);
+		
+		//src/main/webapp/WEB-INF/resources/js/angular_templates
+		IFolder angularTemplatesFolder = jsFolder.getFolder(new Path("angular_templates"));
+		angularTemplatesFolder.create(false, true, new NullProgressMonitor());
+		folders.put("src/main/webapp/WEB-INF/resources/js/angular_templates", angularTemplatesFolder);
+				
+		//src/main/webapp/WEB-INF/resources/js/angular_services
+		IFolder angularServicesFolder = jsFolder.getFolder(new Path("angular_services"));
+		angularServicesFolder.create(false, true, new NullProgressMonitor());
+		folders.put("src/main/webapp/WEB-INF/resources/js/angular_services", angularServicesFolder);
 		
 		//src/main/webapp/WEB-INF/resources/js/fonts
 		IFolder fontsFolder = jsFolder.getFolder(new Path("fonts"));
