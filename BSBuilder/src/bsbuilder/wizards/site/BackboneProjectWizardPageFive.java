@@ -39,7 +39,7 @@ public class BackboneProjectWizardPageFive extends WizardPage {
 		grpTemplateOptions = new Group(container, SWT.NONE);
 		GridData gd_grpTemplateOptions = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_grpTemplateOptions.widthHint = 337;
-		gd_grpTemplateOptions.heightHint = 89;
+		gd_grpTemplateOptions.heightHint = 133;
 		grpTemplateOptions.setLayoutData(gd_grpTemplateOptions);
 		grpTemplateOptions.setText("Template Options");
 		
@@ -56,6 +56,7 @@ public class BackboneProjectWizardPageFive extends WizardPage {
 		
 		Group grpLocalization = new Group(container, SWT.NONE);
 		GridData gd_grpLocalization = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_grpLocalization.heightHint = 91;
 		gd_grpLocalization.widthHint = 281;
 		grpLocalization.setLayoutData(gd_grpLocalization);
 		grpLocalization.setText("Localization");

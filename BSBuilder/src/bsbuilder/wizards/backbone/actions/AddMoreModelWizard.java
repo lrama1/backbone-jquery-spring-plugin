@@ -118,6 +118,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 				//createDao
 				createDaoClass(projectContainer, basePackageName);
 				
+				/**************BACKBONE SPECIFIC****************************/
 				//create backbone model
 				createBackboneModel(projectContainer, projectName);
 				
@@ -135,6 +136,15 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 				
 				//
 				addNewRoutesToRouter(projectContainer, projectName);
+				/**************END OF BACKBONE SPECIFIC****************************/
+				createAngularControllers(projectContainer, projectName);
+				createAngularTemplates(projectContainer, projectName);
+				appendNewRouteExpressionToAngular(projectContainer, createWhenExpressions(projectName, pageThree.getDomainClassName()));
+				appendNewScriptsToAngular(projectContainer, createNewScriptsTag(projectName, pageThree.getDomainClassName()));
+				
+				/**************ANGULAR SPECIFIC****************************/
+				
+				/**************END OF ANGULAR SPECIFIC****************************/
 				
 				//
 				addNewTabsToHomePage(projectContainer, pageThree.getDomainClassName());
@@ -145,6 +155,24 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
         }
 	        
 		return true;
+	}
+	
+	private String createWhenExpressions(String projectName, String domainClassName){
+		String basePath = domainClassName.toLowerCase();
+		String whenExpressions = 
+		".when('/" + basePath + "s', {controller :  '" + domainClassName + "ListController', templateUrl : '/" + 
+					projectName + "/resources/js/angular_templates/" + domainClassName + "List.html'})\n" + 
+		".when('/" + basePath + "/:id', {controller :  '" + domainClassName + "EditController', templateUrl : '/" + 
+					projectName + "/resources/js/angular_templates/" + domainClassName + "Edit.html'})\n"		;
+		
+		return whenExpressions;
+	}
+	
+	private String createNewScriptsTag(String projectName, String domainClassName){
+		StringBuffer stringBuffer = new StringBuffer();
+		stringBuffer.append("<script src=\"/" + projectName + "/resources/js/angular_controllers/" + domainClassName + "ListController.js\"></script>");
+		stringBuffer.append("\n<script src=\"/" + projectName + "/resources/js/angular_controllers/" + domainClassName + "EditController.js\"></script>");
+		return stringBuffer.toString();
 	}
 	
 	private void createJavaDomainClass(IContainer projectContainer, String basePackageName, String className 
@@ -299,7 +327,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		CommonUtils.addFileToProject(modelsFolder, new Path(domainClassName + "Model.js"), 
 				TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/models/model-template.js", mapOfValues), new NullProgressMonitor());
 	}
-	
+		
 	private void createBackboneCollection(IContainer projectContainer, String projectName) throws Exception{
 		IFolder collectionsFolder = projectContainer.getFolder(new Path("src/main/webapp/WEB-INF/resources/js/collections"));
 		String domainClassName = pageThree.getDomainClassName();
@@ -458,6 +486,127 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		return modifier(contents, expression, stringToInsert, stringToBefore);
 	}
 	
+	private void createAngularControllers(IContainer projectContainer, String projectName) throws Exception{
+		IFolder angularControllerFolder = projectContainer.getFolder(new Path("src/main/webapp/WEB-INF/resources/js/angular_controllers"));
+		String domainClassName = pageThree.getDomainClassName();
+		Map<String, Object> mapOfValues = new HashMap<String, Object>();
+		mapOfValues.put("domainClassName", domainClassName);
+		mapOfValues.put("projectName", projectName);
+		mapOfValues.put("domainClassIdAttributeName", pageThree.getDomainClassAttributeName());
+		mapOfValues.put("attrs", pageThree.getModelAttributes());
+		
+		CommonUtils.addFileToProject(angularControllerFolder, new Path(domainClassName +"ListController.js"), 
+				TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_list_controller-template.js", mapOfValues), new NullProgressMonitor());
+		CommonUtils.addFileToProject(angularControllerFolder, new Path(domainClassName +"EditController.js"), 
+				TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_edit_controller-template.js", mapOfValues), new NullProgressMonitor());
+	}
+	
+	private void createAngularTemplates(IContainer projectContainer, String projectName) throws Exception{
+		IFolder angularTemplatesFolder = projectContainer.getFolder(new Path("src/main/webapp/WEB-INF/resources/js/angular_templates"));
+		String domainClassName = pageThree.getDomainClassName();
+		Map<String, Object> mapOfValues = new HashMap<String, Object>();
+		mapOfValues.put("domainClassName", domainClassName);
+		mapOfValues.put("projectName", projectName);
+		mapOfValues.put("domainClassIdAttributeName", pageThree.getDomainClassAttributeName());
+		mapOfValues.put("attrs", pageThree.getModelAttributes());
+		
+		CommonUtils.addFileToProject(angularTemplatesFolder, new Path(domainClassName +"List.html"), 
+				TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_list_html-template.html", mapOfValues), new NullProgressMonitor());
+		CommonUtils.addFileToProject(angularTemplatesFolder, new Path(domainClassName +"Edit.html"), 
+				TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_edit_html-template.html", mapOfValues), new NullProgressMonitor());
+	}
+	
+	
+	
+	public void appendNewRouteExpressionToAngular(IContainer projectContainer,String newWhenExpression)
+		throws Exception
+	{
+		IFolder jsFolder = projectContainer.getFolder(new Path("src/main/webapp/WEB-INF/resources/js"));
+		IFile routerFile = jsFolder.getFile("angular_app.js");
+		File file = routerFile.getRawLocation().toFile();
+		
+		String routerString = FileUtils.readFileToString(file);
+		
+		String whenRegex = "\\.when\\((.*?)\\)(\\;)*";
+		Pattern whenPattern = Pattern.compile(whenRegex, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+		//String value = routePattern.matcher(routerString).
+		//System.out.println(value);
+		Matcher matcher = whenPattern.matcher(routerString);	
+		StringWriter whenWriter = new StringWriter();
+		//1.  gather all 'when' expressions
+
+		while(matcher.find()){			
+			String matchedString = matcher.group().trim();
+			if(matchedString.charAt(matchedString.length()-1) == ';'){
+				matchedString = matchedString.substring(0, matchedString.length()-1);
+			}
+			System.out.println("===========>" + matchedString);
+			whenWriter.append("\n" + matchedString);
+		}
+		routerString = matcher.replaceAll("INSERTHEREPLEASE");
+		
+		
+		//2.  obtain the 'otherwise' expression (IF IT EXISTS)
+		String otherwiseRegex = "\\.otherwise\\((.*?)\\)(\\;)*";
+		Pattern otherwisePattern = Pattern.compile(otherwiseRegex, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+		Matcher otherwiseMatcher = otherwisePattern.matcher(routerString);
+		StringWriter otherwiseWriter = new StringWriter();
+		while(otherwiseMatcher.find()){
+			System.out.println("OTHERWISE EXPR===========>" + otherwiseMatcher.group());
+			otherwiseWriter.append(otherwiseMatcher.group());
+		}
+		routerString = otherwiseMatcher.replaceAll("INSERTHEREPLEASE");
+		
+		//append the new route to the list of 'WHEN' EXPRESSIONS 
+		whenWriter.append("\n" + newWhenExpression);
+		
+		System.out.println("=================================================================================");
+		System.out.println(whenWriter.toString() + " " +  otherwiseWriter.toString());
+		
+		System.out.println("=================================================================================");
+		int insertionPoint = routerString.indexOf("INSERTHEREPLEASE");
+		StringBuffer stringBuffer = new StringBuffer(routerString);
+		stringBuffer.insert(insertionPoint, whenWriter.toString() + " " +  otherwiseWriter.toString());
+		
+		InputStream modifiedFileContent = new ByteArrayInputStream(CommonUtils.prettifyJS(stringBuffer.toString().replaceAll("INSERTHEREPLEASE", "")).getBytes());		
+		routerFile.delete(true, new NullProgressMonitor());
+		routerFile.create(modifiedFileContent, IResource.FORCE, new NullProgressMonitor());
+		
+	}
+	
+	private void appendNewScriptsToAngular(IContainer projectContainer, String newScriptTag)
+		throws Exception
+	{
+		String whenRegex = "\\<script(.*?)\\>(.*?)\\<\\/script\\>";
+		Pattern whenPattern = Pattern.compile(whenRegex, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+		//String value = routePattern.matcher(routerString).
+		//System.out.println(value);
+		IFolder jsFolder = projectContainer.getFolder(new Path("src/main/webapp/WEB-INF"));
+		IFile index2File = jsFolder.getFile("index2.jsp");
+		File file = index2File.getRawLocation().toFile();
+		
+		String htmlString = FileUtils.readFileToString(file);
+		
+		
+		Matcher matcher = whenPattern.matcher(htmlString);	
+		StringWriter whenWriter = new StringWriter();
+		//1.  gather all 'when' expressions
+		while(matcher.find()){
+			System.out.println("===========>" + matcher.group());
+			whenWriter.append("\n" + matcher.group());
+		}
+		whenWriter.append("\n" + newScriptTag);
+		htmlString = matcher.replaceAll("INSERTSCRIPTSHERE");
+		
+		
+		System.out.println("=================================================================================");
+		int insertionPoint = htmlString.indexOf("INSERTSCRIPTSHERE");
+		StringBuffer stringBuffer = new StringBuffer(htmlString);
+		stringBuffer.insert(insertionPoint, whenWriter.toString());
+		InputStream modifiedFileContent = new ByteArrayInputStream( stringBuffer.toString().replaceAll("INSERTSCRIPTSHERE", "").getBytes());
+		index2File.delete(true, new NullProgressMonitor());
+		index2File.create(modifiedFileContent, IResource.FORCE, new NullProgressMonitor());
+	}
 	
 
 	private String[] getLineToInsertNewRoutesTo(IFile routerFile)

@@ -102,7 +102,7 @@ public class BackboneProjectWizardPageTwo extends WizardPage {
 		Group grpMongoDbParams = new Group(container, SWT.NONE);
 		GridData gd_grpMongoDbParams = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_grpMongoDbParams.widthHint = 411;
-		gd_grpMongoDbParams.heightHint = 133;
+		gd_grpMongoDbParams.heightHint = 191;
 		grpMongoDbParams.setLayoutData(gd_grpMongoDbParams);
 		grpMongoDbParams.setText("Mongo DB Params");
 		
