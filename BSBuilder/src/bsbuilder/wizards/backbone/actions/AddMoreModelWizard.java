@@ -141,6 +141,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 				createAngularTemplates(projectContainer, projectName);
 				appendNewRouteExpressionToAngular(projectContainer, createWhenExpressions(projectName, pageThree.getDomainClassName()));
 				appendNewScriptsToAngular(projectContainer, createNewScriptsTag(projectName, pageThree.getDomainClassName()));
+				addNewTabsToAngularHomePage(projectContainer, pageThree.getDomainClassName());
 				
 				/**************ANGULAR SPECIFIC****************************/
 				
@@ -391,6 +392,41 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		String modifiedFile = FileUtils.readFileToString(file);
 		modifiedFile = modifier(modifiedFile, regex,
 				"<li><a href=\"#" + className.toLowerCase() + "s" + "\" >" + className + "s" + "</a></li>\n", "");
+		
+		InputStream modifiedFileContent = new ByteArrayInputStream(modifiedFile.getBytes());
+		indexJSPFile.delete(true, new NullProgressMonitor());
+		indexJSPFile.create(modifiedFileContent, IResource.FORCE, new NullProgressMonitor());
+	}
+	
+	private void addNewTabsToAngularHomePage(IContainer projectContainer, String className) throws Exception{
+		IFolder indexFolder = projectContainer.getFolder(new Path("src/main/webapp/WEB-INF"));
+		IFile indexJSPFile = indexFolder.getFile("index2.jsp");
+		File file = indexJSPFile.getRawLocation().toFile();
+
+		String modifiedFile = FileUtils.readFileToString(file);
+		//modifiedFile = modifier(modifiedFile, regex,
+		//		"<li><a href=\"#" + className.toLowerCase() + "s" + "\" >" + className + "s" + "</a></li>\n", "");
+		String whenRegex = "\\<ul(.*?)class(.*?)\\>";
+		Pattern whenPattern = Pattern.compile(whenRegex, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+
+		Matcher matcher = whenPattern.matcher(modifiedFile);			
+		int positionToInsert = -1;
+		if(matcher.find()){
+			System.out.println("===========>" + matcher.group());
+			positionToInsert = matcher.end();
+		}
+		
+		//whenWriter.append("\n" + newModelTag);
+		//htmlString = matcher.replaceAll("INSERTSCRIPTSHERE");
+		StringBuffer buffer = new StringBuffer(modifiedFile);
+		if(positionToInsert > -1){
+			buffer = new StringBuffer(modifiedFile);
+			buffer.insert(positionToInsert, "<li ng-class=\"{ active: isActive('/"+ 
+					className.toLowerCase() + "s')}\"><a href=\"#"+ className.toLowerCase() +"s\">" +className + "</a></li>");
+		}
+		
+		modifiedFile =  buffer.toString();
+		
 		
 		InputStream modifiedFileContent = new ByteArrayInputStream(modifiedFile.getBytes());
 		indexJSPFile.delete(true, new NullProgressMonitor());

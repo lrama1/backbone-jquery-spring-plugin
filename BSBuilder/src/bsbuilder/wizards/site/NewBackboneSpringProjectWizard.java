@@ -432,6 +432,9 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js"), new Path("angular_app.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_app-template.js", mapOfValues), monitor);
 			
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/angular_controllers"), new Path("HomeController.js"), 
+					TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_home_controller-template.js", mapOfValues), monitor);
+			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/angular_controllers"), new Path(params.getDomainClassName() +"ListController.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_list_controller-template.js", mapOfValues), monitor);
 			
@@ -445,7 +448,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 					TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_edit_html-template.html", mapOfValues), monitor);
 			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF"), new Path("index2.jsp"), 
-					TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_index.jsp-template", mapOfValues), monitor);
+					TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_index-template.jsp", mapOfValues), monitor);
 			
 			CommonUtils.addFileToProject(container, new Path(".tern-project"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/angular/tern-project", mapOfValues), monitor);
