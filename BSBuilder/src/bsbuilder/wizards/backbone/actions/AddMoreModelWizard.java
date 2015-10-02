@@ -138,21 +138,23 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 				addNewRoutesToRouter(projectContainer, projectName);
 				/**************END OF BACKBONE SPECIFIC****************************/
 				createAngularControllers(projectContainer, projectName);
-				createAngularTemplates(projectContainer, projectName);
-				appendNewRouteExpressionToAngular(projectContainer, createWhenExpressions(projectName, pageThree.getDomainClassName()));
+				createAngularTemplates(projectContainer, projectName);				
 				appendNewScriptsToAngular(projectContainer, createNewScriptsTag(projectName, pageThree.getDomainClassName()));
+				appendNewRouteExpressionToAngular(projectContainer, createWhenExpressions(projectName, pageThree.getDomainClassName()));
 				addNewTabsToAngularHomePage(projectContainer, pageThree.getDomainClassName());
 				
 				/**************ANGULAR SPECIFIC****************************/
 				
 				/**************END OF ANGULAR SPECIFIC****************************/
-				
-				//
+			
+				project.refreshLocal(IProject.DEPTH_INFINITE, new NullProgressMonitor());
+	
 				addNewTabsToHomePage(projectContainer, pageThree.getDomainClassName());
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+            
         }
 	        
 		return true;
@@ -394,8 +396,10 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 				"<li><a href=\"#" + className.toLowerCase() + "s" + "\" >" + className + "s" + "</a></li>\n", "");
 		
 		InputStream modifiedFileContent = new ByteArrayInputStream(modifiedFile.getBytes());
-		indexJSPFile.delete(true, new NullProgressMonitor());
-		indexJSPFile.create(modifiedFileContent, IResource.FORCE, new NullProgressMonitor());
+		//indexJSPFile.delete(true, new NullProgressMonitor());
+		//indexJSPFile.create(modifiedFileContent, IResource.FORCE, new NullProgressMonitor());
+		indexJSPFile.setContents(modifiedFileContent, IFile.FORCE, new NullProgressMonitor());
+		indexJSPFile.refreshLocal(IFile.DEPTH_ZERO, new NullProgressMonitor());
 	}
 	
 	private void addNewTabsToAngularHomePage(IContainer projectContainer, String className) throws Exception{
@@ -429,8 +433,10 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		
 		
 		InputStream modifiedFileContent = new ByteArrayInputStream(modifiedFile.getBytes());
-		indexJSPFile.delete(true, new NullProgressMonitor());
-		indexJSPFile.create(modifiedFileContent, IResource.FORCE, new NullProgressMonitor());
+		//indexJSPFile.delete(true, new NullProgressMonitor());		
+		//indexJSPFile.create(modifiedFileContent, IResource.FORCE, new NullProgressMonitor());
+		indexJSPFile.setContents(modifiedFileContent, IFile.FORCE, new NullProgressMonitor());
+		indexJSPFile.refreshLocal(IFile.DEPTH_ZERO, new NullProgressMonitor());
 	}
 	
 	private void addNewRoutesToRouter(IContainer projectContainer, String projectName) throws Exception{
@@ -489,8 +495,10 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 				"\n" + mergeOutput.toString(), "");
 		
 		InputStream modifiedFileContent = new ByteArrayInputStream(modifiedFile.getBytes());
-		routerFile.delete(true, new NullProgressMonitor());
-		routerFile.create(modifiedFileContent, IResource.FORCE, new NullProgressMonitor());
+		//routerFile.delete(true, new NullProgressMonitor());
+		//routerFile.create(modifiedFileContent, IResource.FORCE, new NullProgressMonitor());
+		routerFile.setContents(modifiedFileContent, IFile.FORCE, new NullProgressMonitor());
+		routerFile.refreshLocal(IFile.DEPTH_ZERO, new NullProgressMonitor());
 		
 	}
 	
@@ -605,8 +613,10 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		stringBuffer.insert(insertionPoint, whenWriter.toString() + " " +  otherwiseWriter.toString());
 		
 		InputStream modifiedFileContent = new ByteArrayInputStream(CommonUtils.prettifyJS(stringBuffer.toString().replaceAll("INSERTHEREPLEASE", "")).getBytes());		
-		routerFile.delete(true, new NullProgressMonitor());
-		routerFile.create(modifiedFileContent, IResource.FORCE, new NullProgressMonitor());
+		//routerFile.delete(true, new NullProgressMonitor());
+		//routerFile.create(modifiedFileContent, IResource.FORCE, new NullProgressMonitor());
+		routerFile.setContents(modifiedFileContent, IFile.FORCE, new NullProgressMonitor());
+		routerFile.refreshLocal(IFile.DEPTH_ZERO, new NullProgressMonitor());
 		
 	}
 	
@@ -639,9 +649,15 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		int insertionPoint = htmlString.indexOf("INSERTSCRIPTSHERE");
 		StringBuffer stringBuffer = new StringBuffer(htmlString);
 		stringBuffer.insert(insertionPoint, whenWriter.toString());
-		InputStream modifiedFileContent = new ByteArrayInputStream( stringBuffer.toString().replaceAll("INSERTSCRIPTSHERE", "").getBytes());
-		index2File.delete(true, new NullProgressMonitor());
-		index2File.create(modifiedFileContent, IResource.FORCE, new NullProgressMonitor());
+		String finalString = stringBuffer.toString().replaceAll("INSERTSCRIPTSHERE", "");
+		InputStream modifiedFileContent = new ByteArrayInputStream( finalString.getBytes());
+		
+		//index2File.delete(true, new NullProgressMonitor());		
+		//index2File.create(modifiedFileContent, IResource.FORCE, new NullProgressMonitor());
+		
+		
+		index2File.setContents(modifiedFileContent, IFile.FORCE, new NullProgressMonitor());
+		index2File.refreshLocal(IFile.DEPTH_ZERO, new NullProgressMonitor());
 	}
 	
 

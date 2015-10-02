@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
-<!DOCTYPE html ng-app="${projectName}">
+<!DOCTYPE html>
 <html ng-app="${projectName}">
 <head>
 	<title>${projectName}</title>

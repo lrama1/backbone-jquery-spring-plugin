@@ -24,6 +24,7 @@ import org.eclipse.text.edits.TextEdit;
 import org.eclipse.wst.jsdt.core.ToolFactory;
 import org.eclipse.wst.jsdt.core.formatter.CodeFormatter;
 import org.eclipse.wst.jsdt.core.formatter.DefaultCodeFormatterConstants;
+import org.w3c.tidy.Tidy;
 
 public class CommonUtils {
 
@@ -120,6 +121,8 @@ public class CommonUtils {
 	    }
 	    return doc.get();
 	}
+	
+	
 	
 	@SuppressWarnings("unchecked")
 	private static org.eclipse.jdt.core.formatter.CodeFormatter getDefaultFormatter() {
