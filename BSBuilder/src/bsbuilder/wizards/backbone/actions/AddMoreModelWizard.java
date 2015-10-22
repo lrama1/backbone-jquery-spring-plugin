@@ -137,13 +137,15 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 				//
 				addNewRoutesToRouter(projectContainer, projectName);
 				/**************END OF BACKBONE SPECIFIC****************************/
+				
+				/**************ANGULAR SPECIFIC****************************/
 				createAngularControllers(projectContainer, projectName);
+				createAngularService(projectContainer, projectName);
 				createAngularTemplates(projectContainer, projectName);				
 				appendNewScriptsToAngular(projectContainer, createNewScriptsTag(projectName, pageThree.getDomainClassName()));
 				appendNewRouteExpressionToAngular(projectContainer, createWhenExpressions(projectName, pageThree.getDomainClassName()));
 				addNewTabsToAngularHomePage(projectContainer, pageThree.getDomainClassName());
-				
-				/**************ANGULAR SPECIFIC****************************/
+								
 				
 				/**************END OF ANGULAR SPECIFIC****************************/
 			
@@ -175,6 +177,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		StringBuffer stringBuffer = new StringBuffer();
 		stringBuffer.append("<script src=\"/" + projectName + "/resources/js/angular_controllers/" + domainClassName + "ListController.js\"></script>");
 		stringBuffer.append("\n<script src=\"/" + projectName + "/resources/js/angular_controllers/" + domainClassName + "EditController.js\"></script>");
+		stringBuffer.append("\n<script src=\"/" + projectName + "/resources/js/angular_services/" + domainClassName + "Service.js\"></script>");
 		return stringBuffer.toString();
 	}
 	
@@ -543,6 +546,19 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 				TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_list_controller-template.js", mapOfValues), new NullProgressMonitor());
 		CommonUtils.addFileToProject(angularControllerFolder, new Path(domainClassName +"EditController.js"), 
 				TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_edit_controller-template.js", mapOfValues), new NullProgressMonitor());
+	}
+	
+	private void createAngularService(IContainer projectContainer, String projectName) throws Exception{
+		IFolder angularServiceFolder = projectContainer.getFolder(new Path("src/main/webapp/WEB-INF/resources/js/angular_services"));
+		String domainClassName = pageThree.getDomainClassName();
+		Map<String, Object> mapOfValues = new HashMap<String, Object>();
+		mapOfValues.put("domainClassName", domainClassName);
+		mapOfValues.put("projectName", projectName);
+		mapOfValues.put("domainClassIdAttributeName", pageThree.getDomainClassAttributeName());
+		mapOfValues.put("attrs", pageThree.getModelAttributes());
+		
+		CommonUtils.addFileToProject(angularServiceFolder, new Path(domainClassName +"Service.js"), 
+				TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_service-template.js", mapOfValues), new NullProgressMonitor());
 	}
 	
 	private void createAngularTemplates(IContainer projectContainer, String projectName) throws Exception{

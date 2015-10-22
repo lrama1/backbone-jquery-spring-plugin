@@ -1,14 +1,14 @@
+#set($domainObjectName = ${domainClassName.substring(0,1).toLowerCase()} + ${domainClassName.substring(1)})
 (
 	function(){
-		angular.module('${projectName}').controller('${domainClassName}ListController', function(#[[$scope, $http]]#){
-			#[[$http]]#.get('/${projectName}/${domainClassName.toLowerCase()}s',{params :{page : 1, per_page : 1000}}).then(function(value) {
+		angular.module('${projectName}').controller('${domainClassName}ListController', function(#[[$scope]]#, ${domainObjectName}Service) {
+			${domainObjectName}Service.get${domainClassName}s()
+					.success(function(value){
 				console.log(value);
-				#[[$scope]]#.${domainClassName}s = value.data.rows;
-			}, function(reason) {
+				#[[$scope]]#.${domainClassName}s = value.rows;
 				
-			}, function(value) {
-				
-			})
-		});
+				});
+			});
+
 	}	
 )();

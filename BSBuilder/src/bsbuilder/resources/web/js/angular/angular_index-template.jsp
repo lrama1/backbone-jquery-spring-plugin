@@ -19,6 +19,7 @@
 	<script src="/${projectName}/resources/js/angular_controllers/HomeController.js"></script>
 	<script src="/${projectName}/resources/js/angular_controllers/${domainClassName}ListController.js"></script>
 	<script src="/${projectName}/resources/js/angular_controllers/${domainClassName}EditController.js"></script>
+	<script src="/${projectName}/resources/js/angular_services/${domainClassName}Service.js"></script>
 	
 </head>
 <body>

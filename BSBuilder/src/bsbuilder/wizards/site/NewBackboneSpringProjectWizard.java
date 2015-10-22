@@ -444,6 +444,10 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/angular_controllers"), new Path(params.getDomainClassName() +"EditController.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_edit_controller-template.js", mapOfValues), monitor);
 			
+			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/angular_services"), new Path(params.getDomainClassName() +"Service.js"), 
+					TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_service-template.js", mapOfValues), monitor);
+			
+			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/angular_templates"), new Path(params.getDomainClassName() + "Edit.html"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_edit_html-template.html", mapOfValues), monitor);
 			
