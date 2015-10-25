@@ -78,3 +78,10 @@ $('#rootwizard').bootstrapWizard({
 		alert('next tab');
 	}
 });
+
+---------------------
+Inspecting the generated Web Service
+1.  http://localhost:8080/<webcontext>/webservices
+		- this should list out the available endpoints on your browser
+
+
