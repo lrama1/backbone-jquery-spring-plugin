@@ -4,15 +4,19 @@
 	  var ${domainObjectName}Service = function(#[[$http, $routeParams]]#){
 		  
 		  //define service methods
-		  this.get${domainClassName}s = function(){			  
+		  this.get${domainClassName}s = function(pageNumber, pageSize){			  
 			  return #[[$http]]#.get('/${projectName}/${domainClassName.toLowerCase()}s',{params : {
-					page : 1,
-					per_page : 1000
+					page : pageNumber,
+					per_page : pageSize
 				}});
 		  };
 		  
 		  this.get${domainClassName} = function(id){
 			return #[[$http]]#.get('/${projectName}/${domainClassName.toLowerCase()}/' + #[[$routeParams]]#.id);
+		  };
+		  
+		  this.save${domainClassName} = function(${domainObjectName}ToSave){				
+			  #[[$http]]#.post('/${projectName}/${domainClassName.toLowerCase()}', ${domainObjectName}ToSave);
 		  };
 		  
 	  };

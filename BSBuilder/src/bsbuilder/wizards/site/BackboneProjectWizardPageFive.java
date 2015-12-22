@@ -8,19 +8,21 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Combo;
 
 
 public class BackboneProjectWizardPageFive extends WizardPage {
 
 	public BackboneProjectWizardPageFive(String pageName) {
 		super(pageName);
-		setTitle("Backbone MVC Options");
+		setTitle("UI Options");
 		setDescription("Some options to customize the Backbone Code");
 	}
 
 	Button btnRadioButton;
 	Button btnRadioButton_1;
 	private Group grpTemplateOptions;
+	Combo cmbUIType;
 	private Button btnInjectLocalizedMessages;
 	
 	@Override
@@ -34,6 +36,17 @@ public class BackboneProjectWizardPageFive extends WizardPage {
 		setControl(container);
 		new Label(container, SWT.NONE);
 		new Label(container, SWT.NONE);
+		new Label(container, SWT.NONE);
+		
+		Label lblNewLabel = new Label(container, SWT.NONE);
+		lblNewLabel.setText("UIType");
+		new Label(container, SWT.NONE);
+		
+		cmbUIType = new Combo(container, SWT.READ_ONLY);
+		cmbUIType.add("BackboneJS");
+		cmbUIType.add("AngularJS");
+		cmbUIType.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		cmbUIType.select(0);
 		new Label(container, SWT.NONE);
 		
 		grpTemplateOptions = new Group(container, SWT.NONE);
@@ -79,4 +92,7 @@ public class BackboneProjectWizardPageFive extends WizardPage {
 		return btnInjectLocalizedMessages.getSelection();
 	}
 	
+	public String getUIType(){
+		return cmbUIType.getText();
+	}
 }

@@ -93,6 +93,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 				String projectName = project.getName();
 				String basePackageName = bsBuilderProperties.getProperty("basePackage");
 				String useMongo = bsBuilderProperties.getProperty("useMongo");
+				String uiType = bsBuilderProperties.getProperty("uiType");
 				Map<String, Object> modelAttributes = pageThree.getModelAttributes();
 				
 				//create Domain Class
@@ -118,36 +119,37 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 				//createDao
 				createDaoClass(projectContainer, basePackageName);
 				
-				/**************BACKBONE SPECIFIC****************************/
-				//create backbone model
-				createBackboneModel(projectContainer, projectName);
-				
-				//create backbone collection
-				createBackboneCollection(projectContainer, projectName);
-				
-				//create backbone edit view
-				createBackboneEditView(projectContainer, projectName);
-				
-				//create backbone collection view
-				createCollectionView(projectContainer, projectName);
-				
-				//create Presenter
-				//createPresenter(projectContainer, projectName);
-				
-				//
-				addNewRoutesToRouter(projectContainer, projectName);
-				/**************END OF BACKBONE SPECIFIC****************************/
-				
-				/**************ANGULAR SPECIFIC****************************/
-				createAngularControllers(projectContainer, projectName);
-				createAngularService(projectContainer, projectName);
-				createAngularTemplates(projectContainer, projectName);				
-				appendNewScriptsToAngular(projectContainer, createNewScriptsTag(projectName, pageThree.getDomainClassName()));
-				appendNewRouteExpressionToAngular(projectContainer, createWhenExpressions(projectName, pageThree.getDomainClassName()));
-				addNewTabsToAngularHomePage(projectContainer, pageThree.getDomainClassName());
-								
-				
-				/**************END OF ANGULAR SPECIFIC****************************/
+				if(uiType.equalsIgnoreCase("BackboneJS")){
+					/**************BACKBONE SPECIFIC****************************/
+					//create backbone model
+					createBackboneModel(projectContainer, projectName);
+					
+					//create backbone collection
+					createBackboneCollection(projectContainer, projectName);
+					
+					//create backbone edit view
+					createBackboneEditView(projectContainer, projectName);
+					
+					//create backbone collection view
+					createCollectionView(projectContainer, projectName);
+					
+					//create Presenter
+					//createPresenter(projectContainer, projectName);
+					
+					//
+					addNewRoutesToRouter(projectContainer, projectName);
+					/**************END OF BACKBONE SPECIFIC****************************/
+				}else{				
+					/**************ANGULAR SPECIFIC****************************/
+					createAngularControllers(projectContainer, projectName);
+					createAngularService(projectContainer, projectName);
+					createAngularTemplates(projectContainer, projectName);				
+					appendNewScriptsToAngular(projectContainer, createNewScriptsTag(projectName, pageThree.getDomainClassName()));
+					appendNewRouteExpressionToAngular(projectContainer, createWhenExpressions(projectName, pageThree.getDomainClassName()));
+					addNewTabsToAngularHomePage(projectContainer, pageThree.getDomainClassName());								
+					
+					/**************END OF ANGULAR SPECIFIC****************************/
+				}
 			
 				project.refreshLocal(IProject.DEPTH_INFINITE, new NullProgressMonitor());
 	

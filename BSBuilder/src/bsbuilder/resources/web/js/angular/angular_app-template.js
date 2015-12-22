@@ -1,7 +1,7 @@
 #set($domainObjectName = ${domainClassName.substring(0,1).toLowerCase()} + ${domainClassName.substring(1)})
 (
 	function(){
-		angular.module('${projectName}', ['ngRoute']).config(function($routeProvider){
+		angular.module('${projectName}', ['ngRoute','angularUtils.directives.dirPagination']).config(function($routeProvider){
 			$routeProvider
 					.when('/${domainClassName.toLowerCase()}s', 
 						{controller : '${domainClassName}ListController',

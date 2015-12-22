@@ -3,7 +3,7 @@
 Testing
 	<table class="table table-hover">
 		<tbody>
-			<tr data-ng-repeat="${domainObjectName} in ${domainClassName}s">	
+			<tr dir-paginate="${domainObjectName} in ${domainClassName}s | itemsPerPage: pageSize" total-items="totalRows" current-page="pagination.current">	
 				<td>		
 				<a href="#${domainClassName.toLowerCase()}/{{${domainObjectName}.${domainClassIdAttributeName}}}">
 					{{${domainObjectName}.${domainClassIdAttributeName}}}
@@ -15,5 +15,6 @@ Testing
 			</tr>
 		</tbody>	
 	</table>
+	<dir-pagination-controls  on-page-change="pageChanged(newPageNumber)"></dir-pagination-controls>
 
 </div>

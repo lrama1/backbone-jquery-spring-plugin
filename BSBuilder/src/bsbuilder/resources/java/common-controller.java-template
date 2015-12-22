@@ -29,11 +29,6 @@ public class MainController {
 		return "/WEB-INF/index.jsp";
 	}
 	
-	@RequestMapping("/home2")
-	public String showHomePage2(){
-		return "/WEB-INF/index2.jsp";
-	}
-	
 	@RequestMapping("/resources/js/.templates/**")
 	public String getTemplate(HttpServletRequest request){
 		String  restOfURL= (String)request.getAttribute( HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE );

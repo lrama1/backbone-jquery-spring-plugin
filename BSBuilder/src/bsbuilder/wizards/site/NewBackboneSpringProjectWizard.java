@@ -232,6 +232,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		params.setSampleESAPIProperties(CommonUtils.linesToString(IOUtils.readLines(getClass().getResourceAsStream("/bsbuilder/resources/esapi/ESAPI.properties")),"\n"));
 		params.setJSPTemplate(pageFive.isJSPTemplate());
 		params.setInjectLocalizedMessages(pageFive.injectLocalizedMessages());
+		params.setUiType(pageFive.getUIType());
 		
 		params.setGenerateWebService(pageSix.addWebServiceFeature());
 		params.setWebServicePackageName(webServicePackageName);
@@ -323,12 +324,125 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			createFolderStructures(container, monitor);			
 			
 			//add 3rd party JS libs
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources"), new Path("r.js"), 
-					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/r.js"), monitor);
+			if(params.getUiType().equalsIgnoreCase("BackboneJS")){
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources"), new Path("r.js"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/r.js"), monitor);
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("require.js"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/require.js"), monitor);
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backbone.js"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backbone.js"), monitor);
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("underscore.js"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/underscore-min.js"), monitor);
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backgrid.js"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid.js"), monitor);
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/css/libs"), new Path("backgrid.css"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid.css"), monitor);
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/css/libs"), new Path("backgrid-paginator.css"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid-paginator.css"), monitor);
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backgrid-paginator.js"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid-paginator.js"), monitor);			
+				
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/css/libs"), new Path("backgrid-select-all.css"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid-select-all.css"), monitor);
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backgrid-select-all.js"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid-select-all.js"), monitor);			
+				
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backbone-pageable.js"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backbone-pageable.js"), monitor);
+				//
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("bootstrap-datepicker.js"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/bootstrap-datepicker.js"), monitor);
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/css/libs"), new Path("datepicker.css"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/datepicker.css"), monitor);
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backbone.global.js"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backbone.global.js"), monitor);
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/models"), new Path(params.getDomainClassName()  + "Model.js"), 
+						TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/models/model-template.js", mapOfValues), monitor);
+				
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/collections"), new Path(params.getDomainClassName() + "Collection.js"), 
+						TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/collections/collection-template.js", mapOfValues), monitor);
+				
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/views"), new Path(params.getDomainClassName() + "EditView.js"), 
+						TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/views/view-template.js", mapOfValues), monitor);			
+				
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/views"), new Path(params.getDomainClassName() + "CollectionView.js"), 
+						TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/views/collection-view-template.js", mapOfValues), monitor);
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources"), new Path("buildconfig.js"), 
+						TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/main/buildconfig-template.js", mapOfValues), monitor);
+				
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js"), new Path("app.js"), 
+						TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/main/app-template.js", mapOfValues), monitor);
+				
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js"), new Path("router.js"), 
+						TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/routers/router-template.js", mapOfValues), monitor);
+				
+				/*Add a backbone template file.  This is dependent on the Java Model generation.
+				 * Instead of using plain html, we are going to use JSP so we can use Spring's
+				 * Message Bundles for localization.
+				 * */			
+				Path listTemplatePath;
+				Path editTemplatePath;
+				//Path presenterTemplatePath;
+				if(params.isJSPTemplate()){
+					listTemplatePath = new Path(params.getDomainClassName() + "ListTemplate.jsp");
+					editTemplatePath = new Path(params.getDomainClassName() + "EditTemplate.jsp");
+					//presenterTemplatePath = new Path(params.getDomainClassName() + "PresenterTemplate.jsp");
+				}else{
+					listTemplatePath = new Path(params.getDomainClassName() + "ListTemplate.htm");
+					editTemplatePath = new Path(params.getDomainClassName() + "EditTemplate.htm");
+					//presenterTemplatePath = new Path(params.getDomainClassName() + "PresenterTemplate.htm");
+				}	
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/templates"), editTemplatePath, 
+						TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/EditTemplate.jsp-template",  mapOfValues), monitor);
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/templates"), listTemplatePath, 
+						TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/ListTemplate.jsp-template", mapOfValues), monitor);
+				//CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/templates"), presenterTemplatePath, 
+				//		TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/PresenterTemplate.jsp-template", mapOfValues), monitor);
+				/* Add a default jsp file.  This is dependent on the Java Model generation */
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF"), new Path("index.jsp"),
+								TemplateMerger.merge("/bsbuilder/resources/web/jsps/index.jsp-template", mapOfValues), monitor);
+			
+			}else{
+				//ANGULARJS ONLY COMPONENTS
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("dirPagination.js"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/dirPagination.js"), monitor);
+				
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js"), new Path("angular_app.js"), 
+						TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_app-template.js", mapOfValues), monitor);
+				
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/angular_controllers"), new Path("HomeController.js"), 
+						TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_home_controller-template.js", mapOfValues), monitor);
+				
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/angular_controllers"), new Path(params.getDomainClassName() +"ListController.js"), 
+						TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_list_controller-template.js", mapOfValues), monitor);
+				
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/angular_templates"), new Path(params.getDomainClassName() + "List.html"), 
+						TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_list_html-template.html", mapOfValues), monitor);
+				
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/angular_controllers"), new Path(params.getDomainClassName() +"EditController.js"), 
+						TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_edit_controller-template.js", mapOfValues), monitor);
+				
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/angular_services"), new Path(params.getDomainClassName() +"Service.js"), 
+						TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_service-template.js", mapOfValues), monitor);
+				
+				
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/angular_templates"), new Path(params.getDomainClassName() + "Edit.html"), 
+						TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_edit_html-template.html", mapOfValues), monitor);
+				
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF"), new Path("index.jsp"), 
+						TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_index-template.jsp", mapOfValues), monitor);
+				
+				CommonUtils.addFileToProject(container, new Path(".tern-project"), 
+						TemplateMerger.merge("/bsbuilder/resources/web/js/angular/tern-project", mapOfValues), monitor);
+			}
+			
+			
+			
+			
+			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("localizedmessages.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/localizedmessages.js"), monitor);
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backbone.js"), 
-					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backbone.js"), monitor);
+			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("ejs_fulljslint.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/ejs_fulljslint.js"), monitor);
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("jquery.js"), 
@@ -337,36 +451,11 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("jquery-1.10.2.min.map"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/jquery-1.10.2.min.map"), monitor);
 			
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("require.js"), 
-					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/require.js"), monitor);			
+						
 			//CommonUtils.CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("jquery.dataTables.js"), 
 			//		this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/jquery.dataTables.js"), monitor);
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("json2.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/json2.js"), monitor);
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("underscore.js"), 
-					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/underscore-min.js"), monitor);
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backgrid.js"), 
-					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid.js"), monitor);
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/css/libs"), new Path("backgrid.css"), 
-					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid.css"), monitor);
-			
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/css/libs"), new Path("backgrid-paginator.css"), 
-					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid-paginator.css"), monitor);
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backgrid-paginator.js"), 
-					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid-paginator.js"), monitor);			
-			
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/css/libs"), new Path("backgrid-select-all.css"), 
-					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid-select-all.css"), monitor);
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backgrid-select-all.js"), 
-					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backgrid-select-all.js"), monitor);			
-			
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backbone-pageable.js"), 
-					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backbone-pageable.js"), monitor);
-			//
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("bootstrap-datepicker.js"), 
-					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/bootstrap-datepicker.js"), monitor);
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/css/libs"), new Path("datepicker.css"), 
-					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/datepicker.css"), monitor);
 			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("jquery.bootstrap.wizard.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/jquery.bootstrap.wizard.js"), monitor);
@@ -389,8 +478,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/css/fonts"), new Path("glyphicons-halflings-regular.woff2"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/fonts/glyphicons-halflings-regular.woff2"), monitor);
 			
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("backbone.global.js"), 
-					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/backbone.global.js"), monitor);
+			
 			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("respond.min.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/respond.min.js"), monitor);
@@ -403,70 +491,12 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js"), new Path("text.js"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/text.js"), monitor);
 						
-			
-			
-			//CommonUtils.CommonUtils.addFileToProject(yourJsFolder, new Path("components.js"), 
-			//		TemplateMerger.merge("/bsbuilder/resources/web/js/components.js", mapOfValues), monitor);
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/models"), new Path(params.getDomainClassName()  + "Model.js"), 
-					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/models/model-template.js", mapOfValues), monitor);
-			
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/collections"), new Path(params.getDomainClassName() + "Collection.js"), 
-					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/collections/collection-template.js", mapOfValues), monitor);
-			
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/views"), new Path(params.getDomainClassName() + "EditView.js"), 
-					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/views/view-template.js", mapOfValues), monitor);			
-			
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/views"), new Path(params.getDomainClassName() + "CollectionView.js"), 
-					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/views/collection-view-template.js", mapOfValues), monitor);
-			
-			//CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/presenters"), new Path(params.getDomainClassName() + "Presenter.js"), 
-			//		TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/views/presenter-template.js", mapOfValues), monitor);
-			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/globals"), new Path("global.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/libs/global.js", mapOfValues), monitor);
 			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js"), new Path("main.js"), 
 					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/main/main-template.js", mapOfValues), monitor);
-			
-			//===============================================ANGULAR===========================
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js"), new Path("angular_app.js"), 
-					TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_app-template.js", mapOfValues), monitor);
-			
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/angular_controllers"), new Path("HomeController.js"), 
-					TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_home_controller-template.js", mapOfValues), monitor);
-			
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/angular_controllers"), new Path(params.getDomainClassName() +"ListController.js"), 
-					TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_list_controller-template.js", mapOfValues), monitor);
-			
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/angular_templates"), new Path(params.getDomainClassName() + "List.html"), 
-					TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_list_html-template.html", mapOfValues), monitor);
-			
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/angular_controllers"), new Path(params.getDomainClassName() +"EditController.js"), 
-					TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_edit_controller-template.js", mapOfValues), monitor);
-			
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/angular_services"), new Path(params.getDomainClassName() +"Service.js"), 
-					TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_service-template.js", mapOfValues), monitor);
-			
-			
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/angular_templates"), new Path(params.getDomainClassName() + "Edit.html"), 
-					TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_edit_html-template.html", mapOfValues), monitor);
-			
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF"), new Path("index2.jsp"), 
-					TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_index-template.jsp", mapOfValues), monitor);
-			
-			CommonUtils.addFileToProject(container, new Path(".tern-project"), 
-					TemplateMerger.merge("/bsbuilder/resources/web/js/angular/tern-project", mapOfValues), monitor);
-			
-			//====================================================================================================
-			
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources"), new Path("buildconfig.js"), 
-					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/main/buildconfig-template.js", mapOfValues), monitor);
-			
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js"), new Path("app.js"), 
-					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/main/app-template.js", mapOfValues), monitor);
-			
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js"), new Path("router.js"), 
-					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/routers/router-template.js", mapOfValues), monitor);
+		
 			
 			addVariousSettings(folders.get(".settings"), proj, params.getBasePackageName(), params.getControllerPackageName(),
 					monitor);
@@ -501,9 +531,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 					params.getDomainClassSourceCode() , monitor);
 			
 			Map<String, Object> modelAttributes = pageThree.getModelAttributes();
-			/* Add a default jsp file.  This is dependent on the Java Model generation */
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF"), new Path("index.jsp"),
-							TemplateMerger.merge("/bsbuilder/resources/web/jsps/index.jsp-template", mapOfValues), monitor);
+			
 			
 			/*Add a default CSS */
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/css"), new Path("site.css"),
@@ -513,32 +541,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 					this.getClass().getResourceAsStream("/bsbuilder/resources/css/bootstrap.min.css"), monitor);
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/css/libs"), new Path("bootstrap-theme.min.css"), 
 					this.getClass().getResourceAsStream("/bsbuilder/resources/css/bootstrap-theme.min.css"), monitor);
-	
-	
 			
-			/*Add a backbone template file.  This is dependent on the Java Model generation.
-			 * Instead of using plain html, we are going to use JSP so we can use Spring's
-			 * Message Bundles for localization.
-			 * */			
-			Path listTemplatePath;
-			Path editTemplatePath;
-			//Path presenterTemplatePath;
-			if(params.isJSPTemplate()){
-				listTemplatePath = new Path(params.getDomainClassName() + "ListTemplate.jsp");
-				editTemplatePath = new Path(params.getDomainClassName() + "EditTemplate.jsp");
-				//presenterTemplatePath = new Path(params.getDomainClassName() + "PresenterTemplate.jsp");
-			}else{
-				listTemplatePath = new Path(params.getDomainClassName() + "ListTemplate.htm");
-				editTemplatePath = new Path(params.getDomainClassName() + "EditTemplate.htm");
-				//presenterTemplatePath = new Path(params.getDomainClassName() + "PresenterTemplate.htm");
-			}	
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/templates"), editTemplatePath, 
-					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/EditTemplate.jsp-template",  mapOfValues), monitor);
-			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/templates"), listTemplatePath, 
-					TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/ListTemplate.jsp-template", mapOfValues), monitor);
-			//CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/templates"), presenterTemplatePath, 
-			//		TemplateMerger.merge("/bsbuilder/resources/web/js/backbone/templates/PresenterTemplate.jsp-template", mapOfValues), monitor);
-		
 			
 			/* Add Controllers*/
 			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getControllerPackageName() , "MainController", 
@@ -625,7 +628,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			
 			//add bsbuilder-specific settings
 			addBSBuilderSettings(folders.get(".settings"), project, params.getBasePackageName(),params.isGenerateSecurityCode(),
-					(Boolean)mapOfValues.get("useMongo") , monitor);
+					(Boolean)mapOfValues.get("useMongo"), params.getUiType() , monitor);
 			
 		} catch (Throwable ioe) {
 			IStatus status = new Status(IStatus.ERROR, "NewFileWizard", IStatus.OK,
@@ -879,13 +882,14 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 	}
 	
 	private void addBSBuilderSettings(IFolder settingsFolder, IProject project, 
-			String basePackageName, boolean secureEnabled, boolean useMongo,IProgressMonitor monitor)
+			String basePackageName, boolean secureEnabled, boolean useMongo, String uiType,IProgressMonitor monitor)
 			throws Exception{		
 		//String props = "basePackage=" + basePackageName;
 		StringWriter properties = new StringWriter();
 		properties.append("basePackage=" + basePackageName);		
 		properties.append("\nsecureCodeEnabled=" + secureEnabled);
 		properties.append("\nuseMongo=" + useMongo);
+		properties.append("\nuiType=" + uiType);
 		
         InputStream stream = new ByteArrayInputStream(properties.toString().getBytes());
 		CommonUtils.addFileToProject(settingsFolder, new Path("org.bsbuilder.settings"),
@@ -955,8 +959,15 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		private String sampleESAPIProperties;
 		private boolean isJSPTemplate = true;
 		private boolean injectLocalizedMessages;
+		private String uiType;
 		
 		
+		public String getUiType() {
+			return uiType;
+		}
+		public void setUiType(String uiType) {
+			this.uiType = uiType;
+		}
 		public String getBasePackageName() {
 			return basePackageName;
 		}

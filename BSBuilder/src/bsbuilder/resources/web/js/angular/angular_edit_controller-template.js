@@ -12,7 +12,8 @@
 			});
 			
 			#[[$scope]]#.doSave = function(){
-				alert('Saving:' + JSON.stringify(#[[$scope]]#.${domainClassName}));				
+				alert('Saving:' + JSON.stringify(#[[$scope]]#.${domainClassName}));			
+				${domainObjectName}Service.save${domainClassName}(#[[$scope]]#.${domainClassName});
 			}	
 			
 		});
