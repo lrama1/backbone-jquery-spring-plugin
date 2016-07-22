@@ -138,6 +138,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 					
 					//
 					addNewRoutesToRouter(projectContainer, projectName);
+					addNewTabsToHomePage(projectContainer, pageThree.getDomainClassName());
 					/**************END OF BACKBONE SPECIFIC****************************/
 				}else{				
 					/**************ANGULAR SPECIFIC****************************/
@@ -153,7 +154,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 			
 				project.refreshLocal(IProject.DEPTH_INFINITE, new NullProgressMonitor());
 	
-				addNewTabsToHomePage(projectContainer, pageThree.getDomainClassName());
+				
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -409,7 +410,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 	
 	private void addNewTabsToAngularHomePage(IContainer projectContainer, String className) throws Exception{
 		IFolder indexFolder = projectContainer.getFolder(new Path("src/main/webapp/WEB-INF"));
-		IFile indexJSPFile = indexFolder.getFile("index2.jsp");
+		IFile indexJSPFile = indexFolder.getFile("index.jsp");
 		File file = indexJSPFile.getRawLocation().toFile();
 
 		String modifiedFile = FileUtils.readFileToString(file);
@@ -646,7 +647,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		//String value = routePattern.matcher(routerString).
 		//System.out.println(value);
 		IFolder jsFolder = projectContainer.getFolder(new Path("src/main/webapp/WEB-INF"));
-		IFile index2File = jsFolder.getFile("index2.jsp");
+		IFile index2File = jsFolder.getFile("index.jsp");
 		File file = index2File.getRawLocation().toFile();
 		
 		String htmlString = FileUtils.readFileToString(file);

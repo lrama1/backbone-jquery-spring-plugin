@@ -407,6 +407,13 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("dirPagination.js"), 
 						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/dirPagination.js"), monitor);
 				
+				
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("angular.min.js"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/angular.min.js"), monitor);
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("angular-route.min.js"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/angular-route.min.js"), monitor);
+				
+				
 				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js"), new Path("angular_app.js"), 
 						TemplateMerger.merge("/bsbuilder/resources/web/js/angular/angular_app-template.js", mapOfValues), monitor);
 				

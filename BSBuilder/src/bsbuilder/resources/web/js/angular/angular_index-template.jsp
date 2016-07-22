@@ -8,12 +8,12 @@
 	<title>${projectName}</title>
 	
 	<script src="http://code.jquery.com/jquery-1.11.3.js"></script>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/${projectName}/resources/css/libs/bootstrap.min.css" />
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
 
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular.min.js"></script>
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-route.js"></script>
+	<script src="/${projectName}/resources/js/libs/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/${projectName}/resources/js/libs/angular.min.js"></script>
+	<script type="text/javascript" src="/${projectName}/resources/js/libs/angular-route.min.js"></script>
 	<script src="/${projectName}/resources/js/libs/dirPagination.js"></script>
 	
 	<script src="/${projectName}/resources/js/angular_app.js"></script>
@@ -39,7 +39,7 @@
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" ng-controller="HomeController">
 				<ul class="nav navbar-nav">
-					<li ng-class="{ active: isActive('/${domainClassName.toLowerCase()}s')}"><a href="#${domainClassName.toLowerCase()}s">${domainClassName}<span class="sr-only">(current)</span></a></li>					
+					<li ng-class="{ active: isActive('/${domainClassName.toLowerCase()}s')}"><a href="#${domainClassName.toLowerCase()}s">${domainClassName}<span class="sr-only">(current)</span></a></li>				
 					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
 						aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
 						<ul class="dropdown-menu">
