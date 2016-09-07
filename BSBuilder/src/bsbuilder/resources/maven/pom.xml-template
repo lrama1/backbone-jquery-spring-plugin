@@ -27,8 +27,10 @@
   <properties>
   	#if(${springVersion} == '3.x.x')
   		<spring.version>3.2.0.RELEASE</spring.version>
+  		<spring.security.version>3.1.0.RELEASE</spring.security.version>
   	#else
-  		<spring.version>4.1.6.RELEASE</spring.version>
+  		<spring.version>4.2.5.RELEASE</spring.version>
+		<spring.security.version>4.0.4.RELEASE</spring.security.version>
   	#end
   </properties>
   
@@ -91,12 +93,6 @@
     </dependency>
     #end
   
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>servlet-api</artifactId>
-      <version>2.5</version>
-      <scope>provided</scope>
-    </dependency>
     
     <!-- Added For Spring -->
     
@@ -107,6 +103,12 @@
 		<artifactId>jackson-mapper-asl</artifactId>
 		<version>1.9.13</version>
 	</dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>2.5</version>
+      <scope>provided</scope>
+    </dependency>
 	#else
 	<dependency>
 	    <groupId>com.fasterxml.jackson.core</groupId>
@@ -117,6 +119,12 @@
 	    <groupId>com.fasterxml.jackson.core</groupId>
 	    <artifactId>jackson-databind</artifactId>
 	    <version>2.4.3</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.0.1</version>
+      <scope>provided</scope>
     </dependency>
 	#end
     
@@ -319,57 +327,57 @@
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-acl</artifactId>
-      <version>3.1.0.RELEASE</version>
+      <version>${spring.security.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-aspects</artifactId>
-      <version>3.1.0.RELEASE</version>
+      <version>${spring.security.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-cas</artifactId>
-      <version>3.1.0.RELEASE</version>
+      <version>${spring.security.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-config</artifactId>
-      <version>3.1.0.RELEASE</version>
+      <version>${spring.security.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-core</artifactId>
-      <version>3.1.0.RELEASE</version>
+      <version>${spring.security.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-crypto</artifactId>
-      <version>3.1.0.RELEASE</version>
+      <version>${spring.security.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-ldap</artifactId>
-      <version>3.1.0.RELEASE</version>
+      <version>${spring.security.version}</version>
     </dependency>
     <!-- dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-openid</artifactId>
-      <version>3.1.0.RELEASE</version>
+      <version>${spring.security.version}</version>
     </dependency-->
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-remoting</artifactId>
-      <version>3.1.0.RELEASE</version>
+      <version>${spring.security.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-taglibs</artifactId>
-      <version>3.1.0.RELEASE</version>
+      <version>${spring.security.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-web</artifactId>
-      <version>3.1.0.RELEASE</version>
+      <version>${spring.security.version}</version>
     </dependency>
     <dependency>
       <groupId>org.jasig.cas.client</groupId>
