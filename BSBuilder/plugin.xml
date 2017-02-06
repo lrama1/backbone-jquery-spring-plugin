@@ -73,7 +73,29 @@
                enablesFor="1"
                id="Oleng2.newJSLib">
          </action-->
-      </objectContribution>
+      </objectContribution>      
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            objectClass="org.eclipse.core.resources.IProject"
+            id="Oleng3.contribution1">
+         <menu
+               label="BSBuilder Node"
+               path="additions"
+               id="Oleng3.menu1">
+            <separator name="group1"> </separator>
+            <separator name="group2"> </separator>
+         </menu>
+         <action
+               label="Run npm install"
+               class="bsbuilder.wizards.backbone.actions.RunNpmInstall"
+               menubarPath="Oleng3.menu1/group1"
+               enablesFor="1"
+               id="Oleng3.newAction">
+         </action>         
+      </objectContribution>      
    </extension>
 
 </plugin>

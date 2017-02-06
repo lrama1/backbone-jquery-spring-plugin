@@ -350,6 +350,7 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 	}
 	
 	private void validateAttrName(String attributeName){
+		System.out.println("Validating: " + attributeName);
 		if(attributeName.trim().substring(0, 1).matches("[A-Z]")){
 			updateStatus("Attribute Name must start with a lowercase letter.");
 			return;

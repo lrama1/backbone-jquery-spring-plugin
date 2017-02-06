@@ -402,7 +402,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF"), new Path("index.jsp"),
 								TemplateMerger.merge("/bsbuilder/resources/web/jsps/index.jsp-template", mapOfValues), monitor);
 			
-			}else{
+			}else if(params.getUiType().equalsIgnoreCase("AngularJS")){
 				//ANGULARJS ONLY COMPONENTS
 				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/resources/js/libs"), new Path("dirPagination.js"), 
 						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/dirPagination.js"), monitor);
@@ -441,9 +441,65 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 				
 				CommonUtils.addFileToProject(container, new Path(".tern-project"), 
 						TemplateMerger.merge("/bsbuilder/resources/web/js/angular/tern-project", mapOfValues), monitor);
+			}else{ //VueJS
+				CommonUtils.addFileToProject(folders.get("src/ui/config"), new Path("index.js"), 
+						TemplateMerger.merge("/bsbuilder/resources/web/js/vue/index-template.js", mapOfValues), monitor);
+				CommonUtils.addFileToProject(folders.get("src/ui/src/components"), new Path("Home.vue"), 
+						TemplateMerger.merge("/bsbuilder/resources/web/js/vue/Home-template.vue", mapOfValues), monitor);
+				CommonUtils.addFileToProject(folders.get("src/ui/src/components"), new Path(params.getDomainClassName()  + ".vue"), 
+						TemplateMerger.merge("/bsbuilder/resources/web/js/vue/DomainEditor-template.vue", mapOfValues), monitor);
+				CommonUtils.addFileToProject(folders.get("src/ui/src/components"), new Path(params.getDomainClassName()  + "s.vue"), 
+						TemplateMerger.merge("/bsbuilder/resources/web/js/vue/DomainList-template.vue", mapOfValues), monitor);
+				CommonUtils.addFileToProject(folders.get("src/ui/src"), new Path("App.vue"), 
+						TemplateMerger.merge("/bsbuilder/resources/web/js/vue/App-template.vue", mapOfValues), monitor);
+				CommonUtils.addFileToProject(folders.get("src/ui/src"), new Path("main.js"), 
+						TemplateMerger.merge("/bsbuilder/resources/web/js/vue/main-template.js", mapOfValues), monitor);
+				CommonUtils.addFileToProject(folders.get("src/ui"), new Path("runapp.cmd"), 
+						TemplateMerger.merge("/bsbuilder/resources/web/js/vue/runapp-template.cmd", mapOfValues), monitor);
+				
+				//non-template files for build folder
+				CommonUtils.addFileToProject(folders.get("src/ui/build"), new Path("build.js"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/vue/others/build/build.js"), monitor);
+				CommonUtils.addFileToProject(folders.get("src/ui/build"), new Path("check-versions.js"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/vue/others/build/check-versions.js"), monitor);
+				CommonUtils.addFileToProject(folders.get("src/ui/build"), new Path("dev-client.js"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/vue/others/build/dev-client.js"), monitor);
+				CommonUtils.addFileToProject(folders.get("src/ui/build"), new Path("dev-server.js"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/vue/others/build/dev-server.js"), monitor);
+				CommonUtils.addFileToProject(folders.get("src/ui/build"), new Path("utils.js"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/vue/others/build/utils.js"), monitor);
+				CommonUtils.addFileToProject(folders.get("src/ui/build"), new Path("webpack.base.conf.js"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/vue/others/build/webpack.base.conf.js"), monitor);
+				CommonUtils.addFileToProject(folders.get("src/ui/build"), new Path("webpack.dev.conf.js"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/vue/others/build/webpack.dev.conf.js"), monitor);
+				CommonUtils.addFileToProject(folders.get("src/ui/build"), new Path("webpack.prod.conf.js"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/vue/others/build/webpack.prod.conf.js"), monitor);
+				
+				//non-template files for config folder
+				CommonUtils.addFileToProject(folders.get("src/ui/config"), new Path("dev.env.js"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/vue/others/config/dev.env.js"), monitor);
+				CommonUtils.addFileToProject(folders.get("src/ui/config"), new Path("test.env.js"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/vue/others/config/test.env.js"), monitor);
+				CommonUtils.addFileToProject(folders.get("src/ui/config"), new Path("prod.env.js"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/vue/others/config/prod.env.js"), monitor);
+				
+				//non-template files for root folder
+				CommonUtils.addFileToProject(folders.get("src/ui"), new Path(".babelrc"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/vue/root/x.babelrc"), monitor);
+				CommonUtils.addFileToProject(folders.get("src/ui"), new Path(".editorconfig"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/vue/root/x.editorconfig"), monitor);
+				CommonUtils.addFileToProject(folders.get("src/ui"), new Path(".eslintignore"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/vue/root/x.eslintignore"), monitor);
+				CommonUtils.addFileToProject(folders.get("src/ui"), new Path(".eslintrc.js"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/vue/root/x.eslintrc.js"), monitor);
+				CommonUtils.addFileToProject(folders.get("src/ui"), new Path("index.html"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/vue/root/index.html"), monitor);
+				CommonUtils.addFileToProject(folders.get("src/ui"), new Path("package.json"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/vue/root/package.json"), monitor);
+				CommonUtils.addFileToProject(folders.get("src/ui"), new Path("README.md"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/vue/root/README.md"), monitor);
+				
 			}
-			
-			
 			
 			
 			
@@ -664,8 +720,9 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		outputFolder3.create(true, true, monitor);	
 		folders.put("target/test-classes", outputFolder3);
 
-		//
+		//src
 		IFolder srcFolder = container.getFolder(new Path("src"));
+		
 		//src/main/java
 		srcFolder.create(false, true, new NullProgressMonitor());		
 		IFolder srcFolder21 = srcFolder.getFolder(new Path("main"));
@@ -673,6 +730,46 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		IFolder srcFolder31 = srcFolder21.getFolder(new Path("java"));
 		srcFolder31.create(false, true, new NullProgressMonitor());
 		folders.put("src/main/java", srcFolder31);
+		
+		/************************* VueJS folders *******************************/
+		//src/ui
+		IFolder srcFolder23 = srcFolder.getFolder(new Path("ui"));
+		srcFolder23.create(false, true, new NullProgressMonitor());
+		folders.put("src/ui", srcFolder23);
+		//src/ui/build
+		IFolder srcFolder231 = srcFolder23.getFolder(new Path("build"));
+		srcFolder231.create(false, true, new NullProgressMonitor());
+		folders.put("src/ui/build", srcFolder231);
+		
+		IFolder srcFolder232 = srcFolder23.getFolder(new Path("config"));
+		srcFolder232.create(false, true, new NullProgressMonitor());
+		folders.put("src/ui/config", srcFolder232);
+		
+		IFolder srcFolder233 = srcFolder23.getFolder(new Path("node_modules"));
+		srcFolder233.create(false, true, new NullProgressMonitor());
+		folders.put("src/ui/node_modules", srcFolder233);
+		
+		IFolder srcFolder234 = srcFolder23.getFolder(new Path("src"));
+		srcFolder234.create(false, true, new NullProgressMonitor());
+		folders.put("src/ui/src", srcFolder234);
+		
+		IFolder srcFolder2341 = srcFolder234.getFolder(new Path("assets"));
+		srcFolder2341.create(false, true, new NullProgressMonitor());
+		folders.put("src/ui/src/assets", srcFolder2341);
+		
+		IFolder srcFolder2342 = srcFolder234.getFolder(new Path("components"));
+		srcFolder2342.create(false, true, new NullProgressMonitor());
+		folders.put("src/ui/src/components", srcFolder2342);
+		
+		IFolder srcFolder235 = srcFolder23.getFolder(new Path("static"));
+		srcFolder235.create(false, true, new NullProgressMonitor());
+		folders.put("src/ui/static", srcFolder235);
+		
+		IFolder srcFolder236 = srcFolder23.getFolder(new Path("test"));
+		srcFolder236.create(false, true, new NullProgressMonitor());
+		folders.put("src/ui/test", srcFolder236);
+				
+		/************* END of VueJS *******************************************/
 		
 		//src/main/resources
 		IFolder srcFolder42 = srcFolder21.getFolder(new Path("resources"));

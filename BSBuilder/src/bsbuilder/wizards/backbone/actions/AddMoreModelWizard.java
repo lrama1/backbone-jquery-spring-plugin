@@ -70,9 +70,10 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 	@Override
 	public void addPages() {
 		generateSecurityCode = Boolean.parseBoolean(bsBuilderProperties.getProperty("secureCodeEnabled"));
+		String uiType = bsBuilderProperties.getProperty("uiType");
 		pageThree = new BackboneProjectWizardPageThree("");		
 		pageFour = new BackboneProjectWizardPageFour("");
-		pageFive = new BackboneProjectWizardPageFive("");
+		pageFive = new BackboneProjectWizardPageFive("", uiType);
 		addPage(pageThree);
 		if(generateSecurityCode)
 			addPage(pageFour);
@@ -140,7 +141,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 					addNewRoutesToRouter(projectContainer, projectName);
 					addNewTabsToHomePage(projectContainer, pageThree.getDomainClassName());
 					/**************END OF BACKBONE SPECIFIC****************************/
-				}else{				
+				}else if(uiType.equalsIgnoreCase("AngularJS")){				
 					/**************ANGULAR SPECIFIC****************************/
 					createAngularControllers(projectContainer, projectName);
 					createAngularService(projectContainer, projectName);
@@ -150,6 +151,13 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 					addNewTabsToAngularHomePage(projectContainer, pageThree.getDomainClassName());								
 					
 					/**************END OF ANGULAR SPECIFIC****************************/
+				}else{
+					/**************VUEJS SPECIFIC****************************/
+					createVueTemplates(projectContainer, projectName);
+					addNewRoutesToMainJS(projectContainer, pageThree.getDomainClassName());
+					addNewTabsToVueAppPage(projectContainer, pageThree.getDomainClassName());
+					//addNewTabsToAppVue(projectContainer, projectName);
+					/**************END OF VUEJS SPECIFIC****************************/
 				}
 			
 				project.refreshLocal(IProject.DEPTH_INFINITE, new NullProgressMonitor());
@@ -159,10 +167,91 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-            
         }
 	        
 		return true;
+	}
+	
+	private void addNewTabsToVueAppPage(IContainer projectContainer, String domainClassName) throws Exception{
+		IFolder indexFolder = projectContainer.getFolder(new Path("src/ui/src"));
+		IFile indexJSPFile = indexFolder.getFile("App.vue");
+		File file = indexJSPFile.getRawLocation().toFile();
+
+		String modifiedFile = FileUtils.readFileToString(file);
+		String whenRegex = "\\<ul(.*?)class(.*?)\\>";
+		Pattern whenPattern = Pattern.compile(whenRegex, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+
+		Matcher matcher = whenPattern.matcher(modifiedFile);			
+		int positionToInsert = -1;
+		if(matcher.find()){
+			System.out.println("===========>" + matcher.group());
+			positionToInsert = matcher.end();
+		}
+
+		StringBuffer buffer = new StringBuffer(modifiedFile);
+		if(positionToInsert > -1){
+			buffer = new StringBuffer(modifiedFile);
+			//<li><router-link to='/accounts'>Accounts List</router-link></li>
+			buffer.insert(positionToInsert, "\n<li><router-link to='/" + domainClassName.toLowerCase() + "s'>" + 
+					domainClassName + " List</router-link></li>");
+		}
+		
+		modifiedFile =  buffer.toString();
+		
+		
+		InputStream modifiedFileContent = new ByteArrayInputStream(modifiedFile.getBytes());
+		indexJSPFile.setContents(modifiedFileContent, IFile.FORCE, new NullProgressMonitor());
+		indexJSPFile.refreshLocal(IFile.DEPTH_ZERO, new NullProgressMonitor());
+	}
+	
+	private void createVueTemplates(IContainer projectContainer, String projectName) throws Exception{
+		IFolder vueTemplatesFolder = projectContainer.getFolder(new Path("src/ui/src/components"));
+		String domainClassName = pageThree.getDomainClassName();
+		Map<String, Object> mapOfValues = new HashMap<String, Object>();
+		mapOfValues.put("domainClassName", domainClassName);
+		mapOfValues.put("projectName", projectName);
+		mapOfValues.put("domainClassIdAttributeName", pageThree.getDomainClassAttributeName());
+		mapOfValues.put("attrs", pageThree.getModelAttributes());
+
+		CommonUtils.addFileToProject(vueTemplatesFolder, new Path(domainClassName  + ".vue"), 
+				TemplateMerger.merge("/bsbuilder/resources/web/js/vue/DomainEditor-template.vue", mapOfValues), new NullProgressMonitor());
+		CommonUtils.addFileToProject(vueTemplatesFolder, new Path(domainClassName  + "s.vue"), 
+				TemplateMerger.merge("/bsbuilder/resources/web/js/vue/DomainList-template.vue", mapOfValues), new NullProgressMonitor());
+	}
+	
+	private void addNewRoutesToMainJS(IContainer projectContainer, String domainClassName) throws Exception{			
+		String routesToAdd = "  {path : '/" + domainClassName.toLowerCase() + "/:id', component: " + domainClassName + "},\n" +
+				"  {path : '/" + domainClassName.toLowerCase() + "s', component: " + domainClassName + "s}";
+		IFolder jsFolder = projectContainer.getFolder(new Path("src/ui/src"));
+		IFile routerFile = jsFolder.getFile("main.js");
+		File file = routerFile.getRawLocation().toFile();
+		
+		String routerString = FileUtils.readFileToString(file);
+		
+		String whenRegex = "routes.*\\[(\\r|\\n|.)*]";
+		Pattern whenPattern = Pattern.compile(whenRegex, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+		
+		StringBuffer buffer = new StringBuffer();
+				
+		Matcher matcher = whenPattern.matcher(routerString);	
+		if(matcher.find()){	
+			String matchedString = matcher.group().trim();
+			//System.out.println(matchedString);
+			int insertPosition = matchedString.lastIndexOf(']');			
+			buffer.append(matchedString);
+			buffer.insert(insertPosition-1, ",\n" + routesToAdd);
+			System.out.println(buffer.toString());
+		}
+
+		String finalString = "import " + domainClassName + " from './components/" + domainClassName + ".vue'\n" +
+				"import " + domainClassName + "s from './components/" + domainClassName + "s.vue'\n" +
+				routerString.replaceFirst(whenRegex, buffer.toString());
+		System.out.println("+++++++++++++++++++++++++++++++++");
+		System.out.println(finalString);
+		
+		InputStream modifiedFileContent = new ByteArrayInputStream(CommonUtils.prettifyJS(finalString).getBytes());		
+		routerFile.setContents(modifiedFileContent, IFile.FORCE, new NullProgressMonitor());
+		routerFile.refreshLocal(IFile.DEPTH_ZERO, new NullProgressMonitor());
 	}
 	
 	private String createWhenExpressions(String projectName, String domainClassName){

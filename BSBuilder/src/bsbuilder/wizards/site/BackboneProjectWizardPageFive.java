@@ -1,5 +1,7 @@
 package bsbuilder.wizards.site;
 
+import java.util.Arrays;
+
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
@@ -12,11 +14,18 @@ import org.eclipse.swt.widgets.Combo;
 
 
 public class BackboneProjectWizardPageFive extends WizardPage {
+	
+	private String uiType = "";
 
 	public BackboneProjectWizardPageFive(String pageName) {
 		super(pageName);
 		setTitle("UI Options");
 		setDescription("Some options to customize the Backbone Code");
+	}
+	
+	public BackboneProjectWizardPageFive(String pageName, String uiType){
+		this(pageName);
+		this.uiType = uiType;
 	}
 
 	Button btnRadioButton;
@@ -45,8 +54,15 @@ public class BackboneProjectWizardPageFive extends WizardPage {
 		cmbUIType = new Combo(container, SWT.READ_ONLY);
 		cmbUIType.add("BackboneJS");
 		cmbUIType.add("AngularJS");
+		cmbUIType.add("VueJS");
 		cmbUIType.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		cmbUIType.select(0);
+		//cmbUIType.select(0);		
+		int index = Arrays.binarySearch(cmbUIType.getItems(), this.uiType);
+		if(index >= 0){
+			cmbUIType.select(index);
+		}else{
+			cmbUIType.select(0);
+		}
 		new Label(container, SWT.NONE);
 		
 		grpTemplateOptions = new Group(container, SWT.NONE);
