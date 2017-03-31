@@ -27,7 +27,13 @@
           		http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd
           		http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
     
-    <aop:aspectj-autoproxy />     			
+    <aop:aspectj-autoproxy />     		
+    
+    
+    <!-- if ENV envrionment variable is not set, then we try to default to 'local' -->
+    
+	<context:property-placeholder location="classpath:env_#[[${ENV:local}]]#.properties" />
+    	
     <ehcache:annotation-driven cache-manager="cacheManager"/>
 	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
     	<property name="configLocation"  value="/WEB-INF/spring/ehcache.xml"/>
@@ -49,15 +55,16 @@
 	</bean>	
 	#end
  
+	#set($domainVar = $domainClassName.substring(0,1).toLowerCase() + $domainClassName.substring(1))	
     #if(${prepForOracle} || ${prepForMySQL})
- 	<bean id="sqlSessionFactoryLocal" class="org.mybatis.spring.SqlSessionFactoryBean">
+    <bean id="sqlSessionFactoryLocal" class="org.mybatis.spring.SqlSessionFactoryBean">
   		<property name="dataSource" ref="dataSourceLocal" />
 	</bean>
 	
-	<!--bean id="sampleMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-	  <property name="mapperInterface" value="${basePackageName}.dao.SampleMapper" />
+	<bean id="${domainVar}Mapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	  <property name="mapperInterface" value="${basePackageName}.dao.mapper.${domainClassName}Mapper" />
 	  <property name="sqlSessionFactory" ref="sqlSessionFactoryLocal" />
-	</bean-->
+	</bean>
 	#end
 	
 	#if(${secured})

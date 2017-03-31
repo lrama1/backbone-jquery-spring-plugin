@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import javax.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 #if(${useMongo} == true)
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ${basePackageName}.web.domain.$domainClassName;
 import ${basePackageName}.common.ListWrapper;
 import ${basePackageName}.dao.${domainClassName}DAO;
+import ${basePackageName}.dao.mapper.${domainClassName}Mapper;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -27,9 +29,16 @@ import java.io.InputStreamReader;
 
 @Repository
 public class ${domainClassName}DAO {
+	#set($domainVar = $domainClassName.substring(0,1).toLowerCase() + $domainClassName.substring(1))
+
 	#if(${useMongo} == true)
 	@Autowired
 	private MongoTemplate mongoTemplate;
+	#end
+	
+	#if(${prepForOracle})
+	@Autowired
+	private ${domainClassName}Mapper ${domainVar}Mapper;
 	#end
 
 	//private List<${domainClassName}> all${domainClassName} = new ArrayList<${domainClassName}>();
@@ -70,6 +79,8 @@ public class ${domainClassName}DAO {
 		Criteria criteria = new Criteria("${domainClassIdAttributeName}").is(id);
 		Query query = new Query(criteria);
 		return mongoTemplate.findOne(query, ${domainClassName}.class);
+		#elseif(${prepForOracle})
+		return ${domainVar}Mapper.get${domainClassName}(id);
 		#else
 		return allData.get(id);
 		#end
@@ -82,8 +93,7 @@ public class ${domainClassName}DAO {
 	}
 	
 	public void save$domainClassName($domainClassName $domainClassName.substring(0,1).toLowerCase()$domainClassName.substring(1)){
-		#if(${useMongo} == true)	
-		#set($domainVar = $domainClassName.substring(0,1).toLowerCase() + $domainClassName.substring(1))	
+		#if(${useMongo} == true)				
 		#set($idGetter = 'get' + ${domainClassIdAttributeName.substring(0,1).toUpperCase()} + ${domainClassIdAttributeName.substring(1)})
 		mongoTemplate.save($domainClassName.substring(0,1).toLowerCase()$domainClassName.substring(1));
 		
@@ -109,8 +119,12 @@ public class ${domainClassName}DAO {
 		Long totalRows = mongoTemplate.count(query, ${domainClassName}.class);
 		List<${domainClassName}> partialPage  = mongoTemplate.find(query, ${domainClassName}.class);
 		int totalPages = roundUp(totalRows.intValue(), pageSize);
-		#else			
+		#else		
+		#if(${prepForOracle})			
+		List<${domainClassName}> allDataList = ${domainVar}Mapper.getAll${domainClassName}s();
+		#else
 		List<${domainClassName}> allDataList = new ArrayList<${domainClassName}>(allData.values());
+		#end
 		List<${domainClassName}> partialPage = new ArrayList<${domainClassName}>();
 		int end = (page * pageSize);
 		int start = (end) - pageSize;

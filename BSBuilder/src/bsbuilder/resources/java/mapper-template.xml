@@ -1,0 +1,17 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="${basePackageName}.dao.mapper.${domainClassName}Mapper">
+#set($domainVar = $domainClassName.substring(0,1).toLowerCase() + $domainClassName.substring(1))
+	<resultMap type="${domainPackageName}.${domainClassName}" id="${domainVar}">
+		#foreach($key in $attrs.keySet() )
+		<result column="${key}" property="${key}"/>
+		#end
+	</resultMap>
+	
+	<select id="getAll${domainClassName}s" resultMap="${domainVar}">
+		select * from ${domainVar}
+	</select>
+
+	<select id="get${domainClassName}" resultMap="${domainVar}">
+		select * from ${domainVar} where ${domainClassIdAttributeName} = #{$domainClassIdAttributeName}
+	</select>
+</mapper>

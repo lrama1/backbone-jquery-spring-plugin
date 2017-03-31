@@ -206,6 +206,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		params.setDaoPackageName(daoPackageName);
 		//params.setDaoSourceCode(pageThree.getDaoSourceCode(basePackageName, daoPackageName, domainClassName, domainClassIdAttributeName));
 		params.setDaoSourceCode(pageThree.buildSourceCode(mapOfValues, "dao.java-template"));
+		params.setMapperSourceCode(pageThree.buildSourceCode(mapOfValues, "mapper.java-template"));
 				
 		params.setCommonPackageName(commonPackageName);
 		params.setListWrapperSourceCode(pageThree.getListWrapperSourceCode(basePackageName, commonPackageName, domainClassName));
@@ -456,6 +457,8 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 						TemplateMerger.merge("/bsbuilder/resources/web/js/vue/main-template.js", mapOfValues), monitor);
 				//CommonUtils.addFileToProject(folders.get("src/ui"), new Path("runapp.cmd"), 
 				//		TemplateMerger.merge("/bsbuilder/resources/web/js/vue/runapp-template.cmd", mapOfValues), monitor);
+				CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF"), new Path("index.jsp"), 
+						TemplateMerger.merge("/bsbuilder/resources/web/js/vue/vue_index-template.jsp", mapOfValues), monitor);
 				
 				//non-template files for build folder
 				CommonUtils.addFileToProject(folders.get("src/ui/build"), new Path("build.js"), 
@@ -629,6 +632,13 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getDaoPackageName(), params.getDomainClassName() + "DAO",
 					params.getDaoSourceCode() , monitor);
 			
+			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getDaoPackageName()+ ".mapper", params.getDomainClassName() + "Mapper",
+					params.getMapperSourceCode() , monitor);
+			
+			CommonUtils.createPackageAndClass(folders.get("src/main/resources"), params.getDaoPackageName()+ ".mapper", params.getDomainClassName() + "Mapper.xml",
+					IOUtils.toString(TemplateMerger.merge("/bsbuilder/resources/java/mapper-template.xml", mapOfValues)) , monitor);
+			
+			
 			/* Add Security */
 			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getSecurityPackageName(), "SampleUserDetailsService",
 					params.getSecurityUserDetailsServiceSourceCode() , monitor);
@@ -661,6 +671,10 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			CommonUtils.addFileToProject(folders.get("src/main/resources"), new Path("log4j.properties"),
 					TemplateMerger.merge("/bsbuilder/resources/other/log4j.properties-template", proj.getName(),params.getBasePackageName(),params.getControllerPackageName(), params.getUtilPackageName()), monitor);
 
+			CommonUtils.addFileToProject(folders.get("src/main/resources"), new Path("env_local.properties"),
+					TemplateMerger.merge("/bsbuilder/resources/other/env_local.properties-template", proj.getName(),params.getBasePackageName(),params.getControllerPackageName(), params.getUtilPackageName()), monitor);
+
+			
 			CommonUtils.addFileToProject(container, new Path("readme.txt"),
 					TemplateMerger.merge("/bsbuilder/resources/other/readme.txt-template", proj.getName(),params.getBasePackageName(),params.getControllerPackageName(), params.getUtilPackageName()), monitor);
 	
@@ -1043,6 +1057,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		
 		private String daoPackageName;
 		private String daoSourceCode;
+		private String mapperSourceCode;
 		private String commonPackageName;
 		private String listWrapperSourceCode;
 		private String nameValuePairSourceCode;
@@ -1304,6 +1319,12 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		}
 		public void setSmHeaderChangeSourceCode(String smHeaderChangeSourceCode) {
 			this.smHeaderChangeSourceCode = smHeaderChangeSourceCode;
+		}
+		public String getMapperSourceCode() {
+			return mapperSourceCode;
+		}
+		public void setMapperSourceCode(String mapperSourceCode) {
+			this.mapperSourceCode = mapperSourceCode;
 		}
 		
 		
