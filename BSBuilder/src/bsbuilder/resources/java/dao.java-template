@@ -20,8 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ${basePackageName}.web.domain.$domainClassName;
 import ${basePackageName}.common.ListWrapper;
 import ${basePackageName}.dao.${domainClassName}DAO;
+#if(${prepForOracle} == true)
 import ${basePackageName}.dao.mapper.${domainClassName}Mapper;
-
+#end
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -36,7 +37,7 @@ public class ${domainClassName}DAO {
 	private MongoTemplate mongoTemplate;
 	#end
 	
-	#if(${prepForOracle})
+	#if(${prepForOracle} == true)
 	@Autowired
 	private ${domainClassName}Mapper ${domainVar}Mapper;
 	#end
@@ -79,7 +80,7 @@ public class ${domainClassName}DAO {
 		Criteria criteria = new Criteria("${domainClassIdAttributeName}").is(id);
 		Query query = new Query(criteria);
 		return mongoTemplate.findOne(query, ${domainClassName}.class);
-		#elseif(${prepForOracle})
+		#elseif(${prepForOracle} == true)
 		return ${domainVar}Mapper.get${domainClassName}(id);
 		#else
 		return allData.get(id);
@@ -120,7 +121,7 @@ public class ${domainClassName}DAO {
 		List<${domainClassName}> partialPage  = mongoTemplate.find(query, ${domainClassName}.class);
 		int totalPages = roundUp(totalRows.intValue(), pageSize);
 		#else		
-		#if(${prepForOracle})			
+		#if(${prepForOracle} == true)			
 		List<${domainClassName}> allDataList = ${domainVar}Mapper.getAll${domainClassName}s();
 		#else
 		List<${domainClassName}> allDataList = new ArrayList<${domainClassName}>(allData.values());

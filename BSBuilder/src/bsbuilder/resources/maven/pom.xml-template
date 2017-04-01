@@ -51,7 +51,7 @@
 	<!-- end of Mongodb deps-->
 	#end
 	
-	#if(${prepForOracle})
+	#if(${prepForOracle} == true)
 	<dependency>
 	    <groupId>com.oracle</groupId>
 	    <artifactId>ojdbc6</artifactId>
@@ -59,7 +59,7 @@
     </dependency>
 	#end
 	
-	#if(${prepForMySQL})
+	#if(${prepForMySQL} == true)
 	<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -67,7 +67,7 @@
 	</dependency>
 	#end
 	
-	#if(${prepForOracle} || ${prepForMySQL})	
+	#if(${prepForOracle} == true || ${prepForMySQL} == true)	
     <dependency>
 	    <groupId>org.mybatis</groupId>
 	    <artifactId>mybatis</artifactId>

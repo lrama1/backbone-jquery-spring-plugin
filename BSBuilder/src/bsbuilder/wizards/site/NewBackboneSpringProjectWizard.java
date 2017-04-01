@@ -632,12 +632,13 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getDaoPackageName(), params.getDomainClassName() + "DAO",
 					params.getDaoSourceCode() , monitor);
 			
-			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getDaoPackageName()+ ".mapper", params.getDomainClassName() + "Mapper",
-					params.getMapperSourceCode() , monitor);
-			
-			CommonUtils.createPackageAndClass(folders.get("src/main/resources"), params.getDaoPackageName()+ ".mapper", params.getDomainClassName() + "Mapper.xml",
-					IOUtils.toString(TemplateMerger.merge("/bsbuilder/resources/java/mapper-template.xml", mapOfValues)) , monitor);
-			
+			if((Boolean)mapOfValues.get("prepForOracle") || (Boolean)mapOfValues.get("prepForMySQL")){
+				CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getDaoPackageName()+ ".mapper", params.getDomainClassName() + "Mapper",
+						params.getMapperSourceCode() , monitor);
+				
+				CommonUtils.createPackageAndClass(folders.get("src/main/resources"), params.getDaoPackageName()+ ".mapper", params.getDomainClassName() + "Mapper.xml",
+						IOUtils.toString(TemplateMerger.merge("/bsbuilder/resources/java/mapper-template.xml", mapOfValues)) , monitor);
+			}
 			
 			/* Add Security */
 			CommonUtils.createPackageAndClass(folders.get("src/main/java"), params.getSecurityPackageName(), "SampleUserDetailsService",
@@ -705,7 +706,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			
 			//add bsbuilder-specific settings
 			addBSBuilderSettings(folders.get(".settings"), project, params.getBasePackageName(),params.isGenerateSecurityCode(),
-					(Boolean)mapOfValues.get("useMongo"), params.getUiType() , monitor);
+					(Boolean)mapOfValues.get("useMongo"), (Boolean)mapOfValues.get("prepForOracle"), params.getUiType() , monitor);
 			
 		} catch (Throwable ioe) {
 			IStatus status = new Status(IStatus.ERROR, "NewFileWizard", IStatus.OK,
@@ -1000,7 +1001,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 	}
 	
 	private void addBSBuilderSettings(IFolder settingsFolder, IProject project, 
-			String basePackageName, boolean secureEnabled, boolean useMongo, String uiType,IProgressMonitor monitor)
+			String basePackageName, boolean secureEnabled, boolean useMongo, boolean prepForOracle,String uiType,IProgressMonitor monitor)
 			throws Exception{		
 		//String props = "basePackage=" + basePackageName;
 		StringWriter properties = new StringWriter();
@@ -1008,6 +1009,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		properties.append("\nsecureCodeEnabled=" + secureEnabled);
 		properties.append("\nuseMongo=" + useMongo);
 		properties.append("\nuiType=" + uiType);
+		properties.append("\nprepForOracle=" + prepForOracle);
 		
         InputStream stream = new ByteArrayInputStream(properties.toString().getBytes());
 		CommonUtils.addFileToProject(settingsFolder, new Path("org.bsbuilder.settings"),

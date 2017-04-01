@@ -405,12 +405,29 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		Map<String, Object> mapOfValues = new HashMap<String, Object>();
 		mapOfValues.put("domainClassName",  pageThree.getDomainClassName());
 		mapOfValues.put("domainClassIdAttributeName", pageThree.getDomainClassAttributeName());	
+		//domainPackageName
 		mapOfValues.put("basePackageName", basePackageName);
+		String domainPackageName = basePackageName + ".web.domain";
+		mapOfValues.put("domainPackageName", domainPackageName);
 		mapOfValues.put("useMongo", bsBuilderProperties.getProperty("useMongo"));
+		mapOfValues.put("prepForOracle", bsBuilderProperties.getProperty("prepForOracle"));
 		final String daoSourceCode = pageThree.buildSourceCode(mapOfValues,
 				"dao.java-template");
+		
 		IFolder javaFolder = projectContainer.getFolder(new Path("src/main/java"));
 		CommonUtils.createPackageAndClass(javaFolder, daoPackageName, daoClassName, daoSourceCode , new NullProgressMonitor());
+	
+		//create mapper files
+		if("true".equals(bsBuilderProperties.getProperty("prepForOracle"))){
+			final String mapperSourceCode = pageThree.buildSourceCode(mapOfValues, "mapper.java-template");
+			CommonUtils.createPackageAndClass(javaFolder, daoPackageName + ".mapper", pageThree.getDomainClassName() + "Mapper",
+					mapperSourceCode , new NullProgressMonitor());
+			
+			IFolder resourceFolder = projectContainer.getFolder(new Path("src/main/resources"));
+			CommonUtils.createPackageAndClass(resourceFolder, daoPackageName + ".mapper", pageThree.getDomainClassName() + "Mapper.xml",
+					IOUtils.toString(TemplateMerger.merge("/bsbuilder/resources/java/mapper-template.xml", mapOfValues)) , new NullProgressMonitor());
+	
+		}
 	}
 	
 	private void createBackboneModel(IContainer projectContainer, String projectName) throws Exception{
