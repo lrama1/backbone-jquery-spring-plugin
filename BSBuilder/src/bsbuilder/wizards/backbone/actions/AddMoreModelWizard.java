@@ -178,13 +178,15 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		File file = indexJSPFile.getRawLocation().toFile();
 
 		String modifiedFile = FileUtils.readFileToString(file);
-		String whenRegex = "\\<ul(.*?)class(.*?)\\>";
+		//String whenRegex = "\\<ul(.*?)class(.*?)\\>";
+		String whenRegex = "\\<li\\>.*\\<router-link.*\\>[\\w\\s]*\\</router-link\\>\\</li\\>";
 		Pattern whenPattern = Pattern.compile(whenRegex, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
 
 		Matcher matcher = whenPattern.matcher(modifiedFile);			
 		int positionToInsert = -1;
 		if(matcher.find()){
 			System.out.println("===========>" + matcher.group());
+			System.out.println("********************************************");
 			positionToInsert = matcher.end();
 		}
 
