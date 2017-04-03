@@ -36,7 +36,7 @@
   
   <dependencies>
   
-  	#if(${useMongo})
+  	#if(${useMongo} && ${springVersion} == '3.x.x')
     <!-- Added these for mongodb-->
   	<dependency>
 		<groupId>org.springframework.data</groupId>
@@ -47,6 +47,17 @@
 		<groupId>org.mongodb</groupId>
 		<artifactId>mongo-java-driver</artifactId>
 		<version>2.12.1</version>
+	</dependency>
+	#elseif(${useMongo} && ${springVersion} == '4.x.x')
+	<dependency>
+		<groupId>org.springframework.data</groupId>
+		<artifactId>spring-data-mongodb</artifactId>
+		<version>1.10.1.RELEASE</version>
+	</dependency>
+	<dependency>
+		<groupId>org.mongodb</groupId>
+		<artifactId>mongo-java-driver</artifactId>
+		<version>3.4.2</version>
 	</dependency>
 	<!-- end of Mongodb deps-->
 	#end

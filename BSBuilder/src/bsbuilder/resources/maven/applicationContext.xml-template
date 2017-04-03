@@ -51,12 +51,22 @@
 	<jaxws:endpoint id="${domainObjectName}WS" implementor="#${domainObjectName}WebServiceImpl" address="/${domainClassName}WebService" /> 
 	#end
 	
-	#if(${useMongo} == true)
+	#if(${useMongo} == true && ${springVersion} == '3.x.x')
 	<mongo:mongo host="${mongoHostName}" port="${mongoPort}" />
 	<mongo:db-factory dbname="${mongoDBName}" />
 	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
 		<constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
-	</bean>	
+	</bean>
+	#elseif(${useMongo} == true && ${springVersion} == '4.x.x')
+	<bean id="mongo" class="org.springframework.data.mongodb.core.MongoFactoryBean">
+    	<property name="host" value="${mongoHostName}" />
+	</bean>
+	 
+	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+    	<constructor-arg name="mongo" ref="mongo" />
+    	<constructor-arg name="databaseName" value="${mongoDBName}" />
+	</bean>    	
+	<bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
 	#end
  
 	#set($domainVar = $domainClassName.substring(0,1).toLowerCase() + $domainClassName.substring(1))	
