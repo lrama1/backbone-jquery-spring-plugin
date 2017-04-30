@@ -587,7 +587,8 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 			
 			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/spring"), new Path("spring-security.xml"),
-					TemplateMerger.merge("/bsbuilder/resources/maven/spring-security.xml-template", proj.getName(),params.getBasePackageName(),params.getControllerPackageName(), params.getUtilPackageName()), monitor);
+					TemplateMerger.merge("/bsbuilder/resources/maven/spring-security.xml-template", mapOfValues), monitor);
+			
 			CommonUtils.addFileToProject(folders.get("src/main/webapp/WEB-INF/spring"), new Path("ehcache.xml"),
 					TemplateMerger.merge("/bsbuilder/resources/maven/ehcache.xml-template", proj.getName(),params.getBasePackageName(),params.getControllerPackageName(), params.getUtilPackageName()), monitor);
 
