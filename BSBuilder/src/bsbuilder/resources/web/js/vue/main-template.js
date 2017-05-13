@@ -7,11 +7,13 @@ import ${domainClassName}s from './components/${domainClassName}s.vue'
 
 import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
+import VeeValidate from 'vee-validate'
 
 // We want to apply VueResource and VueRouter
 // to our Vue instance
 Vue.use(VueResource)
 Vue.use(VueRouter)
+Vue.use(VeeValidate)
 
 const routes = [
   {path: '/home', component: Home},
