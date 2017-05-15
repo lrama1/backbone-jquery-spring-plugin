@@ -486,6 +486,10 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 				CommonUtils.addFileToProject(folders.get("src/ui/config"), new Path("prod.env.js"), 
 						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/vue/others/config/prod.env.js"), monitor);
 				
+				//static
+				CommonUtils.addFileToProject(folders.get("src/ui/static"), new Path("jquery.js"), 
+						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/libs/jquery-1.10.2.min.js"), monitor);
+				
 				//non-template files for root folder
 				CommonUtils.addFileToProject(folders.get("src/ui"), new Path(".babelrc"), 
 						this.getClass().getResourceAsStream("/bsbuilder/resources/web/js/vue/root/x.babelrc"), monitor);

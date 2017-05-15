@@ -6,6 +6,14 @@ Import VuePaginator from 'vuejs-paginator'
 	<div class="row">
 		<div class="col-md-12">
 			<table class="table table-bordered table-striped">
+				<thead>
+				<tr>
+				<th>Select</th>
+				#foreach($key in $attrs.keySet() )
+				<th>$key</th>
+				#end
+				</tr>
+				</thead>
 				<tbody>
 					<tr v-for="${domainObjectName} in listOf${domainClassName}s">
 				          <td><a v-bind:href="'#/${domainObjectName}/' + ${domainObjectName}.${domainClassIdAttributeName}">E</a></td>
