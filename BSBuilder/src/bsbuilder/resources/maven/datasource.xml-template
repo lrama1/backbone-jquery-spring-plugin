@@ -15,9 +15,9 @@
 		
 		#if(${prepForOracle} == true)
 		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
-		<property name="url" value="jdbc:oracle:thin:@localhost:<port>:<sid>" />
-		<property name="username" value="user" />
-		<property name="password" value="pass" />
+		<property name="url" value="jdbc:oracle:thin:@${oracleHost}:${oraclePort}:${oracleInstance}" />
+		<property name="username" value="${oracleUser}" />
+		<property name="password" value="${oraclePassword}" />
 		#end
 	</bean>
  

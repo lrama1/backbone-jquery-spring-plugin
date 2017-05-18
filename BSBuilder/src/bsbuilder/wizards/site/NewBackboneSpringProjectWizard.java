@@ -170,6 +170,12 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		mapOfValues.put("mongoDBName", pageTwo.getMongoDBName());
 		mapOfValues.put("prepForOracle", pageTwo.prepForOracle());
 		mapOfValues.put("prepForMySQL", pageTwo.prepForMySql());
+		mapOfValues.put("oracleHost", pageTwo.getOracleHost());
+		mapOfValues.put("oraclePort", pageTwo.getOraclePort());
+		mapOfValues.put("oracleInstance", pageTwo.getOracleInstance());
+		mapOfValues.put("oracleUser", pageTwo.getOracleUser());
+		mapOfValues.put("oraclePassword", pageTwo.getOraclePassword());
+		
 		mapOfValues.put("addWebService", pageSix.addWebServiceFeature());
 		mapOfValues.put("springVersion", pageTwo.getSpringVersion());
 		

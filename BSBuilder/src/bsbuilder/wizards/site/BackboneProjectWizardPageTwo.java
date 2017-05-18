@@ -27,6 +27,13 @@ public class BackboneProjectWizardPageTwo extends WizardPage {
 	private Button btnPrepForMysql;
 	private Combo cmbSpringVersion;
 	private Label lblSpringVersion;
+	private Text textOracleHost;
+	private Text textOraclePort;
+	private Text textOracleInstance;
+	private Text textOracleUser;
+	private Text textOraclePass;
+	private Label lblNewLabel_7;
+	private Label lblNewLabel_8;
 
 	protected BackboneProjectWizardPageTwo(String pageName) {
 		super(pageName);
@@ -38,11 +45,12 @@ public class BackboneProjectWizardPageTwo extends WizardPage {
 	public void createControl(Composite parent) {
 		Composite container = new Composite(parent, SWT.NULL);
 		GridLayout layout = new GridLayout();
-		layout.numColumns = 2;
+		layout.numColumns = 3;
 		container.setLayout(layout);
 		layout.verticalSpacing = 9;
 		
 		setControl(container);
+		new Label(container, SWT.NONE);
 		new Label(container, SWT.NONE);
 		new Label(container, SWT.NONE);
 		
@@ -59,6 +67,7 @@ public class BackboneProjectWizardPageTwo extends WizardPage {
 			}
 		});
 		textBasePackage.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		new Label(container, SWT.NONE);
 		
 		Label lblControllerPackage = new Label(container, SWT.NONE);
 		lblControllerPackage.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -68,6 +77,7 @@ public class BackboneProjectWizardPageTwo extends WizardPage {
 		textControllerPackage.setEnabled(false);
 		textControllerPackage.setEditable(false);
 		textControllerPackage.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		new Label(container, SWT.NONE);
 		
 		Label lblNewLabel_1 = new Label(container, SWT.NONE);
 		lblNewLabel_1.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -80,15 +90,29 @@ public class BackboneProjectWizardPageTwo extends WizardPage {
 		new Label(container, SWT.NONE);
 		new Label(container, SWT.NONE);
 		new Label(container, SWT.NONE);
+		new Label(container, SWT.NONE);
+		new Label(container, SWT.NONE);
+		new Label(container, SWT.NONE);
+		new Label(container, SWT.NONE);
+		new Label(container, SWT.NONE);
 		
 		btnUseMongodb = new Button(container, SWT.CHECK);
+		btnUseMongodb.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1));
 		btnUseMongodb.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
 				if(btnUseMongodb.getSelection()){
+					btnPrepForOracle.setSelection(false);
+					btnPrepForMysql.setSelection(false);
 					textMongoHost.setEnabled(true);
 					textMongoPort.setEnabled(true);
 					textMongoDBName.setEnabled(true);
+					//
+					textOracleHost.setEnabled(false);
+					textOraclePort.setEnabled(false);
+					textOracleInstance.setEnabled(false);
+					textOracleUser.setEnabled(false);
+					textOraclePass.setEnabled(false);
 				}else{
 					textMongoHost.setEnabled(false);
 					textMongoPort.setEnabled(false);
@@ -97,55 +121,135 @@ public class BackboneProjectWizardPageTwo extends WizardPage {
 			}
 		});
 		btnUseMongodb.setText("Use MongoDB");
+		
+		btnPrepForOracle = new Button(container, SWT.CHECK);
+		btnPrepForOracle.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseUp(MouseEvent e) {
+				if(btnPrepForOracle.getSelection()){
+					btnUseMongodb.setSelection(false);
+					btnPrepForMysql.setSelection(false);
+					textOracleHost.setEnabled(true);
+					textOraclePort.setEnabled(true);
+					textOracleInstance.setEnabled(true);
+					textOracleUser.setEnabled(true);
+					textOraclePass.setEnabled(true);
+					//
+					textMongoHost.setEnabled(false);
+					textMongoPort.setEnabled(false);
+					textMongoDBName.setEnabled(false);
+				}else{
+					textOracleHost.setEnabled(false);
+					textOraclePort.setEnabled(false);
+					textOracleInstance.setEnabled(false);
+					textOracleUser.setEnabled(false);
+					textOraclePass.setEnabled(false);
+				}
+			}
+		});
+		GridData gd_btnPrepForOracle = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_btnPrepForOracle.heightHint = 33;
+		btnPrepForOracle.setLayoutData(gd_btnPrepForOracle);
+		btnPrepForOracle.setText("Prep For Oracle");
 		new Label(container, SWT.NONE);
 		
 		Group grpMongoDbParams = new Group(container, SWT.NONE);
 		GridData gd_grpMongoDbParams = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_grpMongoDbParams.widthHint = 411;
-		gd_grpMongoDbParams.heightHint = 191;
+		gd_grpMongoDbParams.widthHint = 348;
+		gd_grpMongoDbParams.heightHint = 210;
 		grpMongoDbParams.setLayoutData(gd_grpMongoDbParams);
 		grpMongoDbParams.setText("Mongo DB Params");
 		
 		Label lblNewLabel_2 = new Label(grpMongoDbParams, SWT.NONE);
 		lblNewLabel_2.setAlignment(SWT.RIGHT);
-		lblNewLabel_2.setBounds(23, 32, 102, 17);
-		lblNewLabel_2.setText("Host Name:");
+		lblNewLabel_2.setBounds(10, 15, 102, 17);
+		lblNewLabel_2.setText("Host:");
 		
 		Label lblNewLabel_3 = new Label(grpMongoDbParams, SWT.NONE);
 		lblNewLabel_3.setAlignment(SWT.RIGHT);
-		lblNewLabel_3.setBounds(23, 76, 102, 17);
+		lblNewLabel_3.setBounds(10, 49, 102, 17);
 		lblNewLabel_3.setText("Port:");
 		
 		Label lblDbName = new Label(grpMongoDbParams, SWT.NONE);
 		lblDbName.setAlignment(SWT.RIGHT);
-		lblDbName.setBounds(23, 120, 102, 17);
+		lblDbName.setBounds(33, 85, 79, 17);
 		lblDbName.setText("DB Name:");
 		
 		textMongoHost = new Text(grpMongoDbParams, SWT.BORDER);
 		textMongoHost.setText("localhost");
 		textMongoHost.setEnabled(false);
-		textMongoHost.setBounds(131, 27, 246, 27);
+		textMongoHost.setBounds(118, 10, 219, 27);
 		
 		textMongoPort = new Text(grpMongoDbParams, SWT.BORDER);
 		textMongoPort.setText("27017");
 		textMongoPort.setEnabled(false);
-		textMongoPort.setBounds(132, 71, 102, 27);
+		textMongoPort.setBounds(119, 44, 102, 27);
 		
 		textMongoDBName = new Text(grpMongoDbParams, SWT.BORDER);
 		textMongoDBName.setText("localdb");
 		textMongoDBName.setEnabled(false);
-		textMongoDBName.setBounds(131, 115, 149, 27);
+		textMongoDBName.setBounds(118, 80, 149, 27);
+		
+		Group grpOracleParam = new Group(container, SWT.NONE);
+		grpOracleParam.setText("Oracle Params");
+		GridData gd_grpOracleParam = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_grpOracleParam.heightHint = 210;
+		gd_grpOracleParam.widthHint = 367;
+		grpOracleParam.setLayoutData(gd_grpOracleParam);
+		
+		textOracleHost = new Text(grpOracleParam, SWT.BORDER);
+		textOracleHost.setText("localhost");
+		textOracleHost.setEnabled(false);
+		textOracleHost.setBounds(84, 8, 265, 29);
+		
+		textOraclePort = new Text(grpOracleParam, SWT.BORDER);
+		textOraclePort.setText("1521");
+		textOraclePort.setEnabled(false);
+		textOraclePort.setBounds(84, 45, 81, 29);
+		
+		textOracleInstance = new Text(grpOracleParam, SWT.BORDER);
+		textOracleInstance.setText("localDB");
+		textOracleInstance.setEnabled(false);
+		textOracleInstance.setBounds(84, 82, 155, 29);
+		
+		Label lblNewLabel_4 = new Label(grpOracleParam, SWT.NONE);
+		lblNewLabel_4.setBounds(7, 10, 71, 17);
+		lblNewLabel_4.setText("Host:");
+		
+		Label lblNewLabel_5 = new Label(grpOracleParam, SWT.NONE);
+		lblNewLabel_5.setBounds(7, 46, 71, 17);
+		lblNewLabel_5.setText("Port:");
+		
+		Label lblNewLabel_6 = new Label(grpOracleParam, SWT.NONE);
+		lblNewLabel_6.setBounds(7, 78, 71, 17);
+		lblNewLabel_6.setText("DB Name:");
+		
+		textOracleUser = new Text(grpOracleParam, SWT.BORDER);
+		textOracleUser.setText("system");
+		textOracleUser.setEnabled(false);
+		textOracleUser.setBounds(84, 119, 155, 29);
+		
+		textOraclePass = new Text(grpOracleParam, SWT.BORDER);
+		textOraclePass.setText("password");
+		textOraclePass.setEnabled(false);
+		textOraclePass.setBounds(84, 156, 155, 29);
+		
+		lblNewLabel_7 = new Label(grpOracleParam, SWT.NONE);
+		lblNewLabel_7.setBounds(10, 119, 71, 17);
+		lblNewLabel_7.setText("User:");
+		
+		lblNewLabel_8 = new Label(grpOracleParam, SWT.NONE);
+		lblNewLabel_8.setBounds(7, 156, 71, 17);
+		lblNewLabel_8.setText("Password:");
 		new Label(container, SWT.NONE);
 		
 		btnPrepForMysql = new Button(container, SWT.CHECK);
 		btnPrepForMysql.setText("Prep For MySQL");
 		new Label(container, SWT.NONE);
-		
-		btnPrepForOracle = new Button(container, SWT.CHECK);
-		GridData gd_btnPrepForOracle = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_btnPrepForOracle.heightHint = 33;
-		btnPrepForOracle.setLayoutData(gd_btnPrepForOracle);
-		btnPrepForOracle.setText("Prep For Oracle");
+		new Label(container, SWT.NONE);
+		new Label(container, SWT.NONE);
+		new Label(container, SWT.NONE);
+		new Label(container, SWT.NONE);
 		new Label(container, SWT.NONE);
 		new Label(container, SWT.NONE);
 		
@@ -158,6 +262,7 @@ public class BackboneProjectWizardPageTwo extends WizardPage {
 		cmbSpringVersion.add("4.x.x");
 		cmbSpringVersion.select(0);
 		cmbSpringVersion.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		new Label(container, SWT.NONE);
 		
 		//Validate on display
 		validatePackage(textBasePackage.getText());
@@ -220,5 +325,24 @@ public class BackboneProjectWizardPageTwo extends WizardPage {
 	public String getSpringVersion(){
 		return cmbSpringVersion.getText();
 	}
-
+	
+	public String getOracleHost(){
+		return textOracleHost.getText();
+	}
+	
+	public String getOraclePort(){
+		return textOraclePort.getText();
+	}
+	
+	public String getOracleInstance(){
+		return textOracleInstance.getText();
+	}
+	
+	public String getOracleUser(){
+		return textOracleUser.getText();
+	}
+	
+	public String getOraclePassword(){
+		return textOraclePass.getText();
+	}
 }
