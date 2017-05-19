@@ -162,33 +162,33 @@ public class BackboneProjectWizardPageTwo extends WizardPage {
 		
 		Label lblNewLabel_2 = new Label(grpMongoDbParams, SWT.NONE);
 		lblNewLabel_2.setAlignment(SWT.RIGHT);
-		lblNewLabel_2.setBounds(10, 15, 102, 17);
+		lblNewLabel_2.setBounds(10, 32, 102, 17);
 		lblNewLabel_2.setText("Host:");
 		
 		Label lblNewLabel_3 = new Label(grpMongoDbParams, SWT.NONE);
 		lblNewLabel_3.setAlignment(SWT.RIGHT);
-		lblNewLabel_3.setBounds(10, 49, 102, 17);
+		lblNewLabel_3.setBounds(10, 66, 102, 17);
 		lblNewLabel_3.setText("Port:");
 		
 		Label lblDbName = new Label(grpMongoDbParams, SWT.NONE);
 		lblDbName.setAlignment(SWT.RIGHT);
-		lblDbName.setBounds(33, 85, 79, 17);
+		lblDbName.setBounds(33, 102, 79, 17);
 		lblDbName.setText("DB Name:");
 		
 		textMongoHost = new Text(grpMongoDbParams, SWT.BORDER);
 		textMongoHost.setText("localhost");
 		textMongoHost.setEnabled(false);
-		textMongoHost.setBounds(118, 10, 219, 27);
+		textMongoHost.setBounds(118, 27, 219, 27);
 		
 		textMongoPort = new Text(grpMongoDbParams, SWT.BORDER);
 		textMongoPort.setText("27017");
 		textMongoPort.setEnabled(false);
-		textMongoPort.setBounds(119, 44, 102, 27);
+		textMongoPort.setBounds(119, 61, 102, 27);
 		
 		textMongoDBName = new Text(grpMongoDbParams, SWT.BORDER);
 		textMongoDBName.setText("localdb");
 		textMongoDBName.setEnabled(false);
-		textMongoDBName.setBounds(118, 80, 149, 27);
+		textMongoDBName.setBounds(118, 97, 149, 27);
 		
 		Group grpOracleParam = new Group(container, SWT.NONE);
 		grpOracleParam.setText("Oracle Params");
@@ -200,46 +200,46 @@ public class BackboneProjectWizardPageTwo extends WizardPage {
 		textOracleHost = new Text(grpOracleParam, SWT.BORDER);
 		textOracleHost.setText("localhost");
 		textOracleHost.setEnabled(false);
-		textOracleHost.setBounds(84, 8, 265, 29);
+		textOracleHost.setBounds(87, 23, 265, 29);
 		
 		textOraclePort = new Text(grpOracleParam, SWT.BORDER);
 		textOraclePort.setText("1521");
 		textOraclePort.setEnabled(false);
-		textOraclePort.setBounds(84, 45, 81, 29);
+		textOraclePort.setBounds(87, 60, 81, 29);
 		
 		textOracleInstance = new Text(grpOracleParam, SWT.BORDER);
 		textOracleInstance.setText("localDB");
 		textOracleInstance.setEnabled(false);
-		textOracleInstance.setBounds(84, 82, 155, 29);
+		textOracleInstance.setBounds(87, 97, 155, 29);
 		
 		Label lblNewLabel_4 = new Label(grpOracleParam, SWT.NONE);
-		lblNewLabel_4.setBounds(7, 10, 71, 17);
+		lblNewLabel_4.setBounds(10, 25, 71, 17);
 		lblNewLabel_4.setText("Host:");
 		
 		Label lblNewLabel_5 = new Label(grpOracleParam, SWT.NONE);
-		lblNewLabel_5.setBounds(7, 46, 71, 17);
+		lblNewLabel_5.setBounds(10, 61, 71, 17);
 		lblNewLabel_5.setText("Port:");
 		
 		Label lblNewLabel_6 = new Label(grpOracleParam, SWT.NONE);
-		lblNewLabel_6.setBounds(7, 78, 71, 17);
+		lblNewLabel_6.setBounds(10, 97, 71, 17);
 		lblNewLabel_6.setText("DB Name:");
 		
 		textOracleUser = new Text(grpOracleParam, SWT.BORDER);
 		textOracleUser.setText("system");
 		textOracleUser.setEnabled(false);
-		textOracleUser.setBounds(84, 119, 155, 29);
+		textOracleUser.setBounds(87, 134, 155, 29);
 		
 		textOraclePass = new Text(grpOracleParam, SWT.BORDER);
 		textOraclePass.setText("password");
 		textOraclePass.setEnabled(false);
-		textOraclePass.setBounds(84, 156, 155, 29);
+		textOraclePass.setBounds(87, 171, 155, 29);
 		
 		lblNewLabel_7 = new Label(grpOracleParam, SWT.NONE);
-		lblNewLabel_7.setBounds(10, 119, 71, 17);
+		lblNewLabel_7.setBounds(13, 134, 71, 17);
 		lblNewLabel_7.setText("User:");
 		
 		lblNewLabel_8 = new Label(grpOracleParam, SWT.NONE);
-		lblNewLabel_8.setBounds(7, 156, 71, 17);
+		lblNewLabel_8.setBounds(10, 171, 71, 17);
 		lblNewLabel_8.setText("Password:");
 		new Label(container, SWT.NONE);
 		
