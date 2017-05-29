@@ -44,7 +44,7 @@ Import VuePaginator from 'vuejs-paginator'
       }
     },
     created () {
-      var resource = this.$resource('/${projectName}/${domainObjectName}s')
+      var resource = this.$resource('/${projectName}/${domainObjectName.toLowerCase()}s')
       resource.query({page: 1, per_page: 4}).then((response) => {
         this.listOf${domainClassName}s = response.data.rows
         this.lastPage = response.data.lastPage
@@ -59,7 +59,7 @@ Import VuePaginator from 'vuejs-paginator'
       },
       previousPage () {
       	  this.currentPage = this.currentPage - 1
-      	  var resource = this.$resource('/${projectName}/${domainObjectName}s')
+      	  var resource = this.$resource('/${projectName}/${domainObjectName.toLowerCase()}s')
       	  resource.query({page: this.currentPage, per_page: 4}).then((response) => {
       		this.listOf${domainClassName}s = response.data.rows
       	      }, (response) => {
@@ -70,7 +70,7 @@ Import VuePaginator from 'vuejs-paginator'
 	  nextPage () {
 	  	console.log('next page')
 	  	this.currentPage = this.currentPage + 1
-	  	var resource = this.$resource('/${projectName}/${domainObjectName}s')
+	  	var resource = this.$resource('/${projectName}/${domainObjectName.toLowerCase()}s')
 	  	resource.query({page: this.currentPage, per_page: 4}).then((response) => {
 	  	  this.listOf${domainClassName}s = response.data.rows
 	  	}, (response) => {

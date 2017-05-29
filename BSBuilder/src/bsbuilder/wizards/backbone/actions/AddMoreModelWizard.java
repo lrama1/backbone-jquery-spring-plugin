@@ -118,7 +118,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 				createServiceClass(projectContainer, basePackageName);
 				
 				//createDao
-				createDaoClass(projectContainer, basePackageName);
+				createDaoClass(projectContainer, basePackageName, modelAttributes);
 				
 				if(uiType.equalsIgnoreCase("BackboneJS")){
 					/**************BACKBONE SPECIFIC****************************/
@@ -400,7 +400,7 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		CommonUtils.createPackageAndClass(javaFolder, servicePackageName, serviceClassName, serviceSourceCode , new NullProgressMonitor());
 	}
 	
-	private void createDaoClass(IContainer projectContainer, String basePackageName)
+	private void createDaoClass(IContainer projectContainer, String basePackageName, Map<String, Object> modelAttributes)
 			throws Exception{
 		final String daoClassName = pageThree.getDomainClassName() + "DAO";
 		String daoPackageName = basePackageName + ".dao";
@@ -411,6 +411,8 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 		mapOfValues.put("basePackageName", basePackageName);
 		String domainPackageName = basePackageName + ".web.domain";
 		mapOfValues.put("domainPackageName", domainPackageName);
+		mapOfValues.put("attrs", modelAttributes);
+		mapOfValues.put("oracleNames", pageThree.getOracleDerivedNamesForTableAndAttrs());
 		mapOfValues.put("useMongo", bsBuilderProperties.getProperty("useMongo"));
 		mapOfValues.put("prepForOracle", bsBuilderProperties.getProperty("prepForOracle"));
 		final String daoSourceCode = pageThree.buildSourceCode(mapOfValues,

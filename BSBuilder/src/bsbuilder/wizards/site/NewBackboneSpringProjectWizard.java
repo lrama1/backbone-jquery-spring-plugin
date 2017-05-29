@@ -161,8 +161,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		mapOfValues.put("mongoDBName", pageTwo.getMongoDBName());					
 		mapOfValues.put("templateType", pageFive.isJSPTemplate()?"JSP" : "HTML");
 		mapOfValues.put("injectMessages", pageFive.injectLocalizedMessages());
-		mapOfValues.put("attrs", pageThree.getModelAttributes());
-		mapOfValues.put("fieldTypes", pageThree.getFieldTypes());
+		
 		mapOfValues.put("useMongo", pageTwo.useMongoDB());
 		mapOfValues.put("mongoDBName", "localdb");
 		mapOfValues.put("mongoHostName", pageTwo.getMongoHostName());
@@ -178,9 +177,11 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		
 		mapOfValues.put("addWebService", pageSix.addWebServiceFeature());
 		mapOfValues.put("springVersion", pageTwo.getSpringVersion());
-		
-		
+				
 		final String domainClassSourceCode = pageThree.getClassSource(mapOfValues);
+		mapOfValues.put("attrs", pageThree.getModelAttributes());
+		mapOfValues.put("oracleNames", pageThree.getOracleDerivedNamesForTableAndAttrs());		
+		mapOfValues.put("fieldTypes", pageThree.getFieldTypes());
 		
 		final String controllerClassName = domainClassName + "Controller";
 		//final String mainControllerSourceCode = pageThree.getMainControllerSource(controllerPackageName, utilPackageName);

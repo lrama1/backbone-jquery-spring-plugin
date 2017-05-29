@@ -32,7 +32,7 @@
       console.log(this.$route.params.id)
       if (this.$route.params.id) {
         console.log('found a value')
-        var resource = this.$resource('/${projectName}/${domainObjectName}/' + this.$route.params.id)
+        var resource = this.$resource('/${projectName}/${domainObjectName.toLowerCase()}/' + this.$route.params.id)
         resource.query().then((response) => {
           this.${domainObjectName} = response.data
         }, (response) => {
@@ -49,7 +49,7 @@
     methods: {
       save${domainClassName} () {
         console.log(this.${domainObjectName})
-        var resource = this.$resource('/${projectName}/${domainObjectName}')
+        var resource = this.$resource('/${projectName}/${domainObjectName.toLowerCase()}')
         resource.save(this.${domainObjectName}).then((response) => {
         // success callback
         }, (response) => {
@@ -59,7 +59,7 @@
       },
       update${domainClassName} () {
         console.log(this.${domainObjectName})
-        var resource = this.$resource('/${projectName}/${domainObjectName}')
+        var resource = this.$resource('/${projectName}/${domainObjectName.toLowerCase()}')
         resource.update(this.${domainObjectName}).then((response) => {
         // success callback
         }, (response) => {

@@ -36,6 +36,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Color;
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.widgets.Combo;
@@ -603,6 +604,41 @@ public class BackboneProjectWizardPageThree extends WizardPage {
 		return attrs;
 	}
 	
+	public Map<String, String> getOracleDerivedNamesForTableAndAttrs(){
+		Map<String, String> derivedNames = new LinkedHashMap<String, String>();
+		String domainName = convertToCamelCase(textSampleDomainClass.getText());
+		derivedNames.put(textSampleDomainClass.getText(), convertToOracleFriendlyName(domainName));
+		for(String key : attrs.keySet()){
+			derivedNames.put(key, convertToOracleFriendlyName(key));
+		}
+		
+		return derivedNames;
+	}
+	
+	private String convertToOracleFriendlyName(String originalString){
+		StringWriter result = new StringWriter();
+		char[] originalCharacters = originalString.toCharArray();
+		for(char charToInspect : originalCharacters){
+			if(Character.isUpperCase(charToInspect)){
+				result.write("_" + Character.toLowerCase(charToInspect));
+			}else{
+				result.write(charToInspect);
+			}
+		}
+		return result.toString();
+	}
+	
+	private String convertToCamelCase(String className){
+		return Character.toLowerCase(className.charAt(0)) + 
+		  className.substring(1);
+		
+	}
+	
+	/**
+	 * returns a list which indicates whether a field is (Textfield, Dropdown
+	 * or TextArea)
+	 * @return
+	 */
 	public Map<String, Object> getFieldTypes(){
 		return fieldTypes;
 	}
