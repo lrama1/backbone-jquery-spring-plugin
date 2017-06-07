@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
@@ -156,6 +157,19 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 					createVueTemplates(projectContainer, projectName);
 					addNewRoutesToMainJS(projectContainer, pageThree.getDomainClassName());
 					addNewTabsToVueAppPage(projectContainer, pageThree.getDomainClassName());
+					
+					String componentTag = pageThree.getDomainClassName().toLowerCase();
+					insertStatementToHomeVue(projectContainer, pageThree.getDomainClassName(), 
+							"\\<.*-list\\>[\\w\\s]*\\</.*-list\\>", 
+							"\n<" + componentTag + "-list></" + componentTag + "-list>");
+					
+					insertStatementToHomeVue(projectContainer, pageThree.getDomainClassName(), 
+							"\\<script\\>", "\nimport " + pageThree.getDomainClassName() + "s from './" +
+									pageThree.getDomainClassName() + "s.vue'");
+					
+					insertStatementToHomeVue(projectContainer, pageThree.getDomainClassName(), 
+							"components\\s*:\\s*\\{", 
+							"\n'" + componentTag + "-list' : " + pageThree.getDomainClassName() + "s,\n");
 					//addNewTabsToAppVue(projectContainer, projectName);
 					/**************END OF VUEJS SPECIFIC****************************/
 				}
@@ -196,6 +210,37 @@ public class AddMoreModelWizard extends Wizard implements INewWizard {
 			//<li><router-link to='/accounts'>Accounts List</router-link></li>
 			buffer.insert(positionToInsert, "\n<li><router-link to='/" + domainClassName.toLowerCase() + "s'>" + 
 					domainClassName + " List</router-link></li>");
+		}
+		
+		modifiedFile =  buffer.toString();
+		
+		
+		InputStream modifiedFileContent = new ByteArrayInputStream(modifiedFile.getBytes());
+		indexJSPFile.setContents(modifiedFileContent, IFile.FORCE, new NullProgressMonitor());
+		indexJSPFile.refreshLocal(IFile.DEPTH_ZERO, new NullProgressMonitor());
+	}
+	
+	private void insertStatementToHomeVue(IContainer projectContainer, String domainClassName, 
+			String regex, String stringToInsert) throws Exception{
+		IFolder indexFolder = projectContainer.getFolder(new Path("src/ui/src/components"));
+		IFile indexJSPFile = indexFolder.getFile("Home.vue");
+		File file = indexJSPFile.getRawLocation().toFile();
+
+		String modifiedFile = FileUtils.readFileToString(file);
+		Pattern whenPattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+
+		Matcher matcher = whenPattern.matcher(modifiedFile);			
+		int positionToInsert = -1;
+		if(matcher.find()){
+			System.out.println("===========>" + matcher.group());
+			System.out.println("********************************************");
+			positionToInsert = matcher.end();
+		}
+
+		StringBuffer buffer = new StringBuffer(modifiedFile);
+		if(positionToInsert > -1){
+			buffer = new StringBuffer(modifiedFile);
+			buffer.insert(positionToInsert, stringToInsert);
 		}
 		
 		modifiedFile =  buffer.toString();

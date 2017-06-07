@@ -257,9 +257,9 @@ public class BackboneProjectWizardPageTwo extends WizardPage {
 		lblSpringVersion.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblSpringVersion.setText("Spring Version?");
 		
-		cmbSpringVersion = new Combo(container, SWT.READ_ONLY);
-		cmbSpringVersion.add("3.x.x");
+		cmbSpringVersion = new Combo(container, SWT.READ_ONLY);		
 		cmbSpringVersion.add("4.x.x");
+		cmbSpringVersion.add("3.x.x");
 		cmbSpringVersion.select(0);
 		cmbSpringVersion.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		new Label(container, SWT.NONE);

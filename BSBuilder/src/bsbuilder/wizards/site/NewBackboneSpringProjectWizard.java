@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -182,6 +183,7 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 		mapOfValues.put("attrs", pageThree.getModelAttributes());
 		mapOfValues.put("oracleNames", pageThree.getOracleDerivedNamesForTableAndAttrs());		
 		mapOfValues.put("fieldTypes", pageThree.getFieldTypes());
+		mapOfValues.put("vueComponentTagName", createComponentTag(domainClassName));
 		
 		final String controllerClassName = domainClassName + "Controller";
 		//final String mainControllerSourceCode = pageThree.getMainControllerSource(controllerPackageName, utilPackageName);
@@ -1048,6 +1050,27 @@ public class NewBackboneSpringProjectWizard extends Wizard implements
 	public void setInitializationData(IConfigurationElement config,
 			String propertyName, Object data) throws CoreException {
 		this.config = config;
+	}
+	
+	public String createComponentTag(String domainClassName){
+		String newTagname = StringUtils.uncapitalize(domainClassName);
+		int indexOfUppercase = lastIndexOfUCL(newTagname);
+		if(indexOfUppercase > -1){
+			newTagname = newTagname.substring(0, indexOfUppercase) + "-" +
+				newTagname.substring(indexOfUppercase).toLowerCase();
+		}else{
+			newTagname = newTagname.toLowerCase();
+		}
+		return newTagname;
+	}
+	
+	public int lastIndexOfUCL(String str) {        
+	    for(int i=str.length()-1; i>=0; i--) {
+	        if(Character.isUpperCase(str.charAt(i))) {
+	            return i;
+	        }
+	    }
+	    return -1;
 	}
 
 	public class SourceCodeGeneratorParameters{

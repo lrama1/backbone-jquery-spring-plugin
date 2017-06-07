@@ -52,9 +52,9 @@ public class BackboneProjectWizardPageFive extends WizardPage {
 		new Label(container, SWT.NONE);
 		
 		cmbUIType = new Combo(container, SWT.READ_ONLY);
-		cmbUIType.add("BackboneJS");
-		cmbUIType.add("AngularJS");
 		cmbUIType.add("VueJS");
+		cmbUIType.add("BackboneJS");
+		cmbUIType.add("AngularJS");		
 		cmbUIType.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		//cmbUIType.select(0);		
 		int index = Arrays.binarySearch(cmbUIType.getItems(), this.uiType);
