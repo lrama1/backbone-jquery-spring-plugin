@@ -15,4 +15,30 @@
 	<select id="get${domainClassName}" resultMap="${domainVar}">
 		select * from $tableName where $oracleNames.get(${domainClassIdAttributeName}) = #{$domainClassIdAttributeName}
 	</select>
+	
+	<update id="update${domainClassName}">
+		update ${domainVar} set 
+			#foreach($key in $attrs.keySet() )
+			#if($foreach.index == 0)
+			$oracleNames.get(${key}) = #{${domainVar}.${key}}
+			#else
+			,$oracleNames.get(${key}) = #{${domainVar}.${key}}
+			#end
+			#end
+		where $oracleNames.get(${domainClassIdAttributeName}) = #{${domainVar}.${domainClassIdAttributeName}}
+	</update>
+	
+	<insert id="saveNew${domainClassName}">
+		insert into ${domainClassName}
+			values(
+			#foreach($key in $attrs.keySet() )
+			#if($foreach.index == 0)
+			#{${domainVar}.${key}}
+			#else
+			, #{${domainVar}.${key}}
+			#end
+			#end
+			)
+		
+	</insert>
 </mapper>

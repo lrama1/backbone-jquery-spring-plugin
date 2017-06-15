@@ -60,7 +60,7 @@ public class CommonUtils {
 			InputStream contentStream, IProgressMonitor monitor)
 			throws CoreException, IOException {
 		final IFile file = container.getFile(path);
-		if(path.toString().endsWith(".js")){
+		if(path.toString().endsWith(".js") || path.toString().endsWith(".vue")){
 			StringWriter writer = new StringWriter();
 			IOUtils.copy(contentStream, writer);
 			contentStream = new ByteArrayInputStream(prettifyJS(writer.toString()).getBytes());
@@ -107,6 +107,7 @@ public class CommonUtils {
 	
 	public static String prettifyJS(String js){
 	    Map<?, ?> setting = DefaultCodeFormatterConstants.getEclipseDefaultSettings();
+
 	    CodeFormatter formatter = ToolFactory.createCodeFormatter(setting);
 	    TextEdit edit = formatter.format(CodeFormatter.K_JAVASCRIPT_UNIT, js,
 	            0, js.length(), 0, "\n");

@@ -10,10 +10,15 @@ import org.apache.ibatis.annotations.Select;
 import ${basePackageName}.web.domain.$domainClassName;
 
 public interface ${domainClassName}Mapper {
+	#set($domainVar = $domainClassName.substring(0,1).toLowerCase() + $domainClassName.substring(1))
 	
 	public ${domainClassName} get${domainClassName}(@Param("${domainClassIdAttributeName}") String ${domainClassIdAttributeName});
 	
 
 	public List<${domainClassName}> getAll${domainClassName}s();
+	
+	public void update${domainClassName}(@Param("${domainVar}") ${domainClassName} ${domainVar}); 
+	
+	public void saveNew${domainClassName}(@Param("${domainVar}") ${domainClassName} ${domainVar}); 
 
 }

@@ -90,6 +90,8 @@ public class ${domainClassName}DAO {
 	public void saveNew$domainClassName($domainClassName $domainClassName.substring(0,1).toLowerCase()$domainClassName.substring(1)){
 		#if(${useMongo} == true)		
 		mongoTemplate.save($domainClassName.substring(0,1).toLowerCase()$domainClassName.substring(1));
+		#elseif(${prepForOracle} == true)
+		${domainVar}Mapper.saveNew${domainClassName}($domainVar);
 		#end
 	}
 	
@@ -107,7 +109,8 @@ public class ${domainClassName}DAO {
 		#end
 		
 		mongoTemplate.updateFirst(query, update, ${domainClassName}.class);
-		
+		#elseif(${prepForOracle} == true)
+		${domainVar}Mapper.update${domainClassName}($domainVar);
 		#end
 	}
 	

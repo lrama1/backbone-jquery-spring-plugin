@@ -59,7 +59,7 @@
       },
       update${domainClassName} () {
         console.log(this.${domainObjectName})
-        var resource = this.$resource('/${projectName}/${domainObjectName.toLowerCase()}')
+        var resource = this.$resource('/${projectName}/${domainObjectName.toLowerCase()}/' + this.$domainObjectName.$domainClassIdAttributeName)
         resource.update(this.${domainObjectName}).then((response) => {
         // success callback
         }, (response) => {

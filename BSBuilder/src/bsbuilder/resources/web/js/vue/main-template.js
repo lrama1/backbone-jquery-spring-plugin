@@ -17,7 +17,6 @@ Vue.use(VeeValidate)
 
 const routes = [
   {path: '/home', component: Home},
-  {path: '/${domainObjectName}', component: ${domainClassName}},
   {path: '/${domainObjectName}/:id', component: ${domainClassName}},
   {path: '/${domainObjectName}s', component: ${domainClassName}s}
 ]
